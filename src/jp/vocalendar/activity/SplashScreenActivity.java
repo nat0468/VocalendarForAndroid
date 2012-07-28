@@ -50,7 +50,8 @@ public class SplashScreenActivity extends Activity {
 	private static final String PREF_ACCOUNT_NAME = "accountName";
 	private static final String PREF_AUTH_TOKEN = "authToken";	
 	
-	private static final String AUTH_TOKEN_TYPE = "cl";	
+	private static final String AUTH_TOKEN_TYPE = "cl";
+	// private static final String AUTH_TOKEN_TYPE = "oauth2:https://www.googleapis.com/auth/calendar.readonly";
 	private static final int REQUEST_AUTHENTICATE = 0;
 
 	private SharedPreferences settings;
