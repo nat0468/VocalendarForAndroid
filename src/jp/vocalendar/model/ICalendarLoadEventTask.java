@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.util.Iterator;
 import java.util.List;
@@ -34,7 +35,7 @@ implements EventContentHandler.EventHandler {
 	private static String TAG = "ICalendarLoadEventTask";
 	
 	/** 読み込み中の URI */
-	private URI loadingUri = null;
+	private String loadingUri = null;
 	
 	/**
 	 * コンストラクタ。
@@ -45,12 +46,12 @@ implements EventContentHandler.EventHandler {
 	}
 	
 	@Override
-	protected List<Event> doInBackground(URI... uris) {
+	protected Void doInBackground(String... uris) {
 		AndroidHttpClient client =
 				AndroidHttpClient.newInstance("Vocalender Android Application Prototype");
 		try {
-			for(URI uri : uris) {
-				Log.d(TAG, "getting " + uri.toString());
+			for(String uri : uris) {
+				Log.d(TAG, "getting " + uri);
 				loadingUri = uri;
 				splashScreenActivity.runOnUiThread(new Runnable() {
 					@Override
@@ -78,7 +79,7 @@ implements EventContentHandler.EventHandler {
 				}
 			}
 			client.close();			
-			return eventList;
+			return null;
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ParserException e) {

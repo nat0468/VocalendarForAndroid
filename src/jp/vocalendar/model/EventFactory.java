@@ -29,6 +29,7 @@ public class EventFactory {
 				e.setEndDateTime(new Date(ge.getEnd().getDateTime().getValue()));
 			}
 		}
+		// TODO 繰り返しイベントへの対応が未実装
 		return e;
 	}
 

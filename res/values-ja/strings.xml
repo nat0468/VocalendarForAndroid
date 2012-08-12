@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Vocalendar</string>
+    <string name="vocalendar">VOCALENDAR</string>
+    <string name="setting_title">設定</string>
+    <string name="setting_about">VOCALENDARアプリについて</string>
+    <string name="back">戻る</string>
+	<string name="choose_account_title">アカウントの選択</string>
+</resources>

@@ -68,7 +68,7 @@ public class EventArrayCursor extends AbstractCursor implements Cursor {
 
 	@Override
 	public String getString(int column) {
-		Log.d("EventListCursor", "getString(" + column + ")");		
+		//Log.d("EventListCursor", "getString(" + column + ")");		
 		switch(column) {
 		case 0: // _id
 			return Integer.toString(currentPosition); 
@@ -90,7 +90,7 @@ public class EventArrayCursor extends AbstractCursor implements Cursor {
 
 	@Override
 	public boolean onMove(int oldPosition, int newPosition) {
-		Log.d("EventListCursor", "onMove(" + oldPosition + "," + newPosition + ")");
+		// Log.d("EventListCursor", "onMove(" + oldPosition + "," + newPosition + ")");
 		try {
 			currentEvent = events[newPosition];
 			currentPosition = newPosition;

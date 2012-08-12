@@ -1,6 +1,5 @@
 package jp.vocalendar.model;
 
-import java.net.URI;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -12,7 +11,7 @@ import android.util.Log;
 /**
  * イベント情報を読み込むAsyncTaskの共通処理。
  */
-public abstract class LoadEventTask extends AsyncTask<URI, Event, List<Event>> {
+public abstract class LoadEventTask extends AsyncTask<String, Event, Void> {
 	private static String TAG = "LoadEventTask";
 
 	/**
@@ -37,9 +36,9 @@ public abstract class LoadEventTask extends AsyncTask<URI, Event, List<Event>> {
 	}
 	
 	@Override
-	protected void onPostExecute(List<Event> result) {
-		if(splashScreenActivity != null) { 
-			splashScreenActivity.onPostExecute(result);
+	protected void onPostExecute(Void result) {
+		if(splashScreenActivity != null && !canceled) { 
+			splashScreenActivity.onPostExecute();
 		}		
 	}
 
@@ -54,7 +53,15 @@ public abstract class LoadEventTask extends AsyncTask<URI, Event, List<Event>> {
 	protected void onCancelled() {
 		Log.d(TAG, "onCancelled()");
 		this.canceled = true;
+		this.splashScreenActivity.onCanceled();
 		this.splashScreenActivity = null;
 	}	
 
+	/**
+	 * (認証失敗時に)再読み込みするときに呼ぶ
+	 */
+	protected void onRetry() {
+		this.canceled = true;
+		this.splashScreenActivity.onCanceled();
+	}
 }

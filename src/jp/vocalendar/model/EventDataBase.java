@@ -96,6 +96,7 @@ public class EventDataBase {
 				events[i++] = getEvent(c);
 			} while(c.moveToNext());
 		}
+		c.close();
 		return events;
 	}
 	
