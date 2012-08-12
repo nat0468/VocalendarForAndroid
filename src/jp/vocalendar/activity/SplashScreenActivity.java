@@ -93,9 +93,9 @@ public class SplashScreenActivity extends Activity {
 		String str = event.toDateTimeString();
 		Log.d("SplashScreenActivity", str);
 		loadingItemView.setText(str);
-		if(event.equalByDate(today, timeZone)) {
-			foundEvents.add(event);
-		}
+		//if(event.equalByDate(today, timeZone)) {
+		foundEvents.add(event);
+		//}
 	}
 	
 	public void onPostExecute() {		

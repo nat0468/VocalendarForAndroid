@@ -6,11 +6,15 @@ import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import android.util.Log;
+
 
 /**
  * イベントオブジェクトの生成メソッドを提供するクラス。
  */
 public class EventFactory {
+	private static final String TAG = "EventFactory";
+	
 	public static Event toVocalendarEvent(com.google.api.services.calendar.model.Event ge) {
 		Event e = new Event();
 		e.setSummary(ge.getSummary());
@@ -29,10 +33,13 @@ public class EventFactory {
 				e.setEndDateTime(new Date(ge.getEnd().getDateTime().getValue()));
 			}
 		}
-		// TODO 繰り返しイベントへの対応が未実装
+		if(ge.getRecurrence() != null) {
+			String rrule = ge.getRecurrence().get(0);
+			operateRrule(e, rrule);
+		}
 		return e;
 	}
-
+	
 	//日付文字列(yyyy-mm-dd)の正規表現パターン
 	private static final Pattern dateVauePattern =
 			Pattern.compile("([0-9]{4})-([0-9]{2})-([0-9]{2})");
@@ -55,4 +62,56 @@ public class EventFactory {
 		}
 		return null;
 	}	
+	
+	//Recurrence Rule(RRULEコンポーネントのパラメータ)の正規表現パターン
+	private static final Pattern recurPattern =
+			Pattern.compile("([A-Za-z]+)=([A-Za-z0-9]+)");
+	
+	private static final String[] WEEKDAY_LIST = new String[] {
+		"SU", "MO", "TU", "WE", "TH", "FR", "SA"		
+	};
+	
+	/**
+	 * RRULEの値をEventに反映する。
+	 * @param e
+	 * @param rrule
+	 */
+	private static void operateRrule(Event e, String rrule) {
+		Log.d(TAG, "operateRrule: " + rrule);
+		Matcher m = recurPattern.matcher(rrule);
+		while(m.find()) {
+			String param = m.group(1);
+			String value = m.group(2);
+			
+			if("FREQ".equals(param)) {
+				if("YEARLY".equals(value)) {
+					e.setRecursive(Event.RECURSIVE_YEARLY);					
+				} else if ("MONTHLY".equals(value)) {
+					e.setRecursive(Event.RECURSIVE_MONTHLY);					
+				} else if ("WEEKLY".equals(value)) {
+					e.setRecursive(Event.RECURSIVE_WEEKLY);					
+				} else { // 未対応のFREQは無視
+					Log.w(TAG, "Not implemented FREQ:" + value);
+					e.setRecursive(Event.RECURSIVE_NONE);
+				}				
+			} else if("BYMONTHDAY".equals(param)) {
+				e.setRecursiveBy(Integer.parseInt(value));
+			} else if("BYDAY".equals(param)) {
+				char[] c = new char[1];
+				value.getChars(0, 1, c, 0);
+				if(Character.isDigit(c[0])) {
+					e.setByWeekdayOccurrence(Integer.parseInt(new String(c)));
+					value = value.substring(1);
+				}
+				for(int i = 0; i < WEEKDAY_LIST.length; i++) {
+					if(WEEKDAY_LIST[i].equals(value)) {
+						e.setRecursiveBy(i+1);
+					}
+				}
+			} else {
+				Log.w(TAG, "Not implemented param: " + param + "=" + value);
+			}
+		}
+	}
+	
 }
