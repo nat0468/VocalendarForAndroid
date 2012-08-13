@@ -40,7 +40,7 @@ public class EventDataBase {
 	}
 	
 	public void insertEvent(Event event) {
-		Log.d(TAG, "insertEvent" + event.toDateTimeString());
+		Log.d(TAG, "insertEvent" + event.toDateTimeSummaryString());
 		ContentValues v = new ContentValues();
 		v.put(EventDataBaseHelper.COLUMN_SUMMARY, event.getSummary());
 		v.put(EventDataBaseHelper.COLUMN_DESCRIPTION, event.getDescription());

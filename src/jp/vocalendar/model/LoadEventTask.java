@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import jp.vocalendar.activity.SplashScreenActivity;
-import jp.vocalendar.model.EventContentHandler.EventHandler;
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -12,12 +12,34 @@ import android.util.Log;
  * イベント情報を読み込むAsyncTaskの共通処理。
  */
 public abstract class LoadEventTask extends AsyncTask<String, Event, Void> {
+	/** 
+	 * AsyncTaskのからのコールバックインターフェイス
+	 */
+	public static interface TaskCallback {
+		/** Task終了後に呼ばれる */
+		public void onPostExecute();
+		/** Event読み込み毎に呼ばれる */
+		public void onProgressUpdate(Event event);
+		/**
+		 * 認証失敗などで再読込が必要なときに呼ばれる。
+		 * 典型的には、このLoadEventTaskを再実行する処理をこのメソッドで実装する。
+		 * @param retryNumber 残り再試行回数。LoadEventTaskを再実行するときは、この値を使う。
+		 */
+		public void retry(int retryNumber);
+	}
+	
 	private static String TAG = "LoadEventTask";
 
 	/**
-	 * イベント読み込み終了時にコールバックするSplashScreenActivity
+	 * イベント読み込み終了時にコールバックするTaskCallback
 	 */
-	protected SplashScreenActivity splashScreenActivity = null;
+	protected TaskCallback taskCallback = null;
+	
+	/**
+	 * このタスクを実行するActivity
+	 */
+	protected Activity activity = null;
+	
 	/**
 	 * タスクがキャンセルされたときにtrueになる。
 	 */
@@ -31,37 +53,33 @@ public abstract class LoadEventTask extends AsyncTask<String, Event, Void> {
 	 * コンストラクタ。
 	 * @param activity イベント読み込み終了時にコールバックするSplashScreenActivity
 	 */	
-	public LoadEventTask(SplashScreenActivity activity) {
-			this.splashScreenActivity = activity;
+	public LoadEventTask(Activity activity, TaskCallback taskCallback) {
+		this.activity = activity;
+		this.taskCallback = taskCallback;
 	}
 	
 	@Override
 	protected void onPostExecute(Void result) {
-		if(splashScreenActivity != null && !canceled) { 
-			splashScreenActivity.onPostExecute();
+		if(taskCallback != null && !canceled) { 
+			taskCallback.onPostExecute();
 		}		
 	}
 
 	@Override
 	protected void onProgressUpdate(Event... events) {
-		if(splashScreenActivity != null) {
-			splashScreenActivity.onProgressUpdate(events[0]);
+		if(taskCallback != null) {
+			taskCallback.onProgressUpdate(events[0]);
 		}
 	}
 
-	@Override
-	protected void onCancelled() {
-		Log.d(TAG, "onCancelled()");
-		this.canceled = true;
-		this.splashScreenActivity.onCanceled();
-		this.splashScreenActivity = null;
-	}	
-
 	/**
 	 * (認証失敗時に)再読み込みするときに呼ぶ
+	 * @param tryNumber 残り試行回数
 	 */
-	protected void onRetry() {
+	protected void doRetry(int tryNumber) {
+		Log.d(TAG, "doRetry()");
 		this.canceled = true;
-		this.splashScreenActivity.onCanceled();
+		this.taskCallback.retry(tryNumber);
+		this.taskCallback = null;
 	}
 }

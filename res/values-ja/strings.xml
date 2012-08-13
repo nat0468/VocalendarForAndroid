@@ -5,5 +5,9 @@
     <string name="setting_title">設定</string>
     <string name="setting_about">VOCALENDARアプリについて</string>
     <string name="back">戻る</string>
-	<string name="choose_account_title">アカウントの選択</string>
+    <string name="ok">OK</string>
+    <string name="cancel">キャンセル</string>
+    	<string name="choose_account_title">アカウントの選択</string>
+  	<string name="google_account_required">Googleアカウントが必要です。アカウントを追加して下さい。</string>
+  	<string name="add_account">アカウント追加</string>  		
 </resources>

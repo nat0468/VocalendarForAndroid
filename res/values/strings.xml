@@ -5,5 +5,9 @@
     <string name="setting_title">Configuration</string>
     <string name="setting_about">About VOCALENDAR application</string>
     <string name="back">Back</string>
+    <string name="ok">OK</string>   
+    <string name="cancel">Cancel</string>    
   	<string name="choose_account_title">Choose account</string>
+  	<string name="google_account_required">Google account is required. Add an account.</string>  		
+  	<string name="add_account">Add account</string>  		
 </resources>

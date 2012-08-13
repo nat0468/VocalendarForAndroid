@@ -1,14 +1,13 @@
 package jp.vocalendar.model;
 
 import java.io.IOException;
-import java.net.URI;
 import java.util.Iterator;
 import java.util.TimeZone;
 
 import jp.vocalendar.Constants;
-import jp.vocalendar.activity.SplashScreenActivity;
 import jp.vocalendar.googleapi.OAuthManager;
 import android.accounts.Account;
+import android.app.Activity;
 import android.util.Log;
 
 import com.google.api.client.extensions.android2.AndroidHttp;
@@ -34,60 +33,48 @@ public class GoogleCalendarLoadEventTask extends LoadEventTask {
 	 * イベント情報を読み込む終了日
 	 */
 	private DateTime end; 	
-	
 	/**
-	 * 読み込み中のカレンダーのID
+	 * イベント情報を読み込む開始日や終了日の指定に使うタイムゾーン
 	 */
-	private String calendarId;
+	private TimeZone timeZone;
 	
 	/**
 	 * 認証失敗時の残り試行回数。
 	 */
 	private int tryNumber = 5;
-	
-    /**
-     * コンストラクタ。
-     * @param activity イベント読み込み終了時にコールバックするSplashScreenActivity
-     */
-    public GoogleCalendarLoadEventTask(SplashScreenActivity activity) {
-        super(activity);
-    }
     
     /**
      * コンストラクタ。
      * @param activity イベント読み込み終了時にコールバックするSplashScreenActivity
      * @param tryNumner 残り試行回数
      */
-    public GoogleCalendarLoadEventTask(SplashScreenActivity activity, int tryNumber) {
-        this(activity);
+    public GoogleCalendarLoadEventTask(Activity activity, TaskCallback taskCallback, int tryNumber) {
+        super(activity, taskCallback);
         this.tryNumber = tryNumber;
+    }
+    
+    public void setStartAndEndDate(DateTime start, DateTime end, TimeZone timeZone) {
+    	this.start = start;
+    	this.end = end;
+    	this.timeZone = timeZone;
     }
     
 	@Override
 	protected Void doInBackground(String... ids) {
-		try {
-			java.util.Calendar cal = java.util.Calendar.getInstance();
-			cal.set(java.util.Calendar.HOUR_OF_DAY, 0);
-			cal.set(java.util.Calendar.MINUTE, 0);
-			cal.set(java.util.Calendar.SECOND, 0);
-			cal.set(java.util.Calendar.MILLISECOND, 0);
-			start = new DateTime(cal.getTime(), TimeZone.getDefault());
-			cal.add(java.util.Calendar.DATE, +1);
-			cal.add(java.util.Calendar.MILLISECOND, -1);
-			end = new DateTime(cal.getTime(), TimeZone.getDefault());
-			calendarId = Constants.MAIN_CALENDAR_ID;
-			
-			loadEvents();
-		} catch(IOException e) {
-			Log.e(TAG, "loadEvents() fails.", e);
-		}      
+		for(String id : ids) {
+			try {
+				loadEvents(id);				
+			} catch(IOException e) {
+				Log.e(TAG, "loadEvents(" + id + ") fails.", e);
+			}
+		}	
 		return null;
 	}
 
-	private void loadEvents() throws IOException {
+	private void loadEvents(String id) throws IOException {
 		Calendar calendar = buildCalendar();
 		Calendar.Events es = calendar.events();
-		Calendar.Events.List list = es.list(calendarId);
+		Calendar.Events.List list = es.list(id);
 		
 		Events events = null;
 		try {
@@ -96,24 +83,27 @@ public class GoogleCalendarLoadEventTask extends LoadEventTask {
 			int statusCode = e.getStatusCode();
 			if (statusCode == 401 && (tryNumber - 1) > 0) {
 				Log.d(TAG, "Got 401, refreshing token.");
-				onRetry();
-				OAuthManager.getInstance().doLogin(true, splashScreenActivity,
+				OAuthManager.getInstance().doLogin(true, activity,
 					new OAuthManager.AuthHandler() {
 						@Override
 						public void handleAuth(Account account, String authToken) {
-							Log.e(TAG, (tryNumber - 1) + ": GoogleCalendarLoadEventTask.execute()");
-							new GoogleCalendarLoadEventTask(splashScreenActivity, tryNumber - 1).execute(new String[0]);
+							tryNumber--;
+							Log.e(TAG, "doRetry: " + tryNumber);
+							doRetry(tryNumber);
 						}
 	             	});
 			}
 		}
 		if(events != null) {
-			handleEvents(calendarId, calendar, events);
+			handleEvents(id, calendar, events);
 		}
 	}
 
 	private void handleEvents(String calendarId, Calendar calendar,
 			Events events) throws IOException {
+		if(events.getItems() == null) {
+			return;
+		}
 		while (true) {
 			Iterator<com.google.api.services.calendar.model.Event> itr = events.getItems().iterator();
 			while(itr.hasNext()) {
@@ -121,8 +111,24 @@ public class GoogleCalendarLoadEventTask extends LoadEventTask {
 				publishProgress(e);
 			}
 			String pageToken = events.getNextPageToken();
-			if (pageToken != null && pageToken.length() != 0) {
-				events = calendar.events().list(calendarId).setPageToken(pageToken).execute();
+			if (pageToken != null && pageToken.length() != 0) {				
+				try {
+					events = calendar.events().list(calendarId).setPageToken(pageToken).execute();
+				} catch (HttpResponseException e) {
+					int statusCode = e.getStatusCode();
+					if (statusCode == 401 && (tryNumber - 1) > 0) {
+						Log.d(TAG, "Got 401, refreshing token.");
+						OAuthManager.getInstance().doLogin(true, activity,
+							new OAuthManager.AuthHandler() {
+								@Override
+								public void handleAuth(Account account, String authToken) {
+									tryNumber--;
+									Log.e(TAG, "doRetry: " + tryNumber);
+									doRetry(tryNumber);
+								}
+			             	});
+					}
+				}				
 			} else {
 				break;
 			}

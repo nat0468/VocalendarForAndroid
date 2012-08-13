@@ -31,5 +31,10 @@ public class Constants {
 	   */
 	  public static final String MAIN_CALENDAR_ID = "0mprpb041vjq02lk80vtu6ajgo@group.calendar.google.com";   
 	  
+	  /**
+	   * VOCALENAR 放送系 のID
+	   */
+	  public static final String BROADCAST_CALENDAR_ID = "5fsoru1dfaga56mcleu5mp76kk@group.calendar.google.com";
+	  
 	  
 }

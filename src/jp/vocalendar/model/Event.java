@@ -2,17 +2,11 @@ package jp.vocalendar.model;
 
 
 import java.io.Serializable;
-import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
 import android.text.format.DateFormat;
-
-import net.fortuna.ical4j.model.Component;
-import net.fortuna.ical4j.model.DateTime;
-import net.fortuna.ical4j.model.Parameter;
-import net.fortuna.ical4j.model.Property;
 
 /**
  * イベントを表すクラス。
@@ -86,7 +80,7 @@ public class Event implements Serializable {
 	 * 開始終了日時とイベント名を表示する文字列を返す。
 	 * @return
 	 */
-	public String toDateTimeString() {
+	public String toDateTimeSummaryString() {
 		// TODO メソッド名修正
 		return formatDateTime() + " " + summary;
 	}
@@ -104,6 +98,14 @@ public class Event implements Serializable {
 	public void setStartDateTime(Date startDateTime) {
 		this.startDateTime = startDateTime;
 	}
+	
+	/**
+	 * 日付イベントの場合にtrueを返す。
+	 * @return
+	 */
+	public boolean isDateEvent() {
+		return startDate != null;
+	}	
 	
 	/**
 	 * イベント日時の表示文字列を返す。
@@ -270,7 +272,7 @@ public class Event implements Serializable {
 	public void setEndDateTime(Date endDateTime) {
 		this.endDateTime = endDateTime;
 	}
-
+	
 	/**
 	 * ソートに使う、開始日時。
 	 * 開始日指定と開始日時の指定されている方が返る。
@@ -432,67 +434,56 @@ public class Event implements Serializable {
 	}
 	
 	/**
-	 * 時分秒を0に設定する。
-	 * @param d
+	 * 繰り返し種別を指定する。 
+	 * @return RECURSIVE_* 定数を指定する。
 	 */
-	private Date normalizeDate(Date d) {
-		Date ret = (Date)d.clone();
-		ret.setHours(0);
-		ret.setMinutes(0);
-		ret.setSeconds(0);
-		return ret;
-	}
-
-	/**
-	 * iCal4JのComponentからEventを作成する。
-	 * VEVENTでないComponentの場合はnullを返す。
-	 * @param component
-	 * @return
-	 */
-	public static Event toEvent(Component component) throws ParseException {
-		if(!Component.VEVENT.equals(component.getName())) {
-			return null;
-		}
-		
-		Event e = new Event();
-		
-		Property dtstart = component.getProperty(Property.DTSTART);
-		Parameter valueParam = dtstart.getParameter(Parameter.VALUE);
-		if(valueParam != null && "DATE".equals(valueParam.getValue())) { // 開始日指定の場合
-			e.setStartDate(new net.fortuna.ical4j.model.Date(dtstart.getValue())); 			
-		} else { // 開始日時指定の場合
-			e.setStartDateTime(new DateTime(dtstart.getValue()));
-		}
-		
-		Property dtend = component.getProperty(Property.DTEND);
-		valueParam = dtend.getParameter(Parameter.VALUE);
-		if(valueParam != null && "DATE".equals(valueParam.getValue())) { // 終了日指定の場合
-			e.setEndDate(new net.fortuna.ical4j.model.Date(dtend.getValue())); 			
-		} else { // 終了日時指定の場合
-			e.setEndDateTime(new DateTime(dtend.getValue()));			
-		}
-		
-		e.setSummary(component.getProperty(Property.SUMMARY).getValue());
-		e.setDescription(component.getProperty(Property.DESCRIPTION).getValue());
-		
-		return e;
-	}
 	public int getRecursive() {
 		return recursive;
 	}
 	public void setRecursive(int recursive) {
 		this.recursive = recursive;
-	}
+	}	
+
+	/**
+	 * 繰り返しの予定の場合の対象日を指定する値を取得。
+	 * RECURSIVE_MONTHLYの場合で、byWeekdayOccurrenceが0の場合は、毎月の日付。
+	 * byWeekdayOccurrenceが1以上の場合は、曜日(1:日,2:月, ... , 土:7)。
+	 * RECURSIVE_WEEKLYの場合は、曜日(1:日,2:月, ... , 土:7)
+	 * 特に指定しない場合は0
+	 */		
 	public int getRecursiveBy() {
 		return recursiveBy;
 	}
+	
+	/**
+	 * 繰り返しの予定の場合の対象日を指定する値を設定。
+	 * RECURSIVE_MONTHLYの場合で、byWeekdayOccurrenceが0の場合は、毎月の日付。
+	 * byWeekdayOccurrenceが1以上の場合は、曜日(1:日,2:月, ... , 土:7)。
+	 * RECURSIVE_WEEKLYの場合は、曜日(1:日,2:月, ... , 土:7)
+	 * 特に指定しない場合は0
+	 */	
 	public void setRecursiveBy(int recursiveBy) {
 		this.recursiveBy = recursiveBy;
 	}
+	
+	/**
+	 * 繰り返しの場合の何番目の曜日かを指定する値。
+	 * RECURSIVE_MONTHLYの場合に使われる。
+	 * 指定がない場合は0が返る。
+	 */	
 	public int getByWeekdayOccurrence() {
 		return byWeekdayOccurrence;
 	}
+	
+	/**
+	 * 繰り返しの場合の何番目の曜日かを指定する値を指定する。
+	 * RECURSIVE_MONTHLYの場合に使われる。
+	 * 指定しない場合は0を指定する。
+	 */	
 	public void setByWeekdayOccurrence(int byWeekdayOccurrence) {
 		this.byWeekdayOccurrence = byWeekdayOccurrence;
 	}	
+	public boolean isRecursive() {
+		return recursive != RECURSIVE_NONE;
+	}
 }
