@@ -25,6 +25,7 @@
         <activity android:name=".activity.EventLoadingActivity"></activity>
         <activity android:name=".activity.EventDescriptionActivity"></activity>
         <activity android:name=".activity.SettingActivity"></activity>
-    </application>
+        <activity android:name=".activity.AboutActivity"></activity>
+        </application>
 
 </manifest>

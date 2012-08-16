@@ -24,6 +24,11 @@ public class Constants {
 	   */
 	  public static final String LAST_UPDATED_PREFERENCE_NAME = "last_updated_preference";
 	  
+	  /**
+	   * イベント情報を取得する日数を格納するプリファレンス名
+	   */
+	  public static final String NUMBER_OF_DATE_TO_GET_EVENTS_PREFERENCE_NAME = "number_of_date_to_get_events_preference";
+	  
 	  
 	  /**
 	   * onActivityResult request codes:

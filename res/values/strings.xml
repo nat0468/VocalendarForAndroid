@@ -2,8 +2,8 @@
 <resources>
     <string name="app_name">Vocalendar</string>
     <string name="vocalendar">VOCALENDAR</string>
-    <string name="setting">Configuration</string>
-    <string name="setting_about">About VOCALENDAR application</string>
+    <string name="setting">Settings</string>
+    <string name="about_vocalendar_app">About VOCALENDAR app</string>
     <string name="back">Back</string>
     <string name="ok">OK</string>   
     <string name="cancel">Cancel</string>    
@@ -29,4 +29,26 @@
 	<string name="update">Update</string>			
 	<string name="change_date">Change date</string>			
 	<string name="not_implemented">Not implemented.</string>
+	<string name="open_vocalendar">Open vocalender.jp</string>	
+	<string name="about_message">\
+VOCALENDAR application is the one to view the information of events about VOCALOID in \
+&lt;a href="http://vocalender.jp/pc"&gt;vocalendar.jp&lt;/a&gt;&lt;br/&gt;&lt;br/&gt;\
+About VOCALENDAR, please see &lt;a href="http://vocalendar.jp/about/"&gt;here&lt;/a&gt;\
+(Japanese).
+	</string>
+	<string name="number_of_date_to_get_events">Number of dates to get</string>
+	<string name="google_account">Google Account</string>
+	<string-array name="number_of_date_to_get_events_entries">
+	    <item>1</item>
+	    <item>3</item>
+	    <item>5</item>
+	    <item>7</item>
+	</string-array>	
+	<string-array name="number_of_date_to_get_events_entriyvalues">
+	    <item>1</item>
+	    <item>3</item>
+	    <item>5</item>
+	    <item>7</item>
+	</string-array>
+	<string name="number_of_date_to_get_events_dialog">Select number of date</string>
 </resources>

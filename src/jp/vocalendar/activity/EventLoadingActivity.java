@@ -23,7 +23,9 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
@@ -196,7 +198,14 @@ public class EventLoadingActivity extends Activity implements LoadEventTask.Task
 	 * イベント取得日数を返す。
 	 * @return
 	 */
-	private int getNumberOfDateToGetEvent() {
+	private int getNumberOfDateToGetEvent() {		
+		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+		String value = pref.getString(Constants.NUMBER_OF_DATE_TO_GET_EVENTS_PREFERENCE_NAME, "3");
+		try {
+			return Integer.parseInt(value);
+		} catch(NumberFormatException e) {
+			Log.e(TAG, "Invalid number of date to get events: " + value);
+		}
 		return 3;
 	}
 }

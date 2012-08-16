@@ -3,11 +3,11 @@
     <string name="app_name">Vocalendar</string>
     <string name="vocalendar">VOCALENDAR</string>
     <string name="setting">設定</string>
-    <string name="setting_about">VOCALENDARアプリについて</string>
+    <string name="about_vocalendar_app">VOCALENDARアプリについて</string>
     <string name="back">戻る</string>
     <string name="ok">OK</string>
     <string name="cancel">キャンセル</string>
-    	<string name="choose_account_title">アカウントの選択</string>
+    <string name="choose_account_title">アカウントの選択</string>
   	<string name="google_account_required">Googleアカウントが必要です。アカウントを追加して下さい。</string>
   	<string name="add_account">アカウント追加</string>  		
   	<string name="loading_events">読み込み中...</string>  		  	
@@ -29,4 +29,13 @@
 	<string name="update">更新</string>
 	<string name="change_date">日付変更</string>
 	<string name="not_implemented">実装予定</string>
+	<string name="open_vocalendar">vocalender.jpを開く</string>
+	<string name="about_message">\
+VOCALENDARアプリは、&lt;a href="http://vocalender.jp/pc"&gt;vocalendar.jp&lt;/a&gt;\
+ボーカロイド関連のイベント情報を参照できるアプリです。&lt;br/&gt;&lt;br/&gt;\
+VOCALENDARについては、&lt;a href="http://vocalendar.jp/about/"&gt;こちらへ&lt;/a&gt;。\
+	</string>
+	<string name="number_of_date_to_get_events">取得イベント日数</string>
+	<string name="google_account">Googleアカウント</string>
+	<string name="number_of_date_to_get_events_dialog">日数の選択</string>
 </resources>

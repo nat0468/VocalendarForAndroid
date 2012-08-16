@@ -1,64 +1,84 @@
 package jp.vocalendar.activity;
 
+import com.google.api.client.googleapis.extensions.android2.auth.GoogleAccountManager;
+
+import jp.vocalendar.Constants;
 import jp.vocalendar.R;
 
+import android.accounts.Account;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.ListPreference;
+import android.preference.Preference;
+import android.preference.Preference.OnPreferenceChangeListener;
+import android.preference.Preference.OnPreferenceClickListener;
+import android.preference.PreferenceActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-public class SettingActivity extends ListActivity{
+public class SettingActivity extends PreferenceActivity
+implements OnPreferenceChangeListener, OnPreferenceClickListener	{
+	private static final String BACK_KEY = "back";
 	
-	private class MenuItem {
-		private int resouceId;
-		private Class activity;
-		
-		public MenuItem(int resourceId, Class activity) {
-			this.resouceId = resourceId;
-			this.activity = activity;
-		}
-		
-		public void doAction() {
-			Intent intent = new Intent(SettingActivity.this, activity);
-			startActivity(intent);			
-		}
-	}
-	
-	private class BackMenuItem extends MenuItem {
-		public BackMenuItem() {
-			super(R.string.back, null);
-		}
-		
-		public void doAction() {
-			finish();
-		}
-	}
-	
-	private MenuItem[] menuItems = {
-		new MenuItem(R.string.setting_about, AboutActivity.class),
-		new BackMenuItem()
-	};
+	/** 選択可能なGoogleアカウント */
+	private Account[] accounts;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
     	setTitle(R.string.setting);
-    	setListAdapter(new ArrayAdapter<String>(
-    			this, android.R.layout.simple_list_item_1, getSettingStrings()));
+    	addPreferencesFromResource(R.xml.pref);
+    	
+    	initNumberODatePreference();
+    	initAccountPreference();
+    	
+    	Preference back = getPreferenceScreen().findPreference(BACK_KEY);
+    	back.setOnPreferenceClickListener(this);    	
 	}
-	
-	private String[] getSettingStrings() {
-		String[] str = new String[menuItems.length];
-		for(int i = 0; i < str.length; i++) {
-			str[i] = getResources().getString(menuItems[i].resouceId);
-		}
-		return str;
-	}	
+
+	private void initNumberODatePreference() {
+		ListPreference numberOfDatePref = (ListPreference)getPreferenceScreen()
+    			.findPreference(Constants.NUMBER_OF_DATE_TO_GET_EVENTS_PREFERENCE_NAME);
+    	numberOfDatePref.setSummary(numberOfDatePref.getEntry());
+    	numberOfDatePref.setOnPreferenceChangeListener(this);
+	}
+
+	private void initAccountPreference() {
+		ListPreference accountPref = (ListPreference)getPreferenceScreen()
+    			.findPreference(Constants.SELECTED_ACCOUNT_PREFERENECE_NAME);
+    	accounts = new GoogleAccountManager(this).getAccounts();
+    	String[] accountEntryValues = new String[accounts.length];
+    	for(int i = 0; i < accountEntryValues.length; i++) {
+    		accountEntryValues[i] = accounts[i].name;
+    	}
+    	accountPref.setEntries(accountEntryValues);
+    	accountPref.setEntryValues(accountEntryValues);
+    	accountPref.setDefaultValue(accountEntryValues[0]);
+    	accountPref.setOnPreferenceChangeListener(this);
+    	accountPref.setSummary(accountPref.getEntry());
+	}
 
 	@Override
-	protected void onListItemClick(ListView l, View v, int position, long id) {
-		menuItems[position].doAction();
-	}	
+	public boolean onPreferenceChange(Preference preference, Object newValue) {
+		if(preference.getKey().equals(Constants.NUMBER_OF_DATE_TO_GET_EVENTS_PREFERENCE_NAME)) {
+			preference.setSummary(newValue.toString());
+		} else if(preference.getKey().equals(Constants.SELECTED_ACCOUNT_PREFERENECE_NAME)) {
+			preference.setSummary(newValue.toString());
+		} else {
+			return false;
+		}
+		setResult(RESULT_OK);
+		return true;
+	}
+
+	@Override
+	public boolean onPreferenceClick(Preference preference) {
+		if(preference.getKey().equals(BACK_KEY)) {
+			finish(); // 戻る
+			return true;
+		}
+		return false;
+	}
 }

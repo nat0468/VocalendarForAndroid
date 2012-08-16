@@ -27,6 +27,8 @@ public class EventListActivity extends ListActivity {
 	
 	// EventListLoadingActivityを呼ぶためのリクエストコード
 	private static int REQUEST_CODE_GET_DAYLY_EVENT = 1;
+	// SettingActivityを呼ぶためのリクエストコード
+	private static int REQUEST_CODE_OPEN_SETTINGS = 2;
 	
     /** Called when the activity is first created. */
     @Override
@@ -42,8 +44,7 @@ public class EventListActivity extends ListActivity {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(EventListActivity.this, SettingActivity.class);
-				startActivity(intent);
-				
+				startActivityForResult(intent, REQUEST_CODE_OPEN_SETTINGS);				
 			}
 		});
         
@@ -127,6 +128,8 @@ public class EventListActivity extends ListActivity {
 		    		System.currentTimeMillis());
 		    editor.commit();
 			updateList();
+		} else if(requestCode == REQUEST_CODE_OPEN_SETTINGS && resultCode == RESULT_OK) {
+			openEventLoadingActivity(); // 設定が更新されたらイベント情報を再読み込み
 		}
 	}
 	
