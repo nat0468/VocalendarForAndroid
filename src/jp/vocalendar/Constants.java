@@ -20,6 +20,12 @@ public class Constants {
 	  public static final String SELECTED_ACCOUNT_PREFERENECE_NAME = "selected_account_preference";
 	  
 	  /**
+	   * 最後にイベント情報を取得している時間を格納するプリファレンス名
+	   */
+	  public static final String LAST_UPDATED_PREFERENCE_NAME = "last_updated_preference";
+	  
+	  
+	  /**
 	   * onActivityResult request codes:
 	   */
 	  public static final int GET_LOGIN = 0;

@@ -3,7 +3,6 @@ package jp.vocalendar.model;
 import java.util.LinkedList;
 import java.util.List;
 
-import jp.vocalendar.activity.SplashScreenActivity;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -11,13 +10,13 @@ import android.util.Log;
 /**
  * イベント情報を読み込むAsyncTaskの共通処理。
  */
-public abstract class LoadEventTask extends AsyncTask<String, Event, Void> {
+public abstract class LoadEventTask extends AsyncTask<String, Event, List<Event>> {
 	/** 
 	 * AsyncTaskのからのコールバックインターフェイス
 	 */
 	public static interface TaskCallback {
 		/** Task終了後に呼ばれる */
-		public void onPostExecute();
+		public void onPostExecute(List<Event> events);
 		/** Event読み込み毎に呼ばれる */
 		public void onProgressUpdate(Event event);
 		/**
@@ -44,10 +43,6 @@ public abstract class LoadEventTask extends AsyncTask<String, Event, Void> {
 	 * タスクがキャンセルされたときにtrueになる。
 	 */
 	protected boolean canceled = false;
-	/**
-	 * 読み込み中のイベント。
-	 */
-	protected List<Event> eventList = new LinkedList<Event>();
 
 	/**
 	 * コンストラクタ。
@@ -59,9 +54,9 @@ public abstract class LoadEventTask extends AsyncTask<String, Event, Void> {
 	}
 	
 	@Override
-	protected void onPostExecute(Void result) {
+	protected void onPostExecute(List<Event> events) {
 		if(taskCallback != null && !canceled) { 
-			taskCallback.onPostExecute();
+			taskCallback.onPostExecute(events);
 		}		
 	}
 

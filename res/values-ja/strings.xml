@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">Vocalendar</string>
     <string name="vocalendar">VOCALENDAR</string>
-    <string name="setting_title">設定</string>
+    <string name="setting">設定</string>
     <string name="setting_about">VOCALENDARアプリについて</string>
     <string name="back">戻る</string>
     <string name="ok">OK</string>
@@ -10,4 +10,23 @@
     	<string name="choose_account_title">アカウントの選択</string>
   	<string name="google_account_required">Googleアカウントが必要です。アカウントを追加して下さい。</string>
   	<string name="add_account">アカウント追加</string>  		
+  	<string name="loading_events">読み込み中...</string>  		  	
+  	<string name="today">今日</string>		
+  	<string name="from_to"> 〜 </string>
+  	<string name="every_week_format">毎週%s</string>			
+  	<string name="every_month_format">毎月%s</string>			
+	<string name="every_year_format">毎年%s</string>			
+	<string name="first">第1</string>			
+	<string name="second">第2</string>			
+	<string name="third">第3</string>			
+	<string name="fourth">第4</string>			
+	<string name="nth_format">第%d</string>			
+		<string name="first_day">1日</string>
+	<string name="second_day">2日</string>
+	<string name="third_day">3日</string>
+	<string name="nth_day_format">%d日</string>			
+	<string name="after_weekday_string">曜日</string>	
+	<string name="update">更新</string>
+	<string name="change_date">日付変更</string>
+	<string name="not_implemented">実装予定</string>
 </resources>

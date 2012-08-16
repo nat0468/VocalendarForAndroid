@@ -39,9 +39,16 @@ public class EventDataBase {
 		database = null;
 	}
 	
-	public void insertEvent(Event event) {
+	public void insertEvent(Event[] events) {
+		for(int i = 0; i < events.length; i++) {
+			insertEvent(i, events[i]);
+		}
+	}
+	
+	public void insertEvent(int index, Event event) {
 		Log.d(TAG, "insertEvent" + event.toDateTimeSummaryString());
 		ContentValues v = new ContentValues();
+		v.put(EventDataBaseHelper.COLUMN_INDEX, index);		
 		v.put(EventDataBaseHelper.COLUMN_SUMMARY, event.getSummary());
 		v.put(EventDataBaseHelper.COLUMN_DESCRIPTION, event.getDescription());
 		if(event.getStartDate() != null) {
@@ -56,8 +63,6 @@ public class EventDataBase {
 		if(event.getEndDateTime() != null) {
 			v.put(EventDataBaseHelper.COLUMN_END_DATE_TIME, event.getEndDateTime().getTime());
 		}
-		v.put(EventDataBaseHelper.COLUMN_START_DATE_INDEX, event.getStartDateIndex());
-		v.put(EventDataBaseHelper.COLUMN_END_DATE_INDEX, event.getEndDateIndex());
 		v.put(EventDataBaseHelper.COLUMN_RECURSIVE, event.getRecursive());
 		v.put(EventDataBaseHelper.COLUMN_RECURSIVE_BY, event.getRecursiveBy());
 		v.put(EventDataBaseHelper.COLUMN_BY_WEEKDAY_OCCURRENCE, event.getByWeekdayOccurrence());
@@ -88,7 +93,7 @@ public class EventDataBase {
 						EventDataBaseHelper.COLUMN_RECURSIVE_BY,
 						EventDataBaseHelper.COLUMN_BY_WEEKDAY_OCCURRENCE						
 				},
-				null, null, null, null, EventDataBaseHelper.COLUMN_END_DATE_INDEX + " ASC");
+				null, null, null, null, EventDataBaseHelper.COLUMN_INDEX + " ASC");
 		Event[] events = new Event[c.getCount()];
 		int i = 0;
 		if(c.moveToFirst()) {
@@ -119,6 +124,9 @@ public class EventDataBase {
 		e.setRecursive(c.getInt(6));
 		e.setRecursiveBy(c.getInt(7));
 		e.setByWeekdayOccurrence(c.getInt(8));
+		if(EventSeparator.isSeparator(e)) {
+			return new EventSeparator(e.getStartDate());
+		}
 		return e;
 	}
 	

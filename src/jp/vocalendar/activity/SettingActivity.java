@@ -44,7 +44,7 @@ public class SettingActivity extends ListActivity{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
-    	setTitle(R.string.setting_title);
+    	setTitle(R.string.setting);
     	setListAdapter(new ArrayAdapter<String>(
     			this, android.R.layout.simple_list_item_1, getSettingStrings()));
 	}

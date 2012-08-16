@@ -143,6 +143,7 @@ public class OAuthManager {
    */
   public void doLogin(String accountName, boolean invalidate, Activity activity,
       AuthHandler callback) {
+	Log.d(TAG, "doLogin:" + accountName + "," + invalidate + "," + accountName + "," + callback);
     if (account != null && accountName.equals(account.name)) {
       if (!invalidate && authToken != null) {
         callback.handleAuth(account, authToken);

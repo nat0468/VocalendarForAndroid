@@ -2,12 +2,31 @@
 <resources>
     <string name="app_name">Vocalendar</string>
     <string name="vocalendar">VOCALENDAR</string>
-    <string name="setting_title">Configuration</string>
+    <string name="setting">Configuration</string>
     <string name="setting_about">About VOCALENDAR application</string>
     <string name="back">Back</string>
     <string name="ok">OK</string>   
     <string name="cancel">Cancel</string>    
   	<string name="choose_account_title">Choose account</string>
   	<string name="google_account_required">Google account is required. Add an account.</string>  		
-  	<string name="add_account">Add account</string>  		
+  	<string name="add_account">Add account</string>  	
+  	<string name="loading_events">Loading...</string>		
+  	<string name="today">Today</string>
+  	<string name="from_to"> - </string>			
+  	<string name="every_week_format">Every %s</string>			
+  	<string name="every_month_format">%s of every month</string>  		
+  	<string name="every_year_format">%s every year</string>		
+	<string name="first">first </string>			
+	<string name="second">second </string>			
+	<string name="third">third </string>			
+	<string name="fourth">forth </string>
+	<string name="nth_format">%dth </string>
+	<string name="first_day">first</string>			
+	<string name="second_day">second</string>			
+	<string name="third_day">third</string>			
+	<string name="nth_day_format">%dth</string>			
+	<string name="after_weekday_string"></string>			
+	<string name="update">Update</string>			
+	<string name="change_date">Change date</string>			
+	<string name="not_implemented">Not implemented.</string>
 </resources>

@@ -23,7 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1.0"
-            android:text="最新のイベント情報を取り込み中..." />
+            android:text="@string/loading_events" />
 
         <TextView
             android:id="@+id/loadingItemView"
@@ -37,7 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1.0"
-            android:text="スキップ" />
+            android:text="@string/cancel" />
 
     </LinearLayout>
 

@@ -6,7 +6,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
+import jp.vocalendar.R;
+
+import android.content.Context;
 import android.text.format.DateFormat;
+import android.text.format.DateUtils;
 
 /**
  * イベントを表すクラス。
@@ -14,6 +18,47 @@ import android.text.format.DateFormat;
 public class Event implements Serializable {
 	private static final long serialVersionUID = -370059715310487233L;
 		
+	// 日付表示に使う文字列
+	private static String STR_FROM_TO;
+	private static String STR_EVERY_YEAR_FORMAT;
+	private static String STR_EVERY_MONTH_FORMAT;
+	private static String STR_EVERY_WEEK_FORMAT;
+	private static String STR_FIRST;
+	private static String STR_SECOND;
+	private static String STR_THIRD;
+	private static String STR_FOURTH;	
+	private static String STR_NTH_FORMAT;	
+	private static String STR_FIRST_DAY;
+	private static String STR_SECOND_DAY;
+	private static String STR_THIRD_DAY;
+	private static String STR_NTH_DAY_FORMAT;
+	private static String STR_AFTER_WEEKDAY_STRING;
+	
+	/**
+	 * 日付表示に使う文字列(多言語対応)の初期化。システムの言語設定に応じて設定
+	 * @param context
+	 */
+	public static void initString(Context context) {
+		STR_FROM_TO = context.getString(R.string.from_to);
+		
+		STR_EVERY_YEAR_FORMAT = context.getString(R.string.every_year_format);
+		STR_EVERY_MONTH_FORMAT = context.getString(R.string.every_month_format);
+		STR_EVERY_WEEK_FORMAT = context.getString(R.string.every_week_format);		
+
+		STR_FIRST = context.getString(R.string.first);		
+		STR_SECOND = context.getString(R.string.second);		
+		STR_THIRD = context.getString(R.string.third);		
+		STR_FOURTH = context.getString(R.string.fourth);
+		STR_NTH_FORMAT = context.getString(R.string.nth_format);
+		
+		STR_FIRST_DAY = context.getString(R.string.first_day);		
+		STR_SECOND_DAY = context.getString(R.string.second_day);		
+		STR_THIRD_DAY = context.getString(R.string.third_day);		
+		STR_NTH_DAY_FORMAT = context.getString(R.string.nth_day_format);
+		
+		STR_AFTER_WEEKDAY_STRING = context.getString(R.string.after_weekday_string);
+	}
+	
 	/** 概要(タイトル) */
 	private String summary;
 	/** 説明 */
@@ -54,7 +99,7 @@ public class Event implements Serializable {
 	private int byWeekdayOccurrence = 0;
 	
 	/** formatDateTime()のキャッシュ */
-	private String formatDateTime = null;
+	protected String formatDateTime = null;
 	
 	public String getSummary() {
 		return summary;
@@ -121,7 +166,8 @@ public class Event implements Serializable {
 		} else {
 			formatRecursiveDateTime(sb);
 		}
-		return sb.toString();
+		formatDateTime = sb.toString();
+		return formatDateTime;
 	}
 	
 	/**
@@ -132,7 +178,7 @@ public class Event implements Serializable {
 		Date start = formatDateTime(startDate, startDateTime, sb);
 		
 		if(endDateTime != null) {
-			sb.append(" 〜 ");
+			sb.append(STR_FROM_TO);
 			if(equalYMD(start, endDateTime)) {
 				sb.append(formatTime(endDateTime));
 				return;
@@ -147,15 +193,15 @@ public class Event implements Serializable {
 			if(equalYMD(startCal, endDateCal)) {
 				return; 
 			}
-			sb.append(" 〜 ");			
+			sb.append(STR_FROM_TO);			
 			sb.append(formatDate(endDate));
 		} else {
-			sb.append(" 〜 ");			
+			sb.append(STR_FROM_TO);			
 			sb.append("????");
 		}
 	}
 	
-	private Date formatDateTime(Date date, Date dateTime, StringBuilder sb) {
+	protected static Date formatDateTime(Date date, Date dateTime, StringBuilder sb) {
 		if(dateTime != null) {
 			sb.append(formatDateTime(dateTime));
 			return dateTime;
@@ -170,44 +216,71 @@ public class Event implements Serializable {
 	private void formatRecursiveDateTime(StringBuilder sb) {
 		switch(recursive) {
 			case RECURSIVE_YEARLY:
-				sb.append("毎年 ");
 				if(startDateTime != null) {
-					sb.append(formatMonthAndDayTime(startDateTime));
+					sb.append(String.format(STR_EVERY_YEAR_FORMAT, formatMonthAndDayTime(startDateTime)));
 				} else if(startDate != null) {
-					sb.append(formatMonthAndDay(startDate));
+					sb.append(String.format(STR_EVERY_YEAR_FORMAT, formatMonthAndDay(startDate)));
 				} else {
-					sb.append("????");
+					sb.append(String.format(STR_EVERY_YEAR_FORMAT, "????"));
 				}
 				// TODO endDateやendDateTimeがある場合の扱い
 				break;
 			case RECURSIVE_MONTHLY:
-				sb.append("毎月");
 				if(byWeekdayOccurrence == 0) { // 日付指定の場合
-					if(recursiveBy != 0) {
-						sb.append(recursiveBy);
-					} else {
-						sb.append("?");
-					}
-					sb.append("日");
+					sb.append(String.format(STR_EVERY_MONTH_FORMAT, formatDayOfMonth(recursiveBy)));
 				} else {
-					sb.append("第");
-					sb.append(byWeekdayOccurrence);
-					sb.append(makeWeekdayString(recursiveBy));
-					sb.append("曜日");
+					String dayOfMonth = 
+							formatOrdinal(byWeekdayOccurrence) + formatWeekdayString(recursiveBy);
+					sb.append(String.format(STR_EVERY_MONTH_FORMAT, dayOfMonth));
 				}
 				break;
 			case RECURSIVE_WEEKLY:
-				sb.append("毎週");
-				sb.append(makeWeekdayString(recursiveBy));
-				sb.append("曜日 ");
+				sb.append(String.format(STR_EVERY_WEEK_FORMAT, formatWeekdayString(recursiveBy)));
 				if(startDateTime != null) {
+					sb.append(" ");
 					sb.append(formatTime(startDateTime));
 				}
 				break;
 			default:
-				sb.append("未実装");
+				sb.append("not implemented");
 				break;
 		}
+	}
+	
+	/**
+	 * 月の日の文字列表現(?日, 10th, など)を返す。
+	 * @param day
+	 * @return
+	 */
+	private static String formatDayOfMonth(int day) {
+		switch (day) {
+		case 1:
+			return STR_FIRST_DAY;
+		case 2:
+			return STR_SECOND_DAY;
+		case 3:
+			return STR_THIRD_DAY;
+		}
+		return String.format(STR_NTH_DAY_FORMAT, day);
+	}
+	
+	/**
+	 * 序数の文字列表現(第1, second, など)を返す。
+	 * @param n
+	 * @return
+	 */
+	private static String formatOrdinal(int n) {
+		switch(n) {
+		case 1:
+			return STR_FIRST;
+		case 2:
+			return STR_SECOND;
+		case 3:
+			return STR_THIRD;
+		case 4:
+			return STR_FOURTH;
+		}
+		return String.format(STR_NTH_FORMAT, n);
 	}
 	
 	/**
@@ -215,24 +288,11 @@ public class Event implements Serializable {
 	 * @param weekday 1:日, 2:月, ... , 7:土
 	 * @return
 	 */
-	private String makeWeekdayString(int weekday) {
-		switch (weekday) {
-		case 1:
-			return "日";
-		case 2:
-			return "月";
-		case 3:
-			return "火";
-		case 4:
-			return "水";
-		case 5:
-			return "木";
-		case 6:
-			return "金";
-		case 7:
-			return "土";
-		}
-		return "?";
+	private String formatWeekdayString(int weekday) {
+		StringBuilder sb = new StringBuilder(
+				DateUtils.getDayOfWeekString(weekday, DateUtils.LENGTH_LONG));
+		sb.append(STR_AFTER_WEEKDAY_STRING);
+		return sb.toString();
 	}
 	
 	private static String formatDate(Date date) {
@@ -485,5 +545,14 @@ public class Event implements Serializable {
 	}	
 	public boolean isRecursive() {
 		return recursive != RECURSIVE_NONE;
+	}
+	
+	/**
+	 * EventSeparator(区切り)のインスタンスならtrueを返す。
+	 * このクラスのインスタンスは常にfalse.
+	 * @return
+	 */
+	public boolean isSeparator() {
+		return false;
 	}
 }

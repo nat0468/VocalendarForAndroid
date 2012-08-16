@@ -19,32 +19,25 @@
         android:gravity="fill" >
 
         <Button
-            android:id="@+id/button1"
+            android:id="@+id/change_date_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1.0"
-            android:text="今日" />
-
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1.0"
-            android:text="日付" />
+            android:text="@string/change_date" />
 
         <Button
             android:id="@+id/setting_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1.0"
-            android:text="設定" />
+            android:text="@string/setting" />
 
         <Button
-            android:id="@+id/button4"
+            android:id="@+id/update_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1.0"
-            android:text="更新" />
+            android:text="@string/update" />
 
     </LinearLayout>
 
