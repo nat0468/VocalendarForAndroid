@@ -2,10 +2,13 @@ package jp.vocalendar.activity;
 
 import jp.vocalendar.R;
 import jp.vocalendar.model.Event;
+import jp.vocalendar.util.DialogUtil;
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class EventDescriptionActivity extends Activity {
@@ -20,7 +23,39 @@ public class EventDescriptionActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.event_description);
 		setTitle(R.string.vocalendar);
+
+		setupButtons();
 		
+		updateEventDescription();
+	}
+
+	private void setupButtons() {
+		Button shareButton = (Button)findViewById(R.id.share_button);
+		shareButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				DialogUtil.openNotImplementedDialog(EventDescriptionActivity.this);
+			}
+		});
+
+		Button nextButton = (Button)findViewById(R.id.next_button);
+		nextButton.setOnClickListener(new View.OnClickListener() {			
+			@Override
+			public void onClick(View v) {
+				DialogUtil.openNotImplementedDialog(EventDescriptionActivity.this);
+			}
+		});		
+		
+		Button previousButton = (Button)findViewById(R.id.previous_button);
+		previousButton.setOnClickListener(new View.OnClickListener() {			
+			@Override
+			public void onClick(View v) {
+				DialogUtil.openNotImplementedDialog(EventDescriptionActivity.this);
+			}
+		});
+	}
+	
+	private void updateEventDescription() {
 		event = (Event)getIntent().getSerializableExtra(KEY_EVENT);
 		//setTitle(event.getSummary());
 		TextView tv = (TextView)findViewById(R.id.descriptionView);

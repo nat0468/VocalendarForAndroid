@@ -38,4 +38,5 @@ VOCALENDARについては、&lt;a href="http://vocalendar.jp/about/"&gt;こち�
 	<string name="number_of_date_to_get_events">取得イベント日数</string>
 	<string name="google_account">Googleアカウント</string>
 	<string name="number_of_date_to_get_events_dialog">日数の選択</string>
+	<string name="share_button">共有</string>	
 </resources>

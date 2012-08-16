@@ -51,4 +51,5 @@ About VOCALENDAR, please see &lt;a href="http://vocalendar.jp/about/"&gt;here&lt
 	    <item>7</item>
 	</string-array>
 	<string name="number_of_date_to_get_events_dialog">Select number of date</string>
+	<string name="share_button">Share</string>
 </resources>
