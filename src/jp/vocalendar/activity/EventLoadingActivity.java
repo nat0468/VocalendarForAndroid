@@ -30,6 +30,7 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -50,7 +51,7 @@ public class EventLoadingActivity extends Activity implements LoadEventTask.Task
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-        setContentView(R.layout.splash);
+        setContentView(R.layout.loading);
         setTitle(R.string.vocalendar);
         
         Button cancel = (Button)findViewById(R.id.cancelButton);
@@ -64,10 +65,16 @@ public class EventLoadingActivity extends Activity implements LoadEventTask.Task
 			}
 		});
 		loadingItemView = (TextView)findViewById(R.id.loadingItemView);
-                
+        initWallpaper();
         initAccount();
 	}
 
+	private void initWallpaper() {
+		ImageView iv = (ImageView)findViewById(R.id.wallpaperImageView);
+		iv.setImageResource(R.drawable.wallpaper);
+		iv.setAlpha(64);
+	}
+	
 	private void startLoadEventTask() {		
         TimeZone timeZone = TimeZone.getDefault();
         Calendar localCal = Calendar.getInstance(timeZone); // いったんローカルのタイムゾーンでカレンダー計算

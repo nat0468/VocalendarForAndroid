@@ -1,21 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
- <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-         android:orientation="vertical"
-         android:layout_width="match_parent"
-         android:layout_height="match_parent">
-     <ScrollView android:id="@+id/scrollView1" android:layout_width="match_parent" android:layout_height="match_parent">
-         <LinearLayout android:id="@+id/linearLayout1" android:layout_width="match_parent" android:layout_height="wrap_content">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.AboutActivity" >
 
-             <TextView
-                 android:id="@+id/aboutTextView"
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:textSize="18sp" >
-</TextView>
-         </LinearLayout>
-     </ScrollView>
-    <jp.vocalendar.activity.ImageView
-        android:id="@+id/imageView"
+    <ImageView
+        android:id="@+id/wallpaperImageView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-</LinearLayout>
+        android:layout_height="match_parent"
+        android:adjustViewBounds="false"
+        android:scaleType="fitEnd" />
+
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/aboutTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp" >
+
+            </TextView>
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>

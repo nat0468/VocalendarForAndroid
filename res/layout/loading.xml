@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+	    
+    <ImageView
+        android:id="@+id/wallpaperImageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:adjustViewBounds="false"
+        android:scaleType="fitCenter" />
+    
+	<LinearLayout 
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:orientation="vertical" >
+	
+	    <LinearLayout
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1.0" >
+	    </LinearLayout>
+	
+	    <LinearLayout
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="0"
+	        android:gravity="center"
+	        android:orientation="vertical" >
+	
+	        <TextView
+	            android:id="@+id/loadingView"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_weight="1.0"
+	            android:text="@string/loading_events" />
+	
+	        <TextView
+	            android:id="@+id/loadingItemView"
+	            android:layout_width="wrap_content"
+	            android:layout_height="50sp"
+	            android:layout_weight="1.0"
+	            android:text="" />
+	
+	        <Button
+	            android:id="@+id/cancelButton"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_weight="1.0"
+	            android:text="@string/cancel" />	
+	    </LinearLayout>	
+	</LinearLayout>
+	
+	
+</FrameLayout>

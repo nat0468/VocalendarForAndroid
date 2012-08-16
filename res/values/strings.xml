@@ -31,10 +31,28 @@
 	<string name="not_implemented">Not implemented.</string>
 	<string name="open_vocalendar">Open vocalender.jp</string>	
 	<string name="about_message">\
+&lt;h2&gt;VOCALENDAR %s&lt;/h2&gt;
+&lt;h4&gt;About VOCALENDAR appliction&lt;/h4&gt;
 VOCALENDAR application is the one to view the information of events about VOCALOID in \
-&lt;a href="http://vocalender.jp/pc"&gt;vocalendar.jp&lt;/a&gt;&lt;br/&gt;&lt;br/&gt;\
+&lt;a href="http://vocalender.jp"&gt;VOCALENDAR&lt;/a&gt;&lt;br/&gt;&lt;br/&gt;\
 About VOCALENDAR, please see &lt;a href="http://vocalendar.jp/about/"&gt;here&lt;/a&gt;\
-(Japanese).
+(Japanese).&lt;br/&gt;\
+&lt;br/&gt;\
+&lt;h4&gt;License&lt;/h4&gt;
+This software exclude the software mensioned later is copyrighted by NAT(@nat0468).&lt;br/&gt;\
+You may use this software free of charge, but licensor provides this software on \
+an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, \
+including, without limitation, any warranties or conditions of FITNESS FOR A PARTICULAR PURPOSE, \
+NON-INFRINGEMENT or MERCHANTABILITY. &lt;br/&gt;\
+&lt;h4&gt;This software uses the followings:&lt;/h4&gt;
+&lt;a href="http://code.google.com/p/google-api-java-client/"&gt;Google APIs Client Library for Java&lt;/a&gt;&lt;br&gt;
+Licensed under the Apache License Version 2.0 \
+&lt;a href="http://www.apache.org/licenses/"&gt;http://www.apache.org/licenses/&lt;/a&gt;&lt;br&gt;
+&lt;br&gt;
+&lt;a href="https://code.google.com/p/google-meeting-scheduler/"&gt;google-meeting-scheduler&lt;/a&gt;に含まれる\
+OAuthManager.java&lt;br&gt;
+Copyright (c) 2010 Google Inc. Licensed under the Apache License Version 2.0 \
+&lt;a href="http://www.apache.org/licenses/"&gt;http://www.apache.org/licenses/&lt;/a&gt;&lt;br&gt;
 	</string>
 	<string name="number_of_date_to_get_events">Number of dates to get</string>
 	<string name="google_account">Google Account</string>
