@@ -74,7 +74,7 @@ public class EventLoadingActivity extends Activity implements LoadEventTask.Task
 	
 	private void startLoadEventTask() {		
         TimeZone timeZone = TimeZone.getDefault();
-        Calendar localCal = Calendar.getInstance(timeZone); // いったんローカルのタイムゾーンでカレンダー計算
+        Calendar localCal = Calendar.getInstance(timeZone);
         localCal.set(Calendar.HOUR_OF_DAY, 0);
         localCal.set(Calendar.MINUTE, 0);
         localCal.set(Calendar.SECOND, 0);
@@ -85,7 +85,7 @@ public class EventLoadingActivity extends Activity implements LoadEventTask.Task
         int date = localCal.get(Calendar.DATE);
         int duration = getNumberOfDateToGetEvent();
         DateTime[] dates = makeStartAndEndDateTime(
-        		year, month, date, duration);
+        		year, month, date, timeZone, duration);
                                 
         EventSeparator[] separators = new EventSeparator[duration];
         for(int i = 0; i < separators.length; i++) {
@@ -98,8 +98,8 @@ public class EventLoadingActivity extends Activity implements LoadEventTask.Task
 		task.execute(Constants.MAIN_CALENDAR_ID, Constants.BROADCAST_CALENDAR_ID);
 	}
 	
-	private DateTime[] makeStartAndEndDateTime(int year, int month, int date, int duration) {
-        Calendar utcCal = Calendar.getInstance(TimeZone.getTimeZone("UTC")); // タイムゾーンUTCで、ローカルのタイムゾーンの日付を指定
+	private DateTime[] makeStartAndEndDateTime(int year, int month, int date, TimeZone timeZone, int duration) {
+        Calendar utcCal = Calendar.getInstance(timeZone);
         utcCal.set(Calendar.YEAR, year);
         utcCal.set(Calendar.MONTH, month);
         utcCal.set(Calendar.DATE, date);        
@@ -109,10 +109,9 @@ public class EventLoadingActivity extends Activity implements LoadEventTask.Task
         utcCal.set(Calendar.MILLISECOND, 0);
                 
         DateTime[] dates = new DateTime[2];
-    	dates[0] = new DateTime(utcCal.getTimeInMillis(), 0); // tzShiftを0。UTCのオフセットを"Z"(=00:00)にする(参考：RFC3339)
-    	
+    	dates[0] = new DateTime(utcCal.getTime(), timeZone); //開始日時   	
     	utcCal.add(Calendar.MONTH, duration);
-    	dates[1] = new DateTime(utcCal.getTimeInMillis(), 0); // 終了日時
+    	dates[1] = new DateTime(utcCal.getTime(), timeZone); //終了日時
     	return dates;
 	}
 	
