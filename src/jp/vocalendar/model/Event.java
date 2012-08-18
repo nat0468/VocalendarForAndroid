@@ -59,6 +59,8 @@ public class Event implements Serializable {
 		STR_AFTER_WEEKDAY_STRING = context.getString(R.string.after_weekday_string);
 	}
 	
+	/** イベントのID(Google CalendarでのID) */
+	private String id;
 	/** 概要(タイトル) */
 	private String summary;
 	/** 説明 */
@@ -554,5 +556,12 @@ public class Event implements Serializable {
 	 */
 	public boolean isSeparator() {
 		return false;
+	}
+	
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
 	}
 }

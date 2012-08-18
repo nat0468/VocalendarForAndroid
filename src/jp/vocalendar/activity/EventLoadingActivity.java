@@ -1,19 +1,14 @@
 package jp.vocalendar.activity;
 
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TimeZone;
-
-import com.google.api.client.util.DateTime;
 
 import jp.vocalendar.Constants;
 import jp.vocalendar.R;
 import jp.vocalendar.googleapi.OAuthManager;
 import jp.vocalendar.model.Event;
-import jp.vocalendar.model.EventComparator;
 import jp.vocalendar.model.EventDataBase;
 import jp.vocalendar.model.EventSeparator;
 import jp.vocalendar.model.GoogleCalendarLoadEventTask;
@@ -32,6 +27,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.google.api.client.util.DateTime;
 
 /**
  * イベント読み込み中の画面のActivity。
@@ -78,11 +75,30 @@ public class EventLoadingActivity extends Activity implements LoadEventTask.Task
 	private void startLoadEventTask() {		
         TimeZone timeZone = TimeZone.getDefault();
         Calendar localCal = Calendar.getInstance(timeZone); // いったんローカルのタイムゾーンでカレンダー計算
-		
+        localCal.set(Calendar.HOUR_OF_DAY, 0);
+        localCal.set(Calendar.MINUTE, 0);
+        localCal.set(Calendar.SECOND, 0);
+        localCal.set(Calendar.MILLISECOND, 0);
+		        
         int year = localCal.get(Calendar.YEAR);
         int month = localCal.get(Calendar.MONTH);
         int date = localCal.get(Calendar.DATE);
+        int duration = getNumberOfDateToGetEvent();
+        DateTime[] dates = makeStartAndEndDateTime(
+        		year, month, date, duration);
+                                
+        EventSeparator[] separators = new EventSeparator[duration];
+        for(int i = 0; i < separators.length; i++) {
+        	separators[i] = new EventSeparator(localCal.getTime());
+        	localCal.add(Calendar.DATE, 1);
+        }
         
+		task = new GoogleCalendarLoadEventTask(this, this, 5);
+		task.setStartAndEndDate(dates[0], dates[1], separators, timeZone);
+		task.execute(Constants.MAIN_CALENDAR_ID, Constants.BROADCAST_CALENDAR_ID);
+	}
+	
+	private DateTime[] makeStartAndEndDateTime(int year, int month, int date, int duration) {
         Calendar utcCal = Calendar.getInstance(TimeZone.getTimeZone("UTC")); // タイムゾーンUTCで、ローカルのタイムゾーンの日付を指定
         utcCal.set(Calendar.YEAR, year);
         utcCal.set(Calendar.MONTH, month);
@@ -92,20 +108,12 @@ public class EventLoadingActivity extends Activity implements LoadEventTask.Task
         utcCal.set(Calendar.SECOND, 0);
         utcCal.set(Calendar.MILLISECOND, 0);
                 
-        DateTime[] dates = new DateTime[getNumberOfDateToGetEvent() + 1];
-        EventSeparator[] separators = new EventSeparator[dates.length - 1];
+        DateTime[] dates = new DateTime[2];
     	dates[0] = new DateTime(utcCal.getTimeInMillis(), 0); // tzShiftを0。UTCのオフセットを"Z"(=00:00)にする(参考：RFC3339)
-        for(int i = 0; i < separators.length; i++) {
-        	separators[i] = new EventSeparator(localCal.getTime());
-        	localCal.add(Calendar.DATE, 1);
-        	
-    		utcCal.add(java.util.Calendar.DATE, 1);
-    		dates[i+1] = new DateTime(utcCal.getTimeInMillis(), 0);        	
-        }
-        
-		task = new GoogleCalendarLoadEventTask(this, this, 5);
-		task.setStartAndEndDate(dates, separators, timeZone);
-		task.execute(Constants.MAIN_CALENDAR_ID, Constants.BROADCAST_CALENDAR_ID);
+    	
+    	utcCal.add(Calendar.MONTH, duration);
+    	dates[1] = new DateTime(utcCal.getTimeInMillis(), 0); // 終了日時
+    	return dates;
 	}
 	
 	public void transitToEventListActivity() {

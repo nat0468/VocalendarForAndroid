@@ -2,6 +2,7 @@ package jp.vocalendar.model;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -26,11 +27,15 @@ import com.google.api.services.calendar.model.Events;
 
 public class GoogleCalendarLoadEventTask extends LoadEventTask {
 	private static String TAG = "LoadEventTask";  
-	
 	/**
-	 * イベント情報を読み込む日
+	 * イベント情報を読み込む開始日(この日時自体は含む)
 	 */
-	private DateTime[] dates;
+	private DateTime start;
+	/**
+	 * イベント情報を読み込む終了日(この日時自体は含まない)
+	 */
+	private DateTime end;
+	
 	/**
 	 * イベント情報のセパレータ
 	 */
@@ -62,30 +67,39 @@ public class GoogleCalendarLoadEventTask extends LoadEventTask {
      * @param timeZone
      */
     public void setStartAndEndDate(
-    		DateTime[] dates, EventSeparator[] separators, TimeZone timeZone) {
-    	this.dates = dates;
+    		DateTime start, DateTime end, EventSeparator[] separators, TimeZone timeZone) {
+    	this.start = start;
+    	this.end = end;
     	this.separators = separators;
     	this.timeZone = timeZone;
     }
     
 	@Override
 	protected List<Event> doInBackground(String... ids) {
+		List<Event> allEventList = getAllEvents(ids);
+		if(allEventList == null) {
+			return null;
+		}		
 		List<Event> eventList = new LinkedList<Event>();
-		for(int i = 0; i < (dates.length-1); i++) {
-			eventList.add(separators[i]);
-			List<Event> oneDayEvents = new LinkedList<Event>();
-			for(String id : ids) {
-				try {
-					oneDayEvents.addAll(loadEvents(id, dates[i], dates[i+1]));				
-				} catch(IOException e) {
-					Log.e(TAG, "loadEvents(" + id + ") fails.", e);
-					return null;
-				}
-			}	
-			Collections.sort(oneDayEvents, new EventComparator());
-			eventList.addAll(oneDayEvents);
+		for(EventSeparator s : separators) {
+			eventList.add(s);
+			eventList.addAll(filteredBy(allEventList, s.getStartDate()));
 		}
 		return eventList;
+	}
+	
+	private List<Event> getAllEvents(String... ids) {
+		List<Event> allEventList = new LinkedList<Event>();
+		for(String id : ids) {
+			try {
+				allEventList.addAll(loadEvents(id, start, end));				
+			} catch(IOException e) {
+				Log.e(TAG, "loadEvents(" + id + ") fails.", e);
+				return null;
+			}
+		}	
+		Collections.sort(allEventList, new EventComparator());
+		return allEventList;
 	}
 
 	private List<Event> loadEvents(String id, DateTime start, DateTime end)
@@ -164,8 +178,24 @@ public class GoogleCalendarLoadEventTask extends LoadEventTask {
 			}
 		}
 	}
+
+	/**
+	 * 指定された日付に合うイベントのみ返す。
+	 * @param events
+	 * @param date
+	 * @return
+	 */
+	private List<Event> filteredBy(List<Event> events, Date date) {
+		List<Event> filtered = new LinkedList<Event>();
+		for(Event e : events) {
+			if(e.equalByDate(date, timeZone)) {
+				filtered.add(e);
+			}
+		}
+		return filtered; 
+	}
 	
-	private Calendar buildCalendar() {
+	protected Calendar buildCalendar() {
 		HttpTransport transport = AndroidHttp.newCompatibleTransport();
 	    JacksonFactory jsonFactory = new JacksonFactory();
 	    String authToken = OAuthManager.getInstance().getAuthToken();

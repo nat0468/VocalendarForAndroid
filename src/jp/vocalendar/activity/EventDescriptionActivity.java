@@ -4,6 +4,7 @@ import jp.vocalendar.R;
 import jp.vocalendar.model.Event;
 import jp.vocalendar.util.DialogUtil;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -34,7 +35,7 @@ public class EventDescriptionActivity extends Activity {
 		shareButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				DialogUtil.openNotImplementedDialog(EventDescriptionActivity.this);
+				openSendDialog();
 			}
 		});
 
@@ -70,11 +71,27 @@ public class EventDescriptionActivity extends Activity {
 	}
 	
 	private static String changeURItoAnchorTag(String src) {
+		if(src == null) {
+			return "";
+		}
 		String dest = src.replaceAll("[\n|\r|\f]", "<br/>");
 		dest = dest.replaceAll("\\\\n", "<br/>");
 		dest =  dest.replaceAll("(https?://[-_.!~*'\\(\\)a-zA-Z0-9;\\/?:\\@&=+\\$,%#]+)",
 								"<a href=\"$1\">$1</a>");
 		return dest;
+	}
+	
+	private void openSendDialog() {
+		Intent intent = new Intent(Intent.ACTION_SEND);
+		intent.setType("text/plain");
+		intent.putExtra(Intent.EXTRA_TEXT, "test text");
+		intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"test@hoge.com"});
+		intent.putExtra(Intent.EXTRA_SUBJECT, "test subject");
+		intent.putExtra(Intent.EXTRA_TITLE, "test title");
+
+		// Create and start the chooser
+		Intent chooser = Intent.createChooser(intent, "選択");
+		startActivity(chooser);
 	}
 
 }

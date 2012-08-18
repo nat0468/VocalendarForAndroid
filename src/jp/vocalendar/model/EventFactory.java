@@ -17,6 +17,7 @@ public class EventFactory {
 	
 	public static Event toVocalendarEvent(com.google.api.services.calendar.model.Event ge) {
 		Event e = new Event();
+		e.setId(ge.getId());
 		e.setSummary(ge.getSummary());
 		e.setDescription(ge.getDescription());
 		if(ge.getStart() != null) {
