@@ -30,14 +30,18 @@
             android:layout_weight="1.0"
             android:gravity="center"
             android:text="&lt;" />
-
         <Button
             android:id="@+id/share_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1.0"
             android:text="@string/share_button" />
-
+        <Button
+            android:id="@+id/import_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:text="@string/import_button" />
         <Button
             android:id="@+id/next_button"
             android:layout_width="wrap_content"

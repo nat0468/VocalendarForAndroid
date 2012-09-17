@@ -54,5 +54,7 @@ Copyright (c) 2010 Google Inc. Licensed under the Apache License Version 2.0 \
 	<string name="number_of_date_to_get_events">取得イベント日数</string>
 	<string name="google_account">Googleアカウント</string>
 	<string name="number_of_date_to_get_events_dialog">日数の選択</string>
-	<string name="share_button">共有</string>	
+	<string name="share_button">共有</string>
+	<string name="import_button">取込</string>
+	<string name="share_footer">http://vocalendar.jp より</string>
 </resources>

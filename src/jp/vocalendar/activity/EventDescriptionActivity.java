@@ -84,14 +84,20 @@ public class EventDescriptionActivity extends Activity {
 	private void openSendDialog() {
 		Intent intent = new Intent(Intent.ACTION_SEND);
 		intent.setType("text/plain");
-		intent.putExtra(Intent.EXTRA_TEXT, "test text");
-		intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"test@hoge.com"});
-		intent.putExtra(Intent.EXTRA_SUBJECT, "test subject");
-		intent.putExtra(Intent.EXTRA_TITLE, "test title");
+		intent.putExtra(Intent.EXTRA_TEXT, makeSharingEventText());
 
 		// Create and start the chooser
 		Intent chooser = Intent.createChooser(intent, "選択");
 		startActivity(chooser);
+	}
+	
+	private String makeSharingEventText() {
+		StringBuilder sb = new StringBuilder();
+		String noTagSummary = event.getSummary().replaceAll("【[^】]+】", "");
+		sb.append(noTagSummary);
+		sb.append(' ');
+		sb.append(getString(R.string.share_footer));
+		return sb.toString();
 	}
 
 }
