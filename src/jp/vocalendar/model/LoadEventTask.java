@@ -10,13 +10,13 @@ import android.util.Log;
 /**
  * イベント情報を読み込むAsyncTaskの共通処理。
  */
-public abstract class LoadEventTask extends AsyncTask<String, Event, List<Event>> {
+public abstract class LoadEventTask extends AsyncTask<String, Event, List<EventDataBaseRow>> {
 	/** 
 	 * AsyncTaskのからのコールバックインターフェイス
 	 */
 	public static interface TaskCallback {
 		/** Task終了後に呼ばれる */
-		public void onPostExecute(List<Event> events);
+		public void onPostExecute(List<EventDataBaseRow> events);
 		/** Event読み込み毎に呼ばれる */
 		public void onProgressUpdate(Event event);
 		/**
@@ -54,7 +54,7 @@ public abstract class LoadEventTask extends AsyncTask<String, Event, List<Event>
 	}
 	
 	@Override
-	protected void onPostExecute(List<Event> events) {
+	protected void onPostExecute(List<EventDataBaseRow> events) {
 		if(taskCallback != null && !canceled) { 
 			taskCallback.onPostExecute(events);
 		}		

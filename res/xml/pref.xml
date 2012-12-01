@@ -20,7 +20,4 @@
     <Preference android:title="@string/back"
         		android:key="back">
     </Preference>
-    
-    
-
 </PreferenceScreen>

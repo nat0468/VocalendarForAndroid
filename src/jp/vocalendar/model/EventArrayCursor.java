@@ -14,13 +14,13 @@ public class EventArrayCursor extends AbstractCursor implements Cursor {
 	};
 	
 	/** カーソル対象の配列 */
-	private Event[] events;
+	private EventDataBaseRow[] events;
 	/** カーソルの現在位置 */
 	private int currentPosition = 0;
 	/** カーソルの現在位置のEvent */
-	private Event currentEvent;
+	private EventDataBaseRow currentRow;
 	
-	public EventArrayCursor(Event[] events) {
+	public EventArrayCursor(EventDataBaseRow[] events) {
 		this.events = events;
 		onMove(0, 0);
 	}
@@ -73,11 +73,11 @@ public class EventArrayCursor extends AbstractCursor implements Cursor {
 		case 0: // _id
 			return Integer.toString(currentPosition); 
 		case 1: // start
-			return currentEvent.formatDateTime();
+			return currentRow.getEvent().formatDateTime();
 		case 2: // summary
-			return currentEvent.getSummary();
+			return currentRow.getEvent().getSummary();
 		case 3: // description
-			return currentEvent.getDescription();
+			return currentRow.getEvent().getDescription();
 		}
 		throw new IllegalArgumentException("invalid column: " + column);		
 	}
@@ -92,7 +92,7 @@ public class EventArrayCursor extends AbstractCursor implements Cursor {
 	public boolean onMove(int oldPosition, int newPosition) {
 		// Log.d("EventListCursor", "onMove(" + oldPosition + "," + newPosition + ")");
 		try {
-			currentEvent = events[newPosition];
+			currentRow = events[newPosition];
 			currentPosition = newPosition;
 			return true;
 		} catch(IndexOutOfBoundsException e) {
@@ -101,6 +101,10 @@ public class EventArrayCursor extends AbstractCursor implements Cursor {
 	}
 	
 	public Event getEvent(int position) {
+		return events[position].getEvent();
+	}
+
+	public EventDataBaseRow getEventDataBaseRow(int position) {
 		return events[position];
 	}
 

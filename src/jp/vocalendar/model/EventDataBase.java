@@ -1,6 +1,7 @@
 package jp.vocalendar.model;
 
 import java.util.Date;
+import java.util.List;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -14,6 +15,25 @@ import android.util.Log;
  */
 public class EventDataBase {
 	private static final String TAG = "EventDataBase";
+	
+	/**
+	 * イベント情報をDBから取得(query())するときのカラム一覧
+	 */
+	private static String[] QUERY_EVENT_COLUMNS = new String[] {
+			EventDataBaseHelper.COLUMN_START_DATE,
+			EventDataBaseHelper.COLUMN_START_DATE_TIME,
+			EventDataBaseHelper.COLUMN_END_DATE,
+			EventDataBaseHelper.COLUMN_END_DATE_TIME,
+			EventDataBaseHelper.COLUMN_SUMMARY,
+			EventDataBaseHelper.COLUMN_DESCRIPTION,
+			EventDataBaseHelper.COLUMN_RECURSIVE,
+			EventDataBaseHelper.COLUMN_RECURSIVE_BY,
+			EventDataBaseHelper.COLUMN_BY_WEEKDAY_OCCURRENCE,
+			EventDataBaseHelper.COLUMN_INDEX,
+			EventDataBaseHelper.COLUMN_PREVIOUS_INDEX,
+			EventDataBaseHelper.COLUMN_NEXT_INDEX
+	};
+
 	
 	private Context context;
 	private EventDataBaseHelper helper;
@@ -39,16 +59,19 @@ public class EventDataBase {
 		database = null;
 	}
 	
-	public void insertEvent(Event[] events) {
-		for(int i = 0; i < events.length; i++) {
-			insertEvent(i, events[i]);
+	public void insertEvent(List<EventDataBaseRow> eventRows) {
+		for(EventDataBaseRow e : eventRows) {
+			insertEvent(e);
 		}
 	}
 	
-	public void insertEvent(int index, Event event) {
+	public void insertEvent(EventDataBaseRow eventRow) {
+		Event event = eventRow.getEvent();
 		Log.d(TAG, "insertEvent" + event.toDateTimeSummaryString());
 		ContentValues v = new ContentValues();
-		v.put(EventDataBaseHelper.COLUMN_INDEX, index);		
+		v.put(EventDataBaseHelper.COLUMN_INDEX, eventRow.getIndex());		
+		v.put(EventDataBaseHelper.COLUMN_PREVIOUS_INDEX, eventRow.getPreviousIndex());		
+		v.put(EventDataBaseHelper.COLUMN_NEXT_INDEX, eventRow.getNextIndex());		
 		v.put(EventDataBaseHelper.COLUMN_SUMMARY, event.getSummary());
 		v.put(EventDataBaseHelper.COLUMN_DESCRIPTION, event.getDescription());
 		if(event.getStartDate() != null) {
@@ -79,22 +102,11 @@ public class EventDataBase {
 		database.execSQL("delete from " + EventDataBaseHelper.EVENT_TABLE_NAME + ";");
 	}
 	
-	public Event[] getAllEvents() {
+	public EventDataBaseRow[] getAllEvents() {
 		Cursor c = database.query(
-				EventDataBaseHelper.EVENT_TABLE_NAME,
-				new String[] {
-						EventDataBaseHelper.COLUMN_START_DATE,
-						EventDataBaseHelper.COLUMN_START_DATE_TIME,
-						EventDataBaseHelper.COLUMN_END_DATE,
-						EventDataBaseHelper.COLUMN_END_DATE_TIME,
-						EventDataBaseHelper.COLUMN_SUMMARY,
-						EventDataBaseHelper.COLUMN_DESCRIPTION,
-						EventDataBaseHelper.COLUMN_RECURSIVE,
-						EventDataBaseHelper.COLUMN_RECURSIVE_BY,
-						EventDataBaseHelper.COLUMN_BY_WEEKDAY_OCCURRENCE						
-				},
+				EventDataBaseHelper.EVENT_TABLE_NAME, QUERY_EVENT_COLUMNS, 
 				null, null, null, null, EventDataBaseHelper.COLUMN_INDEX + " ASC");
-		Event[] events = new Event[c.getCount()];
+		EventDataBaseRow[] events = new EventDataBaseRow[c.getCount()];
 		int i = 0;
 		if(c.moveToFirst()) {
 			do {
@@ -105,7 +117,7 @@ public class EventDataBase {
 		return events;
 	}
 	
-	private Event getEvent(Cursor c) {
+	private EventDataBaseRow getEvent(Cursor c) {
 		Event e = new Event();
 		if(!c.isNull(0)) {
 			e.setStartDate(new Date(c.getLong(0)));
@@ -125,11 +137,28 @@ public class EventDataBase {
 		e.setRecursiveBy(c.getInt(7));
 		e.setByWeekdayOccurrence(c.getInt(8));
 		if(EventSeparator.isSeparator(e)) {
-			return new EventSeparator(e.getStartDate());
+			e = new EventSeparator(e.getStartDate());
 		}
-		return e;
+		return new EventDataBaseRow(e, c.getInt(9), c.getInt(10), c.getInt(11));		
 	}
 	
+	/**
+	 * 指定されたインデックスのイベント情報を返す。
+	 * @param index 
+	 * @return イベント情報。指定されたインデックスが存在しない場合はnull
+	 */
+	public EventDataBaseRow getEventByIndex(int index) {
+		Cursor c = database.query(
+				EventDataBaseHelper.EVENT_TABLE_NAME, QUERY_EVENT_COLUMNS,
+				EventDataBaseHelper.COLUMN_INDEX + "=?", new String[]{Integer.toString(index)},
+				null, null, EventDataBaseHelper.COLUMN_INDEX + " ASC");
+		EventDataBaseRow event = null;
+		if(c.moveToFirst()) {
+			event = getEvent(c);
+		}
+		c.close();
+		return event;		
+	}
 	
 	public Event[] getEventsByDate(Date date) {
 		return null; // TODO

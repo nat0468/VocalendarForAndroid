@@ -2,10 +2,14 @@ package jp.vocalendar.model;
 
 import java.util.Comparator;
 
+import android.util.Log;
+
 /**
  * Eventオブジェクトを、昇順に並べ替えるクラス。
  */
 public class EventComparator implements Comparator<Event> {
+	public static final String TAGS = "EventComparator"; 
+	
 	/**
 	 * 以下のルールで、Eventを比較する。
 	 * <ul>
@@ -20,25 +24,32 @@ public class EventComparator implements Comparator<Event> {
 	@Override
 	public int compare(Event e1, Event e2) {
 		if(e1 == e2) {
-			return 0;			
+			log(e1, e2, 0);
+			return 0;
 		}
 		
 		// 繰り返しイベントの場合
 		if(e1.isRecursive() && e2.isRecursive()) {
+			log(e1, e2, compareRecursive(e1, e2));
 			return compareRecursive(e1, e2);
 		} else if(e1.isRecursive() && !e2.isRecursive()) {
+			log(e1, e2, -1);
 			return -1;
 		} else if(!e1.isRecursive() && e2.isRecursive()) {
+			log(e1, e2, 1);
 			return 1;
 		}
 		
 		// 日付または日時イベントの場合
 		if(e1.getStartDateIndex() == e2.getStartDateIndex()) {
 			if(e1.getEndDateIndex() == e2.getEndDateIndex()) {
+				log(e1, e2, e1.getSummary().compareTo(e2.getSummary()));
 				return e1.getSummary().compareTo(e2.getSummary());
 			} 
+			log(e1, e2, (int)(e1.getEndDateIndex() - e2.getEndDateIndex()));
 			return (int)(e1.getEndDateIndex() - e2.getEndDateIndex());
 		}
+		log(e1, e2, (int)(e1.getStartDateIndex() - e2.getStartDateIndex()));
 		return (int)(e1.getStartDateIndex() - e2.getStartDateIndex());
 	}
 	
@@ -64,5 +75,9 @@ public class EventComparator implements Comparator<Event> {
 			return e1.getEndDateTime().compareTo(e2.getEndDateTime());
 		}
 		return e1.getStartDateTime().compareTo(e2.getStartDateTime());
+	}
+	
+	private void log(Event e1, Event e2, int returnValue) {
+		Log.d(TAGS, e1.toDateTimeSummaryString() + "x" + e2.toDateTimeSummaryString() + ":" + returnValue);		
 	}
 }

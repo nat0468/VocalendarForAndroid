@@ -1,7 +1,6 @@
 package jp.vocalendar.activity;
 
 import java.util.Calendar;
-import java.util.Iterator;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -10,6 +9,7 @@ import jp.vocalendar.R;
 import jp.vocalendar.googleapi.OAuthManager;
 import jp.vocalendar.model.Event;
 import jp.vocalendar.model.EventDataBase;
+import jp.vocalendar.model.EventDataBaseRow;
 import jp.vocalendar.model.EventSeparator;
 import jp.vocalendar.model.GoogleCalendarLoadEventTask;
 import jp.vocalendar.model.LoadEventTask;
@@ -37,6 +37,11 @@ import com.google.api.client.util.DateTime;
 public class EventLoadingActivity extends Activity implements LoadEventTask.TaskCallback {
 	private static String TAG = "SplashScreenActivity";
 	
+	// イベントを取り込む開始日を指定する 年月日 をIntentに格納するキー
+	public static String KEY_YEAR = "year";
+	public static String KEY_MONTH = "month";
+	public static String KEY_DATE = "date";	
+		
 	/**
 	 * 認証系の処理(アカウント追加やアカウント利用許可など)をする時のリクエストコード。
 	 */
@@ -44,6 +49,9 @@ public class EventLoadingActivity extends Activity implements LoadEventTask.Task
 	
 	private GoogleCalendarLoadEventTask task = null;	
 	private TextView loadingItemView = null;
+	
+	// 読み込み中の日付
+	private int loadingYear, loadingMonth, loadingDateOfMonth;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -72,20 +80,37 @@ public class EventLoadingActivity extends Activity implements LoadEventTask.Task
 		iv.setAlpha(64);
 	}
 	
-	private void startLoadEventTask() {		
+	private void startLoadEventTask() {
         TimeZone timeZone = TimeZone.getDefault();
+
+        if(getIntent().hasExtra(KEY_YEAR)) {
+			Intent intent = getIntent();
+			loadingYear = intent.getIntExtra(KEY_YEAR, -1);
+			loadingMonth = intent.getIntExtra(KEY_MONTH, -1);			
+			loadingDateOfMonth = intent.getIntExtra(KEY_DATE, -1);
+		} else {
+	        Calendar localCal = Calendar.getInstance(timeZone);		        
+	        loadingYear = localCal.get(Calendar.YEAR);
+	        loadingMonth = localCal.get(Calendar.MONTH);
+	        loadingDateOfMonth = localCal.get(Calendar.DATE);			
+		}
+		
+        startLoadEventTask(timeZone);
+	}
+
+	private void startLoadEventTask(TimeZone timeZone) {
         Calendar localCal = Calendar.getInstance(timeZone);
         localCal.set(Calendar.HOUR_OF_DAY, 0);
         localCal.set(Calendar.MINUTE, 0);
         localCal.set(Calendar.SECOND, 0);
-        localCal.set(Calendar.MILLISECOND, 0);
-		        
-        int year = localCal.get(Calendar.YEAR);
-        int month = localCal.get(Calendar.MONTH);
-        int date = localCal.get(Calendar.DATE);
-        int duration = getNumberOfDateToGetEvent();
+        localCal.set(Calendar.MILLISECOND, 0);		        
+        localCal.set(Calendar.YEAR, loadingYear);
+        localCal.set(Calendar.MONTH, loadingMonth);
+        localCal.set(Calendar.DATE, loadingDateOfMonth);
+		
+		int duration = getNumberOfDateToGetEvent();
         DateTime[] dates = makeStartAndEndDateTime(
-        		year, month, date, timeZone, duration);
+        		loadingYear, loadingMonth, loadingDateOfMonth, timeZone, duration);
                                 
         EventSeparator[] separators = new EventSeparator[duration];
         for(int i = 0; i < separators.length; i++) {
@@ -98,6 +123,15 @@ public class EventLoadingActivity extends Activity implements LoadEventTask.Task
 		task.execute(Constants.MAIN_CALENDAR_ID, Constants.BROADCAST_CALENDAR_ID);
 	}
 	
+	/**
+	 * 指定された年月日(year,month,date)から指定された日数(duration)の開始日と終了日を返す。
+	 * @param year
+	 * @param month
+	 * @param date
+	 * @param timeZone
+	 * @param duration
+	 * @return
+	 */
 	private DateTime[] makeStartAndEndDateTime(int year, int month, int date, TimeZone timeZone, int duration) {
         Calendar utcCal = Calendar.getInstance(timeZone);
         utcCal.set(Calendar.YEAR, year);
@@ -110,13 +144,17 @@ public class EventLoadingActivity extends Activity implements LoadEventTask.Task
                 
         DateTime[] dates = new DateTime[2];
     	dates[0] = new DateTime(utcCal.getTime(), timeZone); //開始日時   	
-    	utcCal.add(Calendar.MONTH, duration);
+    	utcCal.add(Calendar.DATE, duration);
     	dates[1] = new DateTime(utcCal.getTime(), timeZone); //終了日時
     	return dates;
 	}
 	
 	public void transitToEventListActivity() {
-		setResult(RESULT_OK);
+		Intent i = new Intent();
+		i.putExtra(KEY_YEAR, loadingYear);
+		i.putExtra(KEY_MONTH, loadingMonth);
+		i.putExtra(KEY_DATE, loadingDateOfMonth);
+		setResult(RESULT_OK, i);
 		finish();
 	}
 
@@ -130,7 +168,7 @@ public class EventLoadingActivity extends Activity implements LoadEventTask.Task
 		loadingItemView.setText(str);
 	}
 	
-	public void onPostExecute(List<Event> events) {
+	public void onPostExecute(List<EventDataBaseRow> events) {
 		if(events == null) {
 			return;
 		}		
@@ -138,13 +176,8 @@ public class EventLoadingActivity extends Activity implements LoadEventTask.Task
 		
 		EventDataBase db = new EventDataBase(this);
 		db.open();
-		db.deleteAllEvent();
-				
-		Iterator<Event> itr = events.iterator();
-		int index = 0;
-		while(itr.hasNext()) {
-			db.insertEvent(index++, itr.next());
-		}
+		db.deleteAllEvent();		
+		db.insertEvent(events);
 		db.close();		
 		
 		transitToEventListActivity();

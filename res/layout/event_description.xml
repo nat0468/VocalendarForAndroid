@@ -5,7 +5,7 @@
     android:orientation="vertical" >
 
 	<ScrollView
-		android:id="@+id/scrollView1"
+		android:id="@+id/eventDescriptionScrollView"
     	android:layout_width="fill_parent"
     	android:layout_height="fill_parent"
     	android:layout_weight="1.0" >

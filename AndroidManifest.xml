@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="jp.vocalendar"
-    android:versionCode="4"
-    android:versionName="0.83" >
+    android:versionCode="5"
+    android:versionName="0.86" >
 
     <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="8" />
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.EventLoadingActivity"></activity>
-        <activity android:name=".activity.EventDescriptionActivity"></activity>
+        <activity android:name=".activity.EventDescriptionActivity" android:launchMode="singleTop" ></activity>
         <activity android:name=".activity.SettingActivity"></activity>
         <activity android:name=".activity.AboutActivity"></activity>
         </application>

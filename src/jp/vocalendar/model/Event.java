@@ -11,6 +11,7 @@ import jp.vocalendar.R;
 import android.content.Context;
 import android.text.format.DateFormat;
 import android.text.format.DateUtils;
+import android.util.Log;
 
 /**
  * イベントを表すクラス。
@@ -346,6 +347,7 @@ public class Event implements Serializable {
 		if(startDateTime != null) {
 			return startDateTime.getTime();
 		}
+		Log.d("Event", toString() + ":getStartDateIndex() returns 0!!");
 		return 0;
 	}
 	
@@ -361,6 +363,7 @@ public class Event implements Serializable {
 		if(endDateTime != null) {
 			return endDateTime.getTime();
 		}
+		Log.d("Event", toString() + ":getEndDateIndex() returns 0!!");
 		return 0;
 	}
 

@@ -75,15 +75,28 @@ public class GoogleCalendarLoadEventTask extends LoadEventTask {
     }
     
 	@Override
-	protected List<Event> doInBackground(String... ids) {
+	protected List<EventDataBaseRow> doInBackground(String... ids) {
 		List<Event> allEventList = getAllEvents(ids);
 		if(allEventList == null) {
 			return null;
 		}		
-		List<Event> eventList = new LinkedList<Event>();
+		List<EventDataBaseRow> eventList = new LinkedList<EventDataBaseRow>();
+		int index = 0;
+		EventDataBaseRow previous = null; // 処理中のイベントの前のイベント
 		for(EventSeparator s : separators) {
-			eventList.add(s);
-			eventList.addAll(filteredBy(allEventList, s.getStartDate()));
+			eventList.add(new EventDataBaseRow(s, index++));
+			List<Event> filteredEvents = filteredBy(allEventList, s.getStartDate());
+			for(Event e : filteredEvents) {
+				int previousIndex = -1;
+				if(previous != null) {
+					previousIndex = previous.getIndex();
+					previous.setNextIndex(index);
+				}
+				EventDataBaseRow current = new EventDataBaseRow(e, index, previousIndex, -1); 
+				eventList.add(current);
+				previous = current;
+				index++;
+			}
 		}
 		return eventList;
 	}

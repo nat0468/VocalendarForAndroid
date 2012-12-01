@@ -9,12 +9,14 @@ import android.util.Log;
 public class EventDataBaseHelper extends SQLiteOpenHelper {
 	private static final String TAG = "EventDataBaseHelper";
 	
-	public static final int DATABASE_VERSION = 3;
+	public static final int DATABASE_VERSION = 4;
 	
 	public static final String DATABASE_NAME = "EventDataBase";
 	public static final String EVENT_TABLE_NAME = "events";
 
-	public static final String COLUMN_INDEX = "idx"; // 表示順をinsert時と同じ順番に維持するためのインデックス
+	public static final String COLUMN_INDEX = "idx"; // 表示順をinsert時と同じ順番に維持するためのインデックス 0開始
+	public static final String COLUMN_NEXT_INDEX = "next_idx"; // 次のイベントのインデックス。終端は-1
+	public static final String COLUMN_PREVIOUS_INDEX = "previous_idx"; // 前のイベントのインデックス。終端は-1
 	public static final String COLUMN_SUMMARY = "summary";
 	public static final String COLUMN_DESCRIPTION = "description";
 	public static final String COLUMN_START_DATE = "start_date";
@@ -28,6 +30,8 @@ public class EventDataBaseHelper extends SQLiteOpenHelper {
 	private static final String CREATE_TABLE_SQL =
 			"CREATE TABLE " + EVENT_TABLE_NAME + " (" +
 					COLUMN_INDEX + " integer, " +
+					COLUMN_NEXT_INDEX + " integer, " +
+					COLUMN_PREVIOUS_INDEX + " integer, " +
 					COLUMN_SUMMARY + " text, " +
 					COLUMN_DESCRIPTION + " text, " +
 					COLUMN_START_DATE + " integer, " +
