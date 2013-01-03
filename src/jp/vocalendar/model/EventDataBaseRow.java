@@ -140,8 +140,12 @@ public class EventDataBaseRow implements Serializable {
 	 */
 	public String formatAdditionalDate(TimeZone timeZone) {
 		if(formatAdditionaDate == null) {
-			formatAdditionaDate = EventUtil.formatAdditionalDate(event, timeZone);
-			Log.d("EventDataBaseRow", event.toString() + ":" + formatAdditionaDate.length() + ":" + formatAdditionaDate);
+			if(!event.isSeparator()) {
+				formatAdditionaDate = EventUtil.formatAdditionalDate(event, timeZone);
+				// Log.d("EventDataBaseRow", event.toString() + ":" + formatAdditionaDate.length() + ":" + formatAdditionaDate);
+			} else {
+				formatAdditionaDate = "";
+			}
 		}
 		if(formatAdditionaDate.length() == 0) {
 			return null;

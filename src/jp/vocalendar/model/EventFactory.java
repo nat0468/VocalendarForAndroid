@@ -17,7 +17,9 @@ import android.util.Log;
 public class EventFactory {
 	private static final String TAG = "EventFactory";
 	
-	public static Event toVocalendarEvent(com.google.api.services.calendar.model.Event ge) {
+	public static Event toVocalendarEvent(
+			com.google.api.services.calendar.model.Event ge,
+			TimeZone timeZone) {
 		Event e = new Event();
 		e.setId(ge.getId());
 		e.setSummary(ge.getSummary());
@@ -38,7 +40,7 @@ public class EventFactory {
 		}
 		if(ge.getRecurrence() != null) {
 			String rrule = ge.getRecurrence().get(0);
-			operateRrule(e, rrule);
+			operateRrule(e, rrule, timeZone);
 		}
 		return e;
 	}
@@ -79,7 +81,7 @@ public class EventFactory {
 	 * @param e
 	 * @param rrule
 	 */
-	private static void operateRrule(Event e, String rrule) {
+	private static void operateRrule(Event e, String rrule, TimeZone timeZone) {
 		Log.d(TAG, "operateRrule: " + rrule);
 		Matcher m = recurPattern.matcher(rrule);
 		while(m.find()) {
@@ -90,7 +92,13 @@ public class EventFactory {
 				if("YEARLY".equals(value)) {
 					e.setRecursive(DateUtil.RECURSIVE_YEARLY);					
 				} else if ("MONTHLY".equals(value)) {
-					e.setRecursive(DateUtil.RECURSIVE_MONTHLY);					
+					e.setRecursive(DateUtil.RECURSIVE_MONTHLY);			
+					if(e.getRecursiveBy() == 0) {
+						// BYMONTHDAY(毎月？日)が未指定の場合、開始日の日を使う (Google Calendarの仕様？)
+						Calendar cal = Calendar.getInstance(timeZone);
+						cal.setTime(e.getNotNullStartDate());
+						e.setRecursiveBy(cal.get(Calendar.DAY_OF_MONTH));
+					}
 				} else if ("WEEKLY".equals(value)) {
 					e.setRecursive(DateUtil.RECURSIVE_WEEKLY);					
 				} else { // 未対応のFREQは無視

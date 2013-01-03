@@ -174,8 +174,8 @@ public class GoogleCalendarLoadEventTask extends LoadEventTask {
 		}
 		while (true) {
 			Iterator<com.google.api.services.calendar.model.Event> itr = events.getItems().iterator();
-			while(itr.hasNext()) {
-				Event e = EventFactory.toVocalendarEvent(itr.next());
+			while(itr.hasNext()) {				
+				Event e = EventFactory.toVocalendarEvent(itr.next(), timeZone);
 				eventList.add(e);
 				publishProgress(e);
 			}

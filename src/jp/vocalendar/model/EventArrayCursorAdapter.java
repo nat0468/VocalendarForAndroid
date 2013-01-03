@@ -22,6 +22,12 @@ public class EventArrayCursorAdapter extends SimpleCursorAdapter {
 	private LayoutInflater inflater;
 	private TimeZone timeZone;
 	
+	// ViewType値
+	public static final int VIEW_TYPE_EVENT_WITH_DATE_TEXT= 0;
+	public static final int VIEW_TYPE_EVENT_WITHOUT_DATE_TEXT = 1;
+	public static final int VIEW_TYPE_SEPARATOR = 2;
+	private static final int VIEW_TYPE_COUNT = 3;
+	
 	/**
 	 * コンストラクタ
 	 * @param context
@@ -35,6 +41,7 @@ public class EventArrayCursorAdapter extends SimpleCursorAdapter {
 		super(context, layout, cursor, from, to);
 		this.context = context;
 		this.cursor = cursor;
+		this.timeZone = timeZone;
 		this.inflater =
 				(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
@@ -49,43 +56,49 @@ public class EventArrayCursorAdapter extends SimpleCursorAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		if(isEnabled(position)) { // 選択可能なら通常のEvent(セパレータでない)
-			View view = super.getView(position, convertView, parent); // セパレータでなければ通常処理
-			LinearLayout layout = (LinearLayout)view.findViewById(R.id.eventLinearLayout);			
+		switch(getItemViewType(position)) {
+		case VIEW_TYPE_SEPARATOR:
+			if(convertView == null) {
+				convertView = inflater.inflate(
+						R.layout.event_list_separator_item, parent, false);			
+			}
+			Event e = cursor.getEvent(position);
+			TextView tv = (TextView)convertView.findViewById(R.id.dateText);
+			tv.setText(e.formatDateTime(timeZone));
+			break;
+		case VIEW_TYPE_EVENT_WITHOUT_DATE_TEXT:
+		case VIEW_TYPE_EVENT_WITH_DATE_TEXT:
+			convertView = super.getView(position, convertView, parent); // セパレータでなければ通常処理
+			LinearLayout layout = (LinearLayout)convertView.findViewById(R.id.eventLinearLayout);			
 			int color = chooseColor(cursor.getEventDataBaseRow(position));
 			layout.setBackgroundColor(color);
-			TextView ttv = (TextView)view.findViewById(R.id.timeText);			
-			ttv.setBackgroundColor(color);
-			
-			TextView dtv = (TextView)view.findViewById(R.id.dateText);						
+			TextView ttv = (TextView)convertView.findViewById(R.id.timeText);			
+			ttv.setBackgroundColor(color);						
+			TextView dtv = (TextView)convertView.findViewById(R.id.dateText);						
 			if(cursor.getEventDataBaseRow(position).hasAdditionalDate(timeZone)) {
 				dtv.getLayoutParams().height = LinearLayout.LayoutParams.WRAP_CONTENT;
 			} else {
 				dtv.getLayoutParams().height = 0;
 			}			
-			return view;
-		}
-		if(convertView == null) {
-			convertView = inflater.inflate(
-					R.layout.event_list_separator_item, parent, false);			
-		}
-		Event e = cursor.getEvent(position);
-		TextView tv = (TextView)convertView.findViewById(R.id.dateText);
-		tv.setText(e.formatDateTime(timeZone));
-		return convertView;
+			break;
+		}				
+		return convertView;		
 	}
 
 	@Override
 	public int getItemViewType(int position) {
-		if(!cursor.getEvent(position).isSeparator()) {
-			return super.getItemViewType(position);
+		if(cursor.getEvent(position).isSeparator()) {
+			return VIEW_TYPE_SEPARATOR;
 		}
-		return super.getViewTypeCount(); // 親クラスが 0~(getViewTypeCount()-1) の範囲の値を返すので、それに+1した値を返す。
+		if(cursor.getEventDataBaseRow(position).hasAdditionalDate(timeZone)) {
+			return VIEW_TYPE_EVENT_WITH_DATE_TEXT;
+		}
+		return VIEW_TYPE_EVENT_WITHOUT_DATE_TEXT;
 	}
 
 	@Override
 	public int getViewTypeCount() {
-		return super.getViewTypeCount() + 1; // このクラスがセパレータ用に返すTypeだけ増やす。
+		return VIEW_TYPE_COUNT;
 	}
 	
 	/**
