@@ -1,5 +1,7 @@
 package jp.vocalendar.model;
 
+import java.util.TimeZone;
+
 import android.database.AbstractCursor;
 import android.database.Cursor;
 import android.util.Log;
@@ -10,7 +12,7 @@ import android.util.Log;
  */
 public class EventArrayCursor extends AbstractCursor implements Cursor {
 	public static final String[] columnNames = {
-		"_id", "start", "summary", "description"
+		"_id", "date", "time", "summary", "description"
 	};
 	
 	/** カーソル対象の配列 */
@@ -20,8 +22,12 @@ public class EventArrayCursor extends AbstractCursor implements Cursor {
 	/** カーソルの現在位置のEvent */
 	private EventDataBaseRow currentRow;
 	
-	public EventArrayCursor(EventDataBaseRow[] events) {
+	/** 表示に使うタイムゾーン */
+	private TimeZone timeZone = null;
+	
+	public EventArrayCursor(EventDataBaseRow[] events, TimeZone timeZone) {
 		this.events = events;
+		this.timeZone = timeZone;
 		onMove(0, 0);
 	}
 	
@@ -72,11 +78,13 @@ public class EventArrayCursor extends AbstractCursor implements Cursor {
 		switch(column) {
 		case 0: // _id
 			return Integer.toString(currentPosition); 
-		case 1: // start
-			return currentRow.getEvent().formatDateTime();
-		case 2: // summary
+		case 1: // date
+			return currentRow.formatAdditionalDate(timeZone);
+		case 2: // time
+			return currentRow.formatStartTime(timeZone);
+		case 3: // summary
 			return currentRow.getEvent().getSummary();
-		case 3: // description
+		case 4: // description
 			return currentRow.getEvent().getDescription();
 		}
 		throw new IllegalArgumentException("invalid column: " + column);		

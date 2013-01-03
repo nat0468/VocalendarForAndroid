@@ -2,6 +2,7 @@ package jp.vocalendar.model;
 
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -31,9 +32,10 @@ public class EventDataBase {
 			EventDataBaseHelper.COLUMN_BY_WEEKDAY_OCCURRENCE,
 			EventDataBaseHelper.COLUMN_INDEX,
 			EventDataBaseHelper.COLUMN_PREVIOUS_INDEX,
-			EventDataBaseHelper.COLUMN_NEXT_INDEX
+			EventDataBaseHelper.COLUMN_NEXT_INDEX,
+			EventDataBaseHelper.COLUMN_DISPLAY_DATE,
+			EventDataBaseHelper.COLUMN_DAY_KIND
 	};
-
 	
 	private Context context;
 	private EventDataBaseHelper helper;
@@ -67,7 +69,7 @@ public class EventDataBase {
 	
 	public void insertEvent(EventDataBaseRow eventRow) {
 		Event event = eventRow.getEvent();
-		Log.d(TAG, "insertEvent" + event.toDateTimeSummaryString());
+		Log.d(TAG, "insertEvent" + event.toDateTimeSummaryString(TimeZone.getDefault()));
 		ContentValues v = new ContentValues();
 		v.put(EventDataBaseHelper.COLUMN_INDEX, eventRow.getIndex());		
 		v.put(EventDataBaseHelper.COLUMN_PREVIOUS_INDEX, eventRow.getPreviousIndex());		
@@ -89,6 +91,8 @@ public class EventDataBase {
 		v.put(EventDataBaseHelper.COLUMN_RECURSIVE, event.getRecursive());
 		v.put(EventDataBaseHelper.COLUMN_RECURSIVE_BY, event.getRecursiveBy());
 		v.put(EventDataBaseHelper.COLUMN_BY_WEEKDAY_OCCURRENCE, event.getByWeekdayOccurrence());
+		v.put(EventDataBaseHelper.COLUMN_DISPLAY_DATE, eventRow.getDisplayDate().getTime());
+		v.put(EventDataBaseHelper.COLUMN_DAY_KIND, eventRow.getDayKind());
 		
 		try {
 			database.insertOrThrow(EventDataBaseHelper.EVENT_TABLE_NAME, null, v);
@@ -139,7 +143,9 @@ public class EventDataBase {
 		if(EventSeparator.isSeparator(e)) {
 			e = new EventSeparator(e.getStartDate());
 		}
-		return new EventDataBaseRow(e, c.getInt(9), c.getInt(10), c.getInt(11));		
+		return new EventDataBaseRow(
+				e, c.getInt(9), c.getInt(10), c.getInt(11),
+				new Date(c.getLong(12)), c.getInt(13));		
 	}
 	
 	/**
@@ -158,9 +164,5 @@ public class EventDataBase {
 		}
 		c.close();
 		return event;		
-	}
-	
-	public Event[] getEventsByDate(Date date) {
-		return null; // TODO
 	}
 }

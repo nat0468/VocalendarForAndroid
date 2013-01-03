@@ -1,16 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/eventLinearLayout"
+    android:background="#f0f0f0"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+    <TextView android:id="@+id/timeText"
+	    style="@style/VocalendarContent"
+        android:text="17:30"
+        android:textColor="@android:color/white"
+        android:background="#f0f0f0"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:paddingLeft="0dp"
+        android:paddingRight="0dp"
+        android:layout_width="75sp"
+        android:layout_height="wrap_content"/>
+    <LinearLayout
      android:layout_width="fill_parent"
      android:layout_height="wrap_content"
-     android:orientation="vertical">
-     <TextView android:id="@+id/dateText"
-         android:textSize="16sp"
-         android:textStyle="normal"
-         android:layout_width="fill_parent"
-         android:layout_height="wrap_content"/>
-    <TextView android:id="@+id/sumamryText"
-         android:textSize="20sp"
-         android:textStyle="bold"
-         android:layout_width="fill_parent"
-         android:layout_height="wrap_content"/>
+     android:orientation="vertical">        
+		<TextView android:id="@+id/dateText"
+	        style="@style/VocalendarContent"
+	        android:background="@android:color/white"
+	        android:textColor="#666666"
+	        android:textSize="16sp"
+	        android:textStyle="normal"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"/>
+	    <TextView android:id="@+id/sumamryText"
+			style="@style/VocalendarContent"
+			android:background="@android:color/white"
+		    android:textColor="@android:color/black"
+	        android:textSize="20sp"
+	        android:textStyle="bold"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"/>
+    </LinearLayout>
 </LinearLayout>

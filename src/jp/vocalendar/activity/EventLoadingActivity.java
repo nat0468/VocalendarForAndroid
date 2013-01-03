@@ -163,7 +163,7 @@ public class EventLoadingActivity extends Activity implements LoadEventTask.Task
 	}
 	
 	public void onProgressUpdate(Event event) {
-		String str = event.toDateTimeSummaryString();
+		String str = event.toDateTimeSummaryString(TimeZone.getDefault());
 		Log.d("SplashScreenActivity", str);
 		loadingItemView.setText(str);
 	}

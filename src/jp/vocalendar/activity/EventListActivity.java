@@ -2,14 +2,15 @@ package jp.vocalendar.activity;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 import jp.vocalendar.Constants;
 import jp.vocalendar.R;
-import jp.vocalendar.model.Event;
 import jp.vocalendar.model.EventArrayCursor;
 import jp.vocalendar.model.EventArrayCursorAdapter;
 import jp.vocalendar.model.EventDataBase;
 import jp.vocalendar.model.EventDataBaseRow;
+import jp.vocalendar.util.DateUtil;
 import jp.vocalendar.util.DialogUtil;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -47,9 +48,8 @@ public class EventListActivity extends ListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.event_list);
-        setTitle(R.string.vocalendar);        
         
-        Event.initString(this);
+        DateUtil.initString(this);
         
         Button settingButton = (Button)findViewById(R.id.setting_button);
         settingButton.setOnClickListener(new View.OnClickListener() {			
@@ -90,12 +90,14 @@ public class EventListActivity extends ListActivity {
         EventDataBaseRow[] events = db.getAllEvents();
         db.close();
                 
+        TimeZone timeZone = TimeZone.getDefault();
         setListAdapter(new EventArrayCursorAdapter(
         		this, 
         		R.layout.event_list_item, 
-        		new EventArrayCursor(events),
-        		new String[] { "start", "summary" },
-        		new int[]{ R.id.dateText, R.id.sumamryText }));
+        		new EventArrayCursor(events, timeZone),
+        		new String[] { "time", "date", "summary" },
+        		new int[]{ R.id.timeText, R.id.dateText, R.id.sumamryText },
+        		timeZone));
 	}
 	
 	@Override

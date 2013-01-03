@@ -6,6 +6,8 @@ import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import jp.vocalendar.util.DateUtil;
+
 import android.util.Log;
 
 
@@ -86,14 +88,14 @@ public class EventFactory {
 			
 			if("FREQ".equals(param)) {
 				if("YEARLY".equals(value)) {
-					e.setRecursive(Event.RECURSIVE_YEARLY);					
+					e.setRecursive(DateUtil.RECURSIVE_YEARLY);					
 				} else if ("MONTHLY".equals(value)) {
-					e.setRecursive(Event.RECURSIVE_MONTHLY);					
+					e.setRecursive(DateUtil.RECURSIVE_MONTHLY);					
 				} else if ("WEEKLY".equals(value)) {
-					e.setRecursive(Event.RECURSIVE_WEEKLY);					
+					e.setRecursive(DateUtil.RECURSIVE_WEEKLY);					
 				} else { // 未対応のFREQは無視
 					Log.w(TAG, "Not implemented FREQ:" + value);
-					e.setRecursive(Event.RECURSIVE_NONE);
+					e.setRecursive(DateUtil.RECURSIVE_NONE);
 				}				
 			} else if("BYMONTHDAY".equals(param)) {
 				e.setRecursiveBy(Integer.parseInt(value));

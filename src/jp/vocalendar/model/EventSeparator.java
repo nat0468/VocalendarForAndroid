@@ -2,6 +2,9 @@ package jp.vocalendar.model;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
+
+import jp.vocalendar.util.DateUtil;
 
 import android.text.format.DateUtils;
 
@@ -49,8 +52,8 @@ public class EventSeparator extends Event {
 	 * @return
 	 */
 	@Override
-	public String toDateTimeSummaryString() {
-		return formatDateTime();
+	public String toDateTimeSummaryString(TimeZone timeZone) {
+		return formatDateTime(timeZone);
 	}
 	
 	/**
@@ -58,12 +61,12 @@ public class EventSeparator extends Event {
 	 * @return	
 	 */
 	@Override	
-	public String formatDateTime() {
+	public String formatDateTime(TimeZone timeZone) {
 		if(formatDateTime != null) {
 			return formatDateTime;
 		}
 		StringBuilder sb = new StringBuilder();
-		formatDateTime(getStartDate(), null, sb);
+		DateUtil.formatDateTime(getStartDate(), null, sb);
 		sb.append(" ");
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(getStartDate());

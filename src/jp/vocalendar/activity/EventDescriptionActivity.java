@@ -1,5 +1,7 @@
 package jp.vocalendar.activity;
 
+import java.util.TimeZone;
+
 import jp.vocalendar.R;
 import jp.vocalendar.model.Event;
 import jp.vocalendar.model.EventArrayCursor;
@@ -128,7 +130,7 @@ public class EventDescriptionActivity extends Activity {
 		tv.setMovementMethod(LinkMovementMethod.getInstance());
 		StringBuilder sb = new StringBuilder();
 
-		sb.append(row.getEvent().formatDateTime());
+		sb.append(row.getEvent().formatDateTime(TimeZone.getDefault())); // デフォルトのタイムゾーン
 		sb.append("<h3>"); sb.append(row.getEvent().getSummary()); sb.append("</h3>");
 		sb.append(changeURItoAnchorTag(row.getEvent().getDescription()));
 		CharSequence html = Html.fromHtml(sb.toString());

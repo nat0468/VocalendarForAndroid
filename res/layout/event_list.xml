@@ -1,14 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/Vocalendar"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:background="#e0e0e0"
     android:orientation="vertical" >
+
+    <LinearLayout
+        style="@style/VocalendarContent"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:layout_weight="1.0"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp" >
+
+        <ImageView
+            android:id="@+id/titleImageView"
+            android:layout_width="200dp"
+            android:layout_height="0dp"
+            android:minHeight="100dp"
+            android:maxHeight="100dp"
+            android:layout_weight="1.0"
+            android:src="@drawable/vocalendar_title" />
+
+    </LinearLayout>
 
     <ListView
         android:id="@android:id/list"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1.0" >
+        android:layout_weight="1.0"
+        android:divider="#cccccc"
+        android:dividerHeight="1sp"
+        android:background="#f5f5f5" >
 
     </ListView>
 

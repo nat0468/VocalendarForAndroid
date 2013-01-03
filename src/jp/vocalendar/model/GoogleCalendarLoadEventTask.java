@@ -79,20 +79,35 @@ public class GoogleCalendarLoadEventTask extends LoadEventTask {
 		List<Event> allEventList = getAllEvents(ids);
 		if(allEventList == null) {
 			return null;
-		}		
+		}				
+		List<EventDataBaseRow> eventList = separateAndSortByDate(allEventList);
+		return eventList;
+	}
+
+	/**
+	 * イベントを日付セパレーターを付けて並び替える
+	 * @param allEventList
+	 * @return
+	 */
+	private List<EventDataBaseRow> separateAndSortByDate(List<Event> allEventList) {
 		List<EventDataBaseRow> eventList = new LinkedList<EventDataBaseRow>();
 		int index = 0;
 		EventDataBaseRow previous = null; // 処理中のイベントの前のイベント
 		for(EventSeparator s : separators) {
-			eventList.add(new EventDataBaseRow(s, index++));
+			eventList.add(new EventDataBaseRow(s, index++, s.getStartDate()));
 			List<Event> filteredEvents = filteredBy(allEventList, s.getStartDate());
+			Collections.sort(filteredEvents,
+					new EventComparatorInDate(s.getStartDate(), timeZone));
+			int dayKind = EventDataBaseRow.calcDayKind(s.getStartDate(), timeZone);			
 			for(Event e : filteredEvents) {
 				int previousIndex = -1;
 				if(previous != null) {
 					previousIndex = previous.getIndex();
 					previous.setNextIndex(index);
 				}
-				EventDataBaseRow current = new EventDataBaseRow(e, index, previousIndex, -1); 
+				EventDataBaseRow current =
+						new EventDataBaseRow(e, index, previousIndex, -1,
+								s.getStartDate(), dayKind); 
 				eventList.add(current);
 				previous = current;
 				index++;
@@ -111,7 +126,6 @@ public class GoogleCalendarLoadEventTask extends LoadEventTask {
 				return null;
 			}
 		}	
-		Collections.sort(allEventList, new EventComparator());
 		return allEventList;
 	}
 
