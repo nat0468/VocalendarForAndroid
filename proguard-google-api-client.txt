@@ -22,12 +22,5 @@
 
 # Needed by google-api-client-android when linking against an older platform version
 
--dontwarn com.google.api.client.googleapis.extensions.android.**
--dontwarn android.util.**
--dontwarn sun.misc.Perf
--dontwarn org.apache.avalon.framework.logger.Logger
--dontwarn org.apache.log4j.**
--dontwarn org.apache.log.Logger
--dontwarn org.apache.log.Hierarchy
 
 
