@@ -1,5 +1,6 @@
 package jp.vocalendar.model;
 
+import android.content.Context;
 import jp.vocalendar.util.DateUtil;
 
 /**
@@ -17,13 +18,15 @@ public class StartTime {
 	 * 前日からの継続イベントの場合にtrue。
 	 */
 	private boolean continuesFromYesterday = false;
-
+	
 	/**
 	 * コンストラクタ
 	 * @param hourAndMinute
 	 * @param continuesFromYesterday
 	 */
-	public StartTime(HourAndMinute hourAndMinute, boolean continuesFromYesterday) {
+	public StartTime(
+			HourAndMinute hourAndMinute, boolean continuesFromYesterday,
+			Context context) {
 		this.hourAndMinute = hourAndMinute;
 		this.continuesFromYesterday = continuesFromYesterday;
 	}
@@ -34,7 +37,8 @@ public class StartTime {
 	 * @param minute
 	 * @param continuesFromYesterday
 	 */
-	public StartTime(int hour, int minute, boolean continuesFromYesterday) {
+	public StartTime(
+			int hour, int minute, boolean continuesFromYesterday) {
 		this.hourAndMinute =  new HourAndMinute(hour, minute);
 		this.continuesFromYesterday = continuesFromYesterday;
 	}
@@ -45,7 +49,8 @@ public class StartTime {
 	 * 終日イベントを表すインスタンスを生成。
 	 * 
 	 */
-	public StartTime() { }		
+	public StartTime() {
+	}		
 	
 	public HourAndMinute getHourAndMinute() {
 		return hourAndMinute;
@@ -74,13 +79,13 @@ public class StartTime {
 		return false;
 	}
 	
-	public String toString() {
+	public String toString(Context context) {
 		StringBuilder sb = new StringBuilder();
 		if(continuesFromYesterday) {
-			sb.append(DateUtil.STR_TO);
+			sb.append(DateUtil.getString(context).STR_TO);
 		}
 		if(hourAndMinute == null) {
-			sb.append(DateUtil.STR_ALL_DAY);
+			sb.append(DateUtil.getString(context).STR_ALL_DAY);
 		} else {
 			sb.append(hourAndMinute.toString());
 		}

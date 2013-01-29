@@ -11,7 +11,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="left"
-        android:layout_weight="1.0"
+        android:layout_weight="0.0"
         android:orientation="vertical"
         android:padding="10dp"
         android:paddingBottom="5dp"
@@ -19,11 +19,11 @@
 
         <ImageView
             android:id="@+id/titleImageView"
-            android:layout_width="200dp"
-            android:layout_height="0dp"
-            android:minHeight="100dp"
-            android:maxHeight="100dp"
-            android:layout_weight="1.0"
+            android:contentDescription="@string/vocalendar"
+            android:layout_width="422px"
+            android:minWidth="422px"
+            android:layout_height="36px"
+            android:minHeight="36px"
             android:src="@drawable/vocalendar_title" />
 
     </LinearLayout>

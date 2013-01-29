@@ -1,54 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
-	    
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f5f5f5"
+    android:orientation="vertical">
+    
+    <LinearLayout
+        style="@style/VocalendarContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:layout_weight="0.0"
+	    android:background="#e0e0e0"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp" >
+
+        <ImageView
+            android:contentDescription="@string/vocalendar"
+            android:layout_width="422px"
+            android:minWidth="422px"
+            android:layout_height="36px"
+            android:minHeight="36px"
+            android:src="@drawable/vocalendar_title" />
+    </LinearLayout>
+
     <ImageView
         android:id="@+id/wallpaperImageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_weight="1.0"
         android:adjustViewBounds="false"
-        android:scaleType="fitCenter" />
+        android:contentDescription=""
+        android:paddingBottom="0dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="20dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/wallpaper" />
+
+    <TextView
+        android:id="@+id/loadingImageCreatorText"
+        style="@style/VocalendarContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_weight="0.0"
+        android:gravity="right"
+        android:text="Illustration by ELrowa."
+        android:textSize="12sp" />
     
-	<LinearLayout 
-	    android:layout_width="fill_parent"
-	    android:layout_height="fill_parent"
-	    android:orientation="vertical" >
-	
-	    <LinearLayout
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_weight="1.0" >
-	    </LinearLayout>
-	
-	    <LinearLayout
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_weight="0"
-	        android:gravity="center"
-	        android:orientation="vertical" >
-	
-	        <TextView
-	            android:id="@+id/loadingView"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_weight="1.0"
-	            android:text="@string/loading_events" />
-	
-	        <TextView
-	            android:id="@+id/loadingItemView"
-	            android:layout_width="wrap_content"
-	            android:layout_height="50sp"
-	            android:layout_weight="1.0"
-	            android:text="" />
-	
-	        <Button
-	            android:id="@+id/cancelButton"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_weight="1.0"
-	            android:text="@string/cancel" />	
-	    </LinearLayout>	
-	</LinearLayout>
-	
-	
-</FrameLayout>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.0"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/loadingView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:text="@string/loading_events" />
+
+        <TextView
+            android:id="@+id/loadingItemView"
+            android:layout_width="wrap_content"
+            android:layout_height="50sp"
+            android:layout_weight="1.0"
+            android:text="" />
+
+        <Button
+            android:id="@+id/cancelButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:text="@string/cancel" />	
+    </LinearLayout>	
+		
+</LinearLayout>

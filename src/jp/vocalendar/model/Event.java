@@ -8,6 +8,8 @@ import java.util.TimeZone;
 
 import jp.vocalendar.util.DateUtil;
 
+import android.content.Context;
+import android.net.Uri;
 import android.text.format.DateUtils;
 import android.util.Log;
 
@@ -16,9 +18,13 @@ import android.util.Log;
  */
 public class Event implements Serializable {
 	private static final long serialVersionUID = -370059715310487233L;
-		
-	/** イベントのID(Google CalendarでのID) */
-	private String id;
+	
+	/** Calendar ID(GoogleのCalendar ID) */
+	private String gCalendarId = null;
+
+	/** イベントのID(Google Calendarのevent ID) */
+	private String gid;
+	
 	/** 概要(タイトル) */
 	private String summary;
 	/** 説明 */
@@ -79,9 +85,9 @@ public class Event implements Serializable {
 	 * 開始終了日時とイベント名を表示する文字列を返す。
 	 * @return
 	 */
-	public String toDateTimeSummaryString(TimeZone timeZone) {
+	public String toDateTimeSummaryString(TimeZone timeZone, Context context) {
 		// TODO メソッド名修正
-		return formatDateTime(timeZone) + " " + summary;
+		return formatDateTime(timeZone, context) + " " + summary;
 	}
 	
 	
@@ -143,86 +149,14 @@ public class Event implements Serializable {
 	 * イベント日時の表示文字列を返す。
 	 * @return	
 	 */
-	public String formatDateTime(TimeZone timeZone) {
+	public String formatDateTime(TimeZone timeZone, Context context) {
 		if(formatDateTime != null) {
 			return formatDateTime;
 		}
-		StringBuilder sb = new StringBuilder();
-		if(recursive == DateUtil.RECURSIVE_NONE) {
-			formatNormalDateTime(sb, timeZone);
-		} else {
-			formatRecursiveDateTime(sb);
-		}
-		formatDateTime = sb.toString();
+		formatDateTime = EventUtil.formatDateTime(this, timeZone, context);
 		return formatDateTime;
 	}
 	
-	/**
-	 * 通常(繰り返しでない)イベントの日時の表示文字列。
-	 * @param sb
-	 */
-	private void formatNormalDateTime(StringBuilder sb, TimeZone timeZone) {
-		Date start = DateUtil.formatDateTime(startDate, startDateTime, sb);
-		
-		if(endDateTime != null) {
-			sb.append(DateUtil.STR_FROM_TO);
-			if(DateUtil.equalYMD(start, endDateTime, timeZone)) {
-				sb.append(DateUtil.formatTime(endDateTime));
-				return;
-			}
-			sb.append(DateUtil.formatDateTime(endDateTime));
-		} else if(endDate != null) {
-			Calendar startCal = Calendar.getInstance();
-			startCal.setTime(start);
-			Calendar endDateCal = Calendar.getInstance();
-			endDateCal.setTime(endDate);
-			endDateCal.add(Calendar.DATE, -1); // endDateは実際の日付+1のため、-1日して比較			
-			if(DateUtil.equalYMD(startCal, endDateCal)) {
-				return; 
-			}
-			sb.append(DateUtil.STR_FROM_TO);			
-			sb.append(DateUtil.formatDate(endDate));
-		} else {
-			sb.append(DateUtil.STR_FROM_TO);			
-			sb.append("????");
-		}
-	}
-	
-	private void formatRecursiveDateTime(StringBuilder sb) {
-		switch(recursive) {
-			case DateUtil.RECURSIVE_YEARLY:
-				if(startDateTime != null) {
-					sb.append(String.format(DateUtil.STR_EVERY_YEAR_FORMAT, DateUtil.formatMonthAndDayTime(startDateTime)));
-				} else if(startDate != null) {
-					sb.append(String.format(DateUtil.STR_EVERY_YEAR_FORMAT, DateUtil.formatMonthAndDay(startDate)));
-				} else {
-					sb.append(String.format(DateUtil.STR_EVERY_YEAR_FORMAT, "????"));
-				}
-				// TODO endDateやendDateTimeがある場合の扱い
-				break;
-			case DateUtil.RECURSIVE_MONTHLY:
-				if(byWeekdayOccurrence == 0) { // 日付指定の場合
-					sb.append(String.format(DateUtil.STR_EVERY_MONTH_FORMAT, DateUtil.formatDayOfMonth(recursiveBy)));
-				} else {
-					String dayOfMonth = 
-							DateUtil.formatOrdinal(byWeekdayOccurrence)
-							+ DateUtil.formatWeekdayString(recursiveBy);
-					sb.append(String.format(DateUtil.STR_EVERY_MONTH_FORMAT, dayOfMonth));
-				}
-				break;
-			case DateUtil.RECURSIVE_WEEKLY:
-				sb.append(String.format(DateUtil.STR_EVERY_WEEK_FORMAT,
-						DateUtil.formatWeekdayString(recursiveBy)));
-				if(startDateTime != null) {
-					sb.append(" ");
-					sb.append(DateUtil.formatTime(startDateTime));
-				}
-				break;
-			default:
-				sb.append("not implemented");
-				break;
-		}
-	}
 	
 	public Date getEndDate() {
 		return endDate;
@@ -439,19 +373,22 @@ public class Event implements Serializable {
 		return recursive != DateUtil.RECURSIVE_NONE;
 	}
 	
-	/**
-	 * EventSeparator(区切り)のインスタンスならtrueを返す。
-	 * このクラスのインスタンスは常にfalse.
-	 * @return
-	 */
-	public boolean isSeparator() {
-		return false;
+	public String getGid() {
+		return gid;
+	}
+	public void setGid(String id) {
+		this.gid = id;
+	}
+	public String getGCalendarId() {
+		return gCalendarId;
+	}
+	public void setGCalendarId(String gCalendarId) {
+		this.gCalendarId = gCalendarId;
 	}
 	
-	public String getId() {
-		return id;
-	}
-	public void setId(String id) {
-		this.id = id;
+	/** 詳細情報画面のURLリンク */
+	public String getDetailUrl() {
+		return "http://vocalendar.jp/detail/?feedurl=https://www.google.com/calendar/feeds/" + 
+				Uri.encode(gCalendarId) + "/public/full/" + gid;
 	}
 }

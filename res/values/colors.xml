@@ -3,5 +3,6 @@
     <color name="separator">#00FFCC</color>
     <color name="sunday">#f88</color>
     <color name="saturday">#88f</color>
-    <color name="normalday">#aaa</color>    
+    <color name="normalday">#aaa</color>
+    <color name="item_pressed">#ccc</color>
 </resources>

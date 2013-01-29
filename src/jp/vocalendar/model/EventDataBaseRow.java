@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
+import android.content.Context;
 import android.util.Log;
 
 /**
@@ -14,6 +15,14 @@ import android.util.Log;
 public class EventDataBaseRow implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	// 行の種別を表す定数
+	public static final int TYPE_NORMAL_EVENT = 0; // Event
+	public static final int TYPE_SEPARATOR = 1; // 日付セパレータ
+	public static final int TYPE_NO_EVENT = 2; // 「予定なし」に対応する行
+	
+	/** 行の種別 */
+	private int rowType = TYPE_NORMAL_EVENT;
+	
 	/** イベント情報 */
 	private Event event = null;	
 	
@@ -23,11 +32,13 @@ public class EventDataBaseRow implements Serializable {
 	/** インデックス。表示順をイベントデータベース挿入時と同じ順番に維持するために追加された序数 */
 	private int index = Integer.MIN_VALUE;
 	
-	/** 次のイベントへのインデックス */
-	private int nextIndex = -1;
-	
-	/** 前のイベントへのインデックス */
-	private int previousIndex = -1;
+	/** 
+	 * イベントのインデックス。イベント情報が格納されたEventDataBaseRowの順番。
+	 * イベント情報が格納されたEventDataBaseRowのみ順番に取り出すのに使う。
+	 * 0始まりで、表示順に+1されていく。TYPE_NORMAL_EVENTのみ0以上の値を持つ。
+	 * それ以外のTYPEのEventDataBaseRowはInteger.MIN_VALUEを持つ。
+	 */
+	private int eventIndex = Integer.MIN_VALUE;
 	
 	// 日の種類を表す定数
 	public static final int DAY_KIND_NORMAL = 0; //通常日
@@ -40,6 +51,23 @@ public class EventDataBaseRow implements Serializable {
 	/** 付加日付情報(formatAdditionaDate())のキャッシュ */
 	private String formatAdditionaDate = null;
 	
+	public static EventDataBaseRow makeSeparatorRow(int index, Date date) {
+		EventDataBaseRow row = new EventDataBaseRow(null, index, date);
+		row.setRowType(TYPE_SEPARATOR);
+		return row;
+	}
+	
+	/**
+	 * 「予定なし」行を生成する
+	 * @return
+	 */
+	public static EventDataBaseRow makeNoEventRow(int index, Date date) {
+		EventDataBaseRow row =
+				new EventDataBaseRow(null, index, date);
+		row.setRowType(EventDataBaseRow.TYPE_NO_EVENT);
+		return row;
+	}
+	
 	/**
 	 * コンストラクタ
 	 * @param event
@@ -49,12 +77,10 @@ public class EventDataBaseRow implements Serializable {
 	 * @param date
 	 * @param dayKind
 	 */
-	public EventDataBaseRow(Event event, int index, int previousIndex, int nextIndex,
-			Date date, int dayKind) {
+	public EventDataBaseRow(Event event, int index, int eventIndex, Date date, int dayKind) {
 		this.event = event;
 		this.index = index;
-		this.previousIndex = previousIndex;
-		this.nextIndex = nextIndex;
+		this.eventIndex = eventIndex;
 		this.displayDate = date;
 		this.dayKind = dayKind;
 	}
@@ -64,7 +90,7 @@ public class EventDataBaseRow implements Serializable {
 	 * @param event
 	 * @param index
 	 */
-	public EventDataBaseRow(Event event, int index, Date date) {
+	private EventDataBaseRow(Event event, int index, Date date) {
 		this.event = event;
 		this.index = index;
 		this.displayDate = date;
@@ -78,31 +104,8 @@ public class EventDataBaseRow implements Serializable {
 		this.index = index;
 	}
 
-	public int getNextIndex() {
-		return nextIndex;
-	}
-
-	public void setNextIndex(int nextIndex) {
-		this.nextIndex = nextIndex;
-	}
-
-	public int getPreviousIndex() {
-		return previousIndex;
-	}
-
-	public void setPreviousIndex(int previousIndex) {
-		this.previousIndex = previousIndex;
-	}
-
-	public boolean isLastEvent() {
-		if(nextIndex == -1) {
-			return true;
-		}
-		return false;
-	}
-	
 	public boolean isFirstEvent() {
-		if(previousIndex == -1) {
+		if(eventIndex == 0) {
 			return true;
 		}
 		return false;
@@ -128,8 +131,8 @@ public class EventDataBaseRow implements Serializable {
 	 * 日付イベントの場合は「終日」を返す。
 	 * @return
 	 */
-	public String formatStartTime(TimeZone timeZone) {
-		return EventUtil.getStartTime(event, displayDate, timeZone).toString();				
+	public String formatStartTime(TimeZone timeZone, Context context) {
+		return EventUtil.getStartTime(event, displayDate, timeZone).toString(context);				
 	}
 
 	/**
@@ -138,10 +141,10 @@ public class EventDataBaseRow implements Serializable {
 	 * @param timeZone
 	 * @return
 	 */
-	public String formatAdditionalDate(TimeZone timeZone) {
+	public String formatAdditionalDate(TimeZone timeZone, Context context) {
 		if(formatAdditionaDate == null) {
-			if(!event.isSeparator()) {
-				formatAdditionaDate = EventUtil.formatAdditionalDate(event, timeZone);
+			if(rowType == TYPE_NORMAL_EVENT) {
+				formatAdditionaDate = EventUtil.formatAdditionalDate(event, timeZone, context);
 				// Log.d("EventDataBaseRow", event.toString() + ":" + formatAdditionaDate.length() + ":" + formatAdditionaDate);
 			} else {
 				formatAdditionaDate = "";
@@ -158,8 +161,8 @@ public class EventDataBaseRow implements Serializable {
 	 * @param timeZone
 	 * @return
 	 */
-	public boolean hasAdditionalDate(TimeZone timeZone) {
-		String str = formatAdditionalDate(timeZone);
+	public boolean hasAdditionalDate(TimeZone timeZone, Context context) {
+		String str = formatAdditionalDate(timeZone, context);
 		if(str != null) {
 			return true;
 		}
@@ -194,5 +197,21 @@ public class EventDataBaseRow implements Serializable {
 			return DAY_KIND_SATURDAY;
 		}
 		return DAY_KIND_NORMAL;
+	}
+
+	public int getRowType() {
+		return rowType;
+	}
+
+	public void setRowType(int rowType) {
+		this.rowType = rowType;
+	}
+
+	public int getEventIndex() {
+		return eventIndex;
+	}
+
+	public void setEventIndex(int eventIndex) {
+		this.eventIndex = eventIndex;
 	}
 }

@@ -74,4 +74,6 @@ Copyright (c) 2010 Google Inc. Licensed under the Apache License Version 2.0 \
 	<string name="import_button">Import</string>
 	<string name="share_footer">from http://vocalendar.jp</string>
 	<string name="all_day">All day</string>	
+	<string name="illustration_by">Illustration by </string>	
+	<string name="no_event">No Event</string>
 </resources>

@@ -1,6 +1,7 @@
 package jp.vocalendar.activity;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -10,7 +11,6 @@ import jp.vocalendar.googleapi.OAuthManager;
 import jp.vocalendar.model.Event;
 import jp.vocalendar.model.EventDataBase;
 import jp.vocalendar.model.EventDataBaseRow;
-import jp.vocalendar.model.EventSeparator;
 import jp.vocalendar.model.GoogleCalendarLoadEventTask;
 import jp.vocalendar.model.LoadEventTask;
 import android.accounts.Account;
@@ -22,6 +22,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -59,6 +61,12 @@ public class EventLoadingActivity extends Activity implements LoadEventTask.Task
         setContentView(R.layout.loading);
         setTitle(R.string.vocalendar);
         
+        TextView creatorText = (TextView)findViewById(R.id.loadingImageCreatorText);
+        String str = getResources().getText(R.string.illustration_by).toString()
+        				+ " <a href=\"http://www.elrowa.com/\">ELrowa</a>.";
+        creatorText.setText(Html.fromHtml(str));
+		creatorText.setMovementMethod(LinkMovementMethod.getInstance());
+        
         Button cancel = (Button)findViewById(R.id.cancelButton);
         cancel.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -77,7 +85,7 @@ public class EventLoadingActivity extends Activity implements LoadEventTask.Task
 	private void initWallpaper() {
 		ImageView iv = (ImageView)findViewById(R.id.wallpaperImageView);
 		iv.setImageResource(R.drawable.wallpaper);
-		iv.setAlpha(64);
+		//iv.setAlpha(64);
 	}
 	
 	private void startLoadEventTask() {
@@ -112,9 +120,9 @@ public class EventLoadingActivity extends Activity implements LoadEventTask.Task
         DateTime[] dates = makeStartAndEndDateTime(
         		loadingYear, loadingMonth, loadingDateOfMonth, timeZone, duration);
                                 
-        EventSeparator[] separators = new EventSeparator[duration];
+        Date[] separators = new Date[duration];
         for(int i = 0; i < separators.length; i++) {
-        	separators[i] = new EventSeparator(localCal.getTime());
+        	separators[i] = localCal.getTime();
         	localCal.add(Calendar.DATE, 1);
         }
         
@@ -163,7 +171,7 @@ public class EventLoadingActivity extends Activity implements LoadEventTask.Task
 	}
 	
 	public void onProgressUpdate(Event event) {
-		String str = event.toDateTimeSummaryString(TimeZone.getDefault());
+		String str = event.toDateTimeSummaryString(TimeZone.getDefault(), this);
 		Log.d("SplashScreenActivity", str);
 		loadingItemView.setText(str);
 	}

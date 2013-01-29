@@ -2,6 +2,7 @@ package jp.vocalendar.model;
 
 import java.util.TimeZone;
 
+import android.content.Context;
 import android.database.AbstractCursor;
 import android.database.Cursor;
 import android.util.Log;
@@ -25,9 +26,12 @@ public class EventArrayCursor extends AbstractCursor implements Cursor {
 	/** 表示に使うタイムゾーン */
 	private TimeZone timeZone = null;
 	
-	public EventArrayCursor(EventDataBaseRow[] events, TimeZone timeZone) {
+	private Context context = null;
+	
+	public EventArrayCursor(EventDataBaseRow[] events, TimeZone timeZone, Context context) {
 		this.events = events;
 		this.timeZone = timeZone;
+		this.context = context;
 		onMove(0, 0);
 	}
 	
@@ -74,14 +78,14 @@ public class EventArrayCursor extends AbstractCursor implements Cursor {
 
 	@Override
 	public String getString(int column) {
-		Log.d("EventListCursor", "getString(" + column + ") for " + currentRow.getEvent().toString());		
+		// Log.d("EventListCursor", "getString(" + column + ") for " + currentRow.getEvent().toString());		
 		switch(column) {
 		case 0: // _id
 			return Integer.toString(currentPosition); 
 		case 1: // date
-			return currentRow.formatAdditionalDate(timeZone);
+			return currentRow.formatAdditionalDate(timeZone, context);
 		case 2: // time
-			return currentRow.formatStartTime(timeZone);
+			return currentRow.formatStartTime(timeZone, context);
 		case 3: // summary
 			return currentRow.getEvent().getSummary();
 		case 4: // description
@@ -92,7 +96,6 @@ public class EventArrayCursor extends AbstractCursor implements Cursor {
 
 	@Override
 	public boolean isNull(int arg0) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

@@ -9,14 +9,15 @@ import android.util.Log;
 public class EventDataBaseHelper extends SQLiteOpenHelper {
 	private static final String TAG = "EventDataBaseHelper";
 	
-	public static final int DATABASE_VERSION = 6;
+	public static final int DATABASE_VERSION = 10;
 	
 	public static final String DATABASE_NAME = "EventDataBase";
 	public static final String EVENT_TABLE_NAME = "events";
 
 	public static final String COLUMN_INDEX = "idx"; // 表示順をinsert時と同じ順番に維持するためのインデックス 0開始
-	public static final String COLUMN_NEXT_INDEX = "next_idx"; // 次のイベントのインデックス。終端は-1
-	public static final String COLUMN_PREVIOUS_INDEX = "previous_idx"; // 前のイベントのインデックス。終端は-1
+	public static final String COLUMN_EVENT_INDEX = "next_idx"; // イベントのインデックス。0開始
+	public static final String COLUMN_GID = "gid"; // Google Calendarのevent ID
+	public static final String COLUMN_GCALENDAR_ID = "gcalendar_id"; // Google Calendarのcalendar ID
 	public static final String COLUMN_SUMMARY = "summary";
 	public static final String COLUMN_DESCRIPTION = "description";
 	public static final String COLUMN_START_DATE = "start_date";
@@ -27,13 +28,15 @@ public class EventDataBaseHelper extends SQLiteOpenHelper {
 	public static final String COLUMN_RECURSIVE_BY = "recursive_by";
 	public static final String COLUMN_BY_WEEKDAY_OCCURRENCE = "by_weekday_occurence";
 	public static final String COLUMN_DISPLAY_DATE = "display_date";
+	public static final String COLUMN_ROW_TYPE = "row_type";
 	public static final String COLUMN_DAY_KIND = "day_kind";
 	
 	private static final String CREATE_TABLE_SQL =
 			"CREATE TABLE " + EVENT_TABLE_NAME + " (" +
 					COLUMN_INDEX + " integer, " +
-					COLUMN_NEXT_INDEX + " integer, " +
-					COLUMN_PREVIOUS_INDEX + " integer, " +
+					COLUMN_EVENT_INDEX + " integer, " +
+					COLUMN_GID + " text, " +
+					COLUMN_GCALENDAR_ID + " text, " +
 					COLUMN_SUMMARY + " text, " +
 					COLUMN_DESCRIPTION + " text, " +
 					COLUMN_START_DATE + " integer, " +
@@ -44,6 +47,7 @@ public class EventDataBaseHelper extends SQLiteOpenHelper {
 					COLUMN_RECURSIVE_BY + " integer," +
 					COLUMN_BY_WEEKDAY_OCCURRENCE + " integer," +
 					COLUMN_DISPLAY_DATE + " integer," +
+					COLUMN_ROW_TYPE + " integer," +
 					COLUMN_DAY_KIND + " integer);";
 
 	private static final String DROP_TABLE_SQL = 

@@ -10,25 +10,19 @@ import jp.vocalendar.model.EventArrayCursor;
 import jp.vocalendar.model.EventArrayCursorAdapter;
 import jp.vocalendar.model.EventDataBase;
 import jp.vocalendar.model.EventDataBaseRow;
-import jp.vocalendar.util.DateUtil;
-import jp.vocalendar.util.DialogUtil;
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
-import android.app.DatePickerDialog.OnDateSetListener;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 
 public class EventListActivity extends ListActivity {
 	
@@ -48,8 +42,6 @@ public class EventListActivity extends ListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.event_list);
-        
-        DateUtil.initString(this);
         
         Button settingButton = (Button)findViewById(R.id.setting_button);
         settingButton.setOnClickListener(new View.OnClickListener() {			
@@ -94,17 +86,22 @@ public class EventListActivity extends ListActivity {
         setListAdapter(new EventArrayCursorAdapter(
         		this, 
         		R.layout.event_list_item, 
-        		new EventArrayCursor(events, timeZone),
+        		new EventArrayCursor(events, timeZone, this),
         		new String[] { "time", "date", "summary" },
-        		new int[]{ R.id.timeText, R.id.dateText, R.id.sumamryText },
+        		new int[]{ R.id.timeText, R.id.dateText, R.id.summaryText },
         		timeZone));
 	}
 	
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
+		openEventDescriptionActivity(l, position);
+	}
+
+	private void openEventDescriptionActivity(ListView l, int position) {
 		EventDataBaseRow event = ((EventArrayCursor)l.getAdapter().getItem(position)).getEventDataBaseRow(position);
-		Intent i = new Intent(this, EventDescriptionActivity.class);
-		i.putExtra(EventDescriptionActivity.KEY_EVENT_DATA_BASE_ROW, event);
+		//Intent i = new Intent(this, EventDescriptionActivity.class);
+		Intent i = new Intent(this, SwipableEventDescriptionActivity.class);
+		i.putExtra(SwipableEventDescriptionActivity.KEY_EVENT_DATA_BASE_ROW, event);
 		startActivity(i);
 	}
 	

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="jp.vocalendar"
-    android:versionCode="5"
-    android:versionName="0.87" >
+    android:versionCode="9500"
+    android:versionName="0.95.0" >
 
-    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="8" />
+    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="14" />
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
     <uses-permission android:name="android.permission.USE_CREDENTIALS"/>
@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.EventLoadingActivity"></activity>
-        <activity android:name=".activity.EventDescriptionActivity" android:launchMode="singleTop" ></activity>
+        <activity android:name=".activity.SwipableEventDescriptionActivity"></activity>        
         <activity android:name=".activity.SettingActivity"></activity>
         <activity android:name=".activity.AboutActivity"></activity>
         </application>

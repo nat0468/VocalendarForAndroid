@@ -1,11 +1,8 @@
 package jp.vocalendar.model;
 
-import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.TimeZone;
-
-import android.util.Log;
 
 /**
  * Eventオブジェクトを、指定された日付内での開始時間に基づいて、昇順に並べ替えるクラス。
@@ -23,7 +20,7 @@ public class EventComparatorInDate implements Comparator<Event> {
 	 * 比較に使うタイムゾーン
 	 */
 	private TimeZone timeZone;
-	
+		
 	/**
 	 * コンストラクタ
 	 * @param date 並び替えをする日付

@@ -2,7 +2,6 @@ package jp.vocalendar.model;
 
 import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -20,29 +19,29 @@ public class EventDataBase {
 	/**
 	 * イベント情報をDBから取得(query())するときのカラム一覧
 	 */
-	private static String[] QUERY_EVENT_COLUMNS = new String[] {
-			EventDataBaseHelper.COLUMN_START_DATE,
+	private static String[] QUERY_EVENT_COLUMNS = new String[] {		
+			EventDataBaseHelper.COLUMN_START_DATE, // 0
 			EventDataBaseHelper.COLUMN_START_DATE_TIME,
 			EventDataBaseHelper.COLUMN_END_DATE,
 			EventDataBaseHelper.COLUMN_END_DATE_TIME,
+			EventDataBaseHelper.COLUMN_GID,			
+			EventDataBaseHelper.COLUMN_GCALENDAR_ID, // 5
 			EventDataBaseHelper.COLUMN_SUMMARY,
 			EventDataBaseHelper.COLUMN_DESCRIPTION,
 			EventDataBaseHelper.COLUMN_RECURSIVE,
 			EventDataBaseHelper.COLUMN_RECURSIVE_BY,
-			EventDataBaseHelper.COLUMN_BY_WEEKDAY_OCCURRENCE,
+			EventDataBaseHelper.COLUMN_BY_WEEKDAY_OCCURRENCE, // 10
 			EventDataBaseHelper.COLUMN_INDEX,
-			EventDataBaseHelper.COLUMN_PREVIOUS_INDEX,
-			EventDataBaseHelper.COLUMN_NEXT_INDEX,
+			EventDataBaseHelper.COLUMN_EVENT_INDEX,
 			EventDataBaseHelper.COLUMN_DISPLAY_DATE,
-			EventDataBaseHelper.COLUMN_DAY_KIND
+			EventDataBaseHelper.COLUMN_ROW_TYPE,
+			EventDataBaseHelper.COLUMN_DAY_KIND, // 15
 	};
 	
-	private Context context;
 	private EventDataBaseHelper helper;
 	private SQLiteDatabase database;
 	
 	public EventDataBase(Context context) {
-		this.context = context;
 		this.helper = new EventDataBaseHelper(context);
 	}
 	
@@ -68,32 +67,35 @@ public class EventDataBase {
 	}
 	
 	public void insertEvent(EventDataBaseRow eventRow) {
-		Event event = eventRow.getEvent();
-		Log.d(TAG, "insertEvent" + event.toDateTimeSummaryString(TimeZone.getDefault()));
+		// Log.d(TAG, "insertEvent" + event.toDateTimeSummaryString(TimeZone.getDefault()));
 		ContentValues v = new ContentValues();
 		v.put(EventDataBaseHelper.COLUMN_INDEX, eventRow.getIndex());		
-		v.put(EventDataBaseHelper.COLUMN_PREVIOUS_INDEX, eventRow.getPreviousIndex());		
-		v.put(EventDataBaseHelper.COLUMN_NEXT_INDEX, eventRow.getNextIndex());		
-		v.put(EventDataBaseHelper.COLUMN_SUMMARY, event.getSummary());
-		v.put(EventDataBaseHelper.COLUMN_DESCRIPTION, event.getDescription());
-		if(event.getStartDate() != null) {
-			v.put(EventDataBaseHelper.COLUMN_START_DATE, event.getStartDate().getTime());
-		}
-		if(event.getStartDateTime() != null) {
-			v.put(EventDataBaseHelper.COLUMN_START_DATE_TIME, event.getStartDateTime().getTime());
-		}
-		if(event.getEndDate() != null) {
-			v.put(EventDataBaseHelper.COLUMN_END_DATE, event.getEndDate().getTime());
-		}
-		if(event.getEndDateTime() != null) {
-			v.put(EventDataBaseHelper.COLUMN_END_DATE_TIME, event.getEndDateTime().getTime());
-		}
-		v.put(EventDataBaseHelper.COLUMN_RECURSIVE, event.getRecursive());
-		v.put(EventDataBaseHelper.COLUMN_RECURSIVE_BY, event.getRecursiveBy());
-		v.put(EventDataBaseHelper.COLUMN_BY_WEEKDAY_OCCURRENCE, event.getByWeekdayOccurrence());
+		v.put(EventDataBaseHelper.COLUMN_EVENT_INDEX, eventRow.getEventIndex());		
 		v.put(EventDataBaseHelper.COLUMN_DISPLAY_DATE, eventRow.getDisplayDate().getTime());
+		v.put(EventDataBaseHelper.COLUMN_ROW_TYPE, eventRow.getRowType());
 		v.put(EventDataBaseHelper.COLUMN_DAY_KIND, eventRow.getDayKind());
-		
+		if(eventRow.getRowType() == EventDataBaseRow.TYPE_NORMAL_EVENT) {
+			Event event = eventRow.getEvent();
+			v.put(EventDataBaseHelper.COLUMN_GID, event.getGid());		
+			v.put(EventDataBaseHelper.COLUMN_GCALENDAR_ID, event.getGCalendarId());
+			v.put(EventDataBaseHelper.COLUMN_SUMMARY, event.getSummary());
+			v.put(EventDataBaseHelper.COLUMN_DESCRIPTION, event.getDescription());
+			if(event.getStartDate() != null) {
+				v.put(EventDataBaseHelper.COLUMN_START_DATE, event.getStartDate().getTime());
+			}
+			if(event.getStartDateTime() != null) {
+				v.put(EventDataBaseHelper.COLUMN_START_DATE_TIME, event.getStartDateTime().getTime());
+			}
+			if(event.getEndDate() != null) {
+				v.put(EventDataBaseHelper.COLUMN_END_DATE, event.getEndDate().getTime());
+			}
+			if(event.getEndDateTime() != null) {
+				v.put(EventDataBaseHelper.COLUMN_END_DATE_TIME, event.getEndDateTime().getTime());
+			}
+			v.put(EventDataBaseHelper.COLUMN_RECURSIVE, event.getRecursive());
+			v.put(EventDataBaseHelper.COLUMN_RECURSIVE_BY, event.getRecursiveBy());
+			v.put(EventDataBaseHelper.COLUMN_BY_WEEKDAY_OCCURRENCE, event.getByWeekdayOccurrence());			
+		}	
 		try {
 			database.insertOrThrow(EventDataBaseHelper.EVENT_TABLE_NAME, null, v);
 		} catch(SQLiteException e) {
@@ -135,17 +137,26 @@ public class EventDataBase {
 		if(!c.isNull(3)) {
 			e.setEndDateTime(new Date(c.getLong(3)));
 		}
-		e.setSummary(c.getString(4));
-		e.setDescription(c.getString(5));
-		e.setRecursive(c.getInt(6));
-		e.setRecursiveBy(c.getInt(7));
-		e.setByWeekdayOccurrence(c.getInt(8));
-		if(EventSeparator.isSeparator(e)) {
-			e = new EventSeparator(e.getStartDate());
+		e.setGid(c.getString(4));
+		e.setGCalendarId(c.getString(5));
+		e.setSummary(c.getString(6));		
+		e.setDescription(c.getString(7));
+		e.setRecursive(c.getInt(8));
+		e.setRecursiveBy(c.getInt(9));
+		e.setByWeekdayOccurrence(c.getInt(10));
+		
+		Date dispDate = new Date(c.getLong(13)); 
+		int rowType = c.getInt(14);
+		int index = c.getInt(11);
+		
+		switch(rowType) {
+		case EventDataBaseRow.TYPE_SEPARATOR:
+			return EventDataBaseRow.makeSeparatorRow(index, dispDate);
+		case EventDataBaseRow.TYPE_NO_EVENT:
+			return EventDataBaseRow.makeNoEventRow(index, dispDate);
 		}
 		return new EventDataBaseRow(
-				e, c.getInt(9), c.getInt(10), c.getInt(11),
-				new Date(c.getLong(12)), c.getInt(13));		
+				e, index, c.getInt(12), dispDate, c.getInt(15));		
 	}
 	
 	/**
@@ -164,5 +175,35 @@ public class EventDataBase {
 		}
 		c.close();
 		return event;		
+	}
+	
+	/**
+	 * 指定されたイベントインデックスのイベント情報を返す。
+	 * @param eventIndex 
+	 * @return イベント情報。指定されたインデックスが存在しない場合はnull
+	 */
+	public EventDataBaseRow getEventByEventIndex(int eventIndex) {
+		Cursor c = database.query(
+				EventDataBaseHelper.EVENT_TABLE_NAME, QUERY_EVENT_COLUMNS,
+				EventDataBaseHelper.COLUMN_EVENT_INDEX + "=?", new String[]{Integer.toString(eventIndex)},
+				null, null, EventDataBaseHelper.COLUMN_INDEX + " ASC");
+		EventDataBaseRow event = null;
+		if(c.moveToFirst()) {
+			event = getEvent(c);
+		}
+		c.close();
+		return event;		
+	}
+	
+	public int countEvent() {
+		Cursor c = database.rawQuery(
+				"SELECT COUNT(" + EventDataBaseHelper.COLUMN_GCALENDAR_ID + ") FROM " +
+						EventDataBaseHelper.EVENT_TABLE_NAME + " WHERE " +
+						EventDataBaseHelper.COLUMN_ROW_TYPE + "=?",
+						new String[]{ Integer.toString(EventDataBaseRow.TYPE_NORMAL_EVENT) });
+		c.moveToFirst();
+		int count = c.getInt(0);
+		c.close();
+		return count;
 	}
 }

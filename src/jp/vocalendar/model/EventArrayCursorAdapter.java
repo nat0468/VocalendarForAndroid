@@ -3,8 +3,8 @@ package jp.vocalendar.model;
 import java.util.TimeZone;
 
 import jp.vocalendar.R;
+import jp.vocalendar.util.DateUtil;
 import android.content.Context;
-import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +26,8 @@ public class EventArrayCursorAdapter extends SimpleCursorAdapter {
 	public static final int VIEW_TYPE_EVENT_WITH_DATE_TEXT= 0;
 	public static final int VIEW_TYPE_EVENT_WITHOUT_DATE_TEXT = 1;
 	public static final int VIEW_TYPE_SEPARATOR = 2;
-	private static final int VIEW_TYPE_COUNT = 3;
+	public static final int VIEW_TYPE_NO_EVENT = 3;
+	private static final int VIEW_TYPE_COUNT = 4;
 	
 	/**
 	 * コンストラクタ
@@ -48,10 +49,11 @@ public class EventArrayCursorAdapter extends SimpleCursorAdapter {
 
 	@Override
 	public boolean isEnabled(int position) {
-		if(cursor.getEvent(position).isSeparator()) {
-			return false;
+		if(cursor.getEventDataBaseRow(position).getRowType() 
+				== EventDataBaseRow.TYPE_NORMAL_EVENT) {			
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 	@Override
@@ -62,9 +64,15 @@ public class EventArrayCursorAdapter extends SimpleCursorAdapter {
 				convertView = inflater.inflate(
 						R.layout.event_list_separator_item, parent, false);			
 			}
-			Event e = cursor.getEvent(position);
+			EventDataBaseRow row = cursor.getEventDataBaseRow(position);
 			TextView tv = (TextView)convertView.findViewById(R.id.dateText);
-			tv.setText(e.formatDateTime(timeZone));
+			tv.setText(DateUtil.formatDate(row.getDisplayDate()));
+			break;
+		case VIEW_TYPE_NO_EVENT:
+			if(convertView == null) {
+				convertView = inflater.inflate(
+						R.layout.event_list_no_event_item, parent, false);
+			}
 			break;
 		case VIEW_TYPE_EVENT_WITHOUT_DATE_TEXT:
 		case VIEW_TYPE_EVENT_WITH_DATE_TEXT:
@@ -75,7 +83,7 @@ public class EventArrayCursorAdapter extends SimpleCursorAdapter {
 			TextView ttv = (TextView)convertView.findViewById(R.id.timeText);			
 			ttv.setBackgroundColor(color);						
 			TextView dtv = (TextView)convertView.findViewById(R.id.dateText);						
-			if(cursor.getEventDataBaseRow(position).hasAdditionalDate(timeZone)) {
+			if(cursor.getEventDataBaseRow(position).hasAdditionalDate(timeZone, context)) {
 				dtv.getLayoutParams().height = LinearLayout.LayoutParams.WRAP_CONTENT;
 			} else {
 				dtv.getLayoutParams().height = 0;
@@ -87,10 +95,16 @@ public class EventArrayCursorAdapter extends SimpleCursorAdapter {
 
 	@Override
 	public int getItemViewType(int position) {
-		if(cursor.getEvent(position).isSeparator()) {
+		EventDataBaseRow row = cursor.getEventDataBaseRow(position);
+		switch(row.getRowType()) {
+		case EventDataBaseRow.TYPE_NO_EVENT:
+			return VIEW_TYPE_NO_EVENT;
+		case EventDataBaseRow.TYPE_SEPARATOR:
 			return VIEW_TYPE_SEPARATOR;
 		}
-		if(cursor.getEventDataBaseRow(position).hasAdditionalDate(timeZone)) {
+		
+		// EventDataBaseRow.TYPE_NORMAL_EVENT の場合
+		if(row.hasAdditionalDate(timeZone, context)) {
 			return VIEW_TYPE_EVENT_WITH_DATE_TEXT;
 		}
 		return VIEW_TYPE_EVENT_WITHOUT_DATE_TEXT;

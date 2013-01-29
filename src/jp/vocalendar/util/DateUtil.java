@@ -13,23 +13,53 @@ import android.text.format.DateUtils;
  * 日付処理のユーティリティ
  */
 public class DateUtil {
-	// 日付表示に使う文字列
-	public static String STR_FROM_TO;
-	public static String STR_TO;
-	public static String STR_EVERY_YEAR_FORMAT;
-	public static String STR_EVERY_MONTH_FORMAT;
-	public static String STR_EVERY_WEEK_FORMAT;
-	public static String STR_FIRST;
-	public static String STR_SECOND;
-	public static String STR_THIRD;
-	public static String STR_FOURTH;
-	public static String STR_NTH_FORMAT;
-	public static String STR_FIRST_DAY;
-	public static String STR_SECOND_DAY;
-	public static String STR_THIRD_DAY;
-	public static String STR_NTH_DAY_FORMAT;
-	public static String STR_AFTER_WEEKDAY_STRING;
-	public static String STR_ALL_DAY;
+	public static class ConstString {		
+		// 日付表示に使う文字列
+		public final String STR_FROM_TO;
+		public final String STR_TO;
+		public final String STR_EVERY_YEAR_FORMAT;
+		public final String STR_EVERY_MONTH_FORMAT;
+		public final String STR_EVERY_WEEK_FORMAT;
+		public final String STR_FIRST;
+		public final String STR_SECOND;
+		public final String STR_THIRD;
+		public final String STR_FOURTH;
+		public final String STR_NTH_FORMAT;
+		public final String STR_FIRST_DAY;
+		public final String STR_SECOND_DAY;
+		public final String STR_THIRD_DAY;
+		public final String STR_NTH_DAY_FORMAT;
+		public final String STR_AFTER_WEEKDAY_STRING;
+		public final String STR_ALL_DAY;
+		
+		ConstString(Context context) {
+			STR_FROM_TO = context.getString(R.string.from_to);
+			STR_TO = context.getString(R.string.to);
+			
+			STR_EVERY_YEAR_FORMAT = context.getString(R.string.every_year_format);
+			STR_EVERY_MONTH_FORMAT = context.getString(R.string.every_month_format);
+			STR_EVERY_WEEK_FORMAT = context.getString(R.string.every_week_format);		
+		
+			STR_FIRST = context.getString(R.string.first);		
+			STR_SECOND = context.getString(R.string.second);		
+			STR_THIRD = context.getString(R.string.third);		
+			STR_FOURTH = context.getString(R.string.fourth);
+			STR_NTH_FORMAT = context.getString(R.string.nth_format);
+			
+			STR_FIRST_DAY = context.getString(R.string.first_day);		
+			STR_SECOND_DAY = context.getString(R.string.second_day);		
+			STR_THIRD_DAY = context.getString(R.string.third_day);		
+			STR_NTH_DAY_FORMAT = context.getString(R.string.nth_day_format);
+			
+			STR_AFTER_WEEKDAY_STRING = context.getString(R.string.after_weekday_string);
+			
+			STR_ALL_DAY = context.getString(R.string.all_day);			
+		}
+	}
+	
+	// ConstStringのシングルトン
+	private static ConstString string = null;
+	
 	// 繰り返しの予定種別に使う値
 	public static final int RECURSIVE_NONE = 0;
 	public static final int RECURSIVE_WEEKLY = 1;
@@ -79,33 +109,23 @@ public class DateUtil {
 		return null;
 	}
 
-	public static Date formatDateTimeWithoutYear(Date date, Date dateTime, StringBuilder sb) {
-		if(dateTime != null) {
-			sb.append(formatDateTimeWithoutYear(dateTime));
-			return dateTime;
-		} else if(date != null) {
-			sb.append(formatDateWithoutYear(date));
-			return date;
-		}
-		sb.append("????");
-		return null;
-	}
-
 	/**
 	 * 月の日の文字列表現(?日, 10th, など)を返す。
 	 * @param day
 	 * @return
 	 */
-	public static String formatDayOfMonth(int day) {
+	public static String formatDayOfMonth(int day, Context context) {
+		DateUtil.ConstString str = DateUtil.getString(context);
+		
 		switch (day) {
 		case 1:
-			return DateUtil.STR_FIRST_DAY;
+			return str.STR_FIRST_DAY;
 		case 2:
-			return DateUtil.STR_SECOND_DAY;
+			return str.STR_SECOND_DAY;
 		case 3:
-			return DateUtil.STR_THIRD_DAY;
+			return str.STR_THIRD_DAY;
 		}
-		return String.format(DateUtil.STR_NTH_DAY_FORMAT, day);
+		return String.format(str.STR_NTH_DAY_FORMAT, day);
 	}
 
 	/**
@@ -113,34 +133,36 @@ public class DateUtil {
 	 * @param n
 	 * @return
 	 */
-	public static String formatOrdinal(int n) {
+	public static String formatOrdinal(int n, Context context) {
+		ConstString str = getString(context);
+		
 		switch(n) {
 		case 1:
-			return DateUtil.STR_FIRST;
+			return str.STR_FIRST;
 		case 2:
-			return DateUtil.STR_SECOND;
+			return str.STR_SECOND;
 		case 3:
-			return DateUtil.STR_THIRD;
+			return str.STR_THIRD;
 		case 4:
-			return DateUtil.STR_FOURTH;
+			return str.STR_FOURTH;
 		}
-		return String.format(DateUtil.STR_NTH_FORMAT, n);
+		return String.format(str.STR_NTH_FORMAT, n);
 	}
 
 	public static String formatDate(Date date) {
-		return formatDate("yyyy年M月d日", date);
-	}
-
-	public static String formatDateWithoutYear(Date date) {
-		return formatDate("M月d日", date);
+		return formatDate("yyyy年M月d日(E)", date);
 	}
 
 	public static String formatDateTime(Date date) {
-		return formatDate("yyyy年M月d日 k:mm", date);		
+		return formatDate("yyyy年M月d日(E)k:mm", date);		
+	}
+
+	public static String formatDateWithoutYear(Date date) {
+		return formatDate("M月d日(E)", date);
 	}
 
 	public static String formatDateTimeWithoutYear(Date date) {
-		return formatDate("M月d日 k:mm", date);		
+		return formatDate("M月d日(E)k:mm", date);		
 	}
 
 	public static String formatTime(Date date) {
@@ -165,38 +187,42 @@ public class DateUtil {
 	 * @param weekday 1:日, 2:月, ... , 7:土
 	 * @return
 	 */
-	public static String formatWeekdayString(int weekday) {
+	public static String formatWeekdayString(int weekday, Context context) {
 		StringBuilder sb = new StringBuilder(
 				DateUtils.getDayOfWeekString(weekday, DateUtils.LENGTH_LONG));
-		sb.append(DateUtil.STR_AFTER_WEEKDAY_STRING);
+		sb.append(getString(context).STR_AFTER_WEEKDAY_STRING);
 		return sb.toString();
 	}
 			
 	/**
-	 * 日付表示に使う文字列(多言語対応)の初期化。システムの言語設定に応じて設定
+	 * 日付表示に使う文字列(多言語対応)を集めたオブジェクトの初期化。
 	 * @param context
 	 */
-	public static void initString(Context context) {
-		STR_FROM_TO = context.getString(R.string.from_to);
-		STR_TO = context.getString(R.string.to);
-		
-		STR_EVERY_YEAR_FORMAT = context.getString(R.string.every_year_format);
-		STR_EVERY_MONTH_FORMAT = context.getString(R.string.every_month_format);
-		STR_EVERY_WEEK_FORMAT = context.getString(R.string.every_week_format);		
+	public static ConstString getString(Context context) {
+		if(string == null) {
+			string = new ConstString(context);
+		}
+		return string;
+	}	
 	
-		STR_FIRST = context.getString(R.string.first);		
-		STR_SECOND = context.getString(R.string.second);		
-		STR_THIRD = context.getString(R.string.third);		
-		STR_FOURTH = context.getString(R.string.fourth);
-		STR_NTH_FORMAT = context.getString(R.string.nth_format);
-		
-		STR_FIRST_DAY = context.getString(R.string.first_day);		
-		STR_SECOND_DAY = context.getString(R.string.second_day);		
-		STR_THIRD_DAY = context.getString(R.string.third_day);		
-		STR_NTH_DAY_FORMAT = context.getString(R.string.nth_day_format);
-		
-		STR_AFTER_WEEKDAY_STRING = context.getString(R.string.after_weekday_string);
-		
-		STR_ALL_DAY = context.getString(R.string.all_day);
+	/**
+	 * UTCでの指定された日の始まりの時間(0時0分0秒)のミリ秒を返す(エポックタイム)。
+	 * @param date
+	 * @return
+	 */
+	public static long toUTCStartTimeOfDay(Date date, TimeZone timeZone) {
+		Calendar cal = Calendar.getInstance(timeZone);
+		cal.setTime(date);
+
+		Calendar utc = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+		utc.set(Calendar.YEAR, cal.get(Calendar.YEAR));
+		utc.set(Calendar.MONTH, cal.get(Calendar.MONTH));
+		utc.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH));		
+		utc.set(Calendar.HOUR_OF_DAY, 0);
+		utc.set(Calendar.MINUTE, 0);
+		utc.set(Calendar.SECOND, 0);
+		utc.set(Calendar.MILLISECOND, 0);
+		return utc.getTimeInMillis();
 	}
+	
 }

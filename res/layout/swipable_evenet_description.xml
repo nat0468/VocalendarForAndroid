@@ -27,45 +27,16 @@
             android:src="@drawable/vocalendar_title" />
     </LinearLayout>
 
-   <TextView
-		android:id="@+id/detailDateText"
-		style="@style/VocalendarContent"				
-      	android:layout_width="match_parent"
-       	android:layout_height="wrap_content"
-        android:layout_weight="0.0"
-       	android:background="@color/separator"
-     	android:paddingTop="5sp"
-   	 	android:paddingBottom="5sp"
-        android:text="date" />
-	<TextView
-    	android:id="@+id/detailSummaryText"
-		style="@style/VocalendarContent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_weight="0.0"
-        android:text="summary" />
-    
-	<ScrollView
-		android:id="@+id/eventDescriptionScrollView"
-    	android:layout_width="match_parent"
-    	android:layout_height="match_parent"
-    	android:layout_weight="1.0" >
-        <TextView
-           	android:id="@+id/detailDescriptionText"
-			style="@style/VocalendarContent"
-           	android:layout_width="match_parent"
-           	android:layout_height="wrap_content"
-	        android:textSize="16sp"
-           	android:text="description" />
-	</ScrollView>
+	<android.support.v4.view.ViewPager
+    	xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:id="@+id/swipable_event_description_pager"
+        android:layout_weight="1.0"	    
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent">
+	</android.support.v4.view.ViewPager>
 	
-
-   <LinearLayout
-        android:id="@+id/event_description_button_layout"
+	<LinearLayout
+    	android:id="@+id/event_description_button_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.0"

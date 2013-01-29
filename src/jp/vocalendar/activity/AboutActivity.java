@@ -33,9 +33,11 @@ public class AboutActivity extends Activity {
 				getString(R.string.about_message), version);
 		CharSequence html = Html.fromHtml(htmlSrc);
 		tv.setText(html);
-		
+
+		/*
 		ImageView imageView = (ImageView)findViewById(R.id.wallpaperImageView);
 		imageView.setImageResource(R.drawable.wallpaper);
 		imageView.setAlpha(64);
+		*/
 	}
 }

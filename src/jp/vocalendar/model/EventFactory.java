@@ -18,10 +18,12 @@ public class EventFactory {
 	private static final String TAG = "EventFactory";
 	
 	public static Event toVocalendarEvent(
+			String gCalendarId,
 			com.google.api.services.calendar.model.Event ge,
 			TimeZone timeZone) {
 		Event e = new Event();
-		e.setId(ge.getId());
+		e.setGCalendarId(gCalendarId);
+		e.setGid(ge.getId());
 		e.setSummary(ge.getSummary());
 		e.setDescription(ge.getDescription());
 		if(ge.getStart() != null) {

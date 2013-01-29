@@ -37,9 +37,9 @@ public class GoogleCalendarLoadEventTask extends LoadEventTask {
 	private DateTime end;
 	
 	/**
-	 * イベント情報のセパレータ
+	 * イベント情報のセパレータに使う日付の一覧
 	 */
-	private EventSeparator[] separators;	
+	private Date[] separators;	
 	/**
 	 * イベント情報を読み込む開始日や終了日の指定に使うタイムゾーン
 	 */
@@ -67,7 +67,7 @@ public class GoogleCalendarLoadEventTask extends LoadEventTask {
      * @param timeZone
      */
     public void setStartAndEndDate(
-    		DateTime start, DateTime end, EventSeparator[] separators, TimeZone timeZone) {
+    		DateTime start, DateTime end, Date[] separators, TimeZone timeZone) {
     	this.start = start;
     	this.end = end;
     	this.separators = separators;
@@ -92,24 +92,25 @@ public class GoogleCalendarLoadEventTask extends LoadEventTask {
 	private List<EventDataBaseRow> separateAndSortByDate(List<Event> allEventList) {
 		List<EventDataBaseRow> eventList = new LinkedList<EventDataBaseRow>();
 		int index = 0;
-		EventDataBaseRow previous = null; // 処理中のイベントの前のイベント
-		for(EventSeparator s : separators) {
-			eventList.add(new EventDataBaseRow(s, index++, s.getStartDate()));
-			List<Event> filteredEvents = filteredBy(allEventList, s.getStartDate());
+		int eventIndex = 0;
+		for(Date date : separators) {
+			eventList.add(
+					EventDataBaseRow.makeSeparatorRow(index++, date));
+			List<Event> filteredEvents = filteredBy(allEventList, date);
+			if(filteredEvents.isEmpty()) {
+				// 予定のない日は、予定のない日を表す行だけ追加して次へ
+				eventList.add(
+						EventDataBaseRow.makeNoEventRow(index++, date));
+				continue;
+			}			
 			Collections.sort(filteredEvents,
-					new EventComparatorInDate(s.getStartDate(), timeZone));
-			int dayKind = EventDataBaseRow.calcDayKind(s.getStartDate(), timeZone);			
+					new EventComparatorInDate(date, timeZone));
+			int dayKind = EventDataBaseRow.calcDayKind(date, timeZone);			
 			for(Event e : filteredEvents) {
-				int previousIndex = -1;
-				if(previous != null) {
-					previousIndex = previous.getIndex();
-					previous.setNextIndex(index);
-				}
 				EventDataBaseRow current =
-						new EventDataBaseRow(e, index, previousIndex, -1,
-								s.getStartDate(), dayKind); 
+						new EventDataBaseRow(e, index, eventIndex++,
+								date, dayKind); 
 				eventList.add(current);
-				previous = current;
 				index++;
 			}
 		}
@@ -174,8 +175,12 @@ public class GoogleCalendarLoadEventTask extends LoadEventTask {
 		}
 		while (true) {
 			Iterator<com.google.api.services.calendar.model.Event> itr = events.getItems().iterator();
-			while(itr.hasNext()) {				
-				Event e = EventFactory.toVocalendarEvent(itr.next(), timeZone);
+			while(itr.hasNext()) {
+				com.google.api.services.calendar.model.Event ge = itr.next();
+				if(ge.getStatus() != null && !"confirmed".equals(ge.getStatus())) {
+					continue; // confirmed 以外のイベントは無視
+				}						
+				Event e = EventFactory.toVocalendarEvent(calendarId, ge, timeZone);
 				eventList.add(e);
 				publishProgress(e);
 			}
