@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="jp.vocalendar"
-    android:versionCode="9500"
-    android:versionName="0.95.0" >
+    android:versionCode="9540"
+    android:versionName="0.95.4" >
 
     <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="14" />
     <uses-permission android:name="android.permission.INTERNET"/>

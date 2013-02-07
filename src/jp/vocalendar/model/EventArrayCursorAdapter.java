@@ -5,6 +5,8 @@ import java.util.TimeZone;
 import jp.vocalendar.R;
 import jp.vocalendar.util.DateUtil;
 import android.content.Context;
+import android.database.Cursor;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +19,8 @@ import android.widget.TextView;
  * SeparatorEventに対するセパレータ表示を行う。
  */
 public class EventArrayCursorAdapter extends SimpleCursorAdapter {
+	private static final String TAG = "EventArrayCursorAdapter";
+	
 	private Context context;
 	private EventArrayCursor cursor;
 	private LayoutInflater inflater;
@@ -37,16 +41,18 @@ public class EventArrayCursorAdapter extends SimpleCursorAdapter {
 	 * @param from
 	 * @param to
 	 */
-	public EventArrayCursorAdapter(Context context, int layout, EventArrayCursor cursor,
-			String[] from, int[] to, TimeZone timeZone) {
-		super(context, layout, cursor, from, to);
+	public EventArrayCursorAdapter(Context context, EventDataBaseRow[] events, TimeZone timeZone) {
+		super(context, R.layout.event_list_item_additional_date,
+				new EventArrayCursor(events, timeZone, context),
+				new String[] { "time", "date", "summary" },
+				new int[]{ R.id.timeText, R.id.dateText, R.id.summaryText });
 		this.context = context;
-		this.cursor = cursor;
+		this.cursor = (EventArrayCursor)getCursor();
 		this.timeZone = timeZone;
 		this.inflater =
 				(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
-
+		
 	@Override
 	public boolean isEnabled(int position) {
 		if(cursor.getEventDataBaseRow(position).getRowType() 
@@ -75,24 +81,37 @@ public class EventArrayCursorAdapter extends SimpleCursorAdapter {
 			}
 			break;
 		case VIEW_TYPE_EVENT_WITHOUT_DATE_TEXT:
+			if(convertView == null) {
+				convertView = inflater.inflate(
+						R.layout.event_list_item, parent, false);
+			}
+			setViewValue(position, convertView);
+			setColorToTimeTextView(position, convertView);			
+			break;
 		case VIEW_TYPE_EVENT_WITH_DATE_TEXT:
 			convertView = super.getView(position, convertView, parent); // セパレータでなければ通常処理
-			LinearLayout layout = (LinearLayout)convertView.findViewById(R.id.eventLinearLayout);			
-			int color = chooseColor(cursor.getEventDataBaseRow(position));
-			layout.setBackgroundColor(color);
-			TextView ttv = (TextView)convertView.findViewById(R.id.timeText);			
-			ttv.setBackgroundColor(color);						
-			TextView dtv = (TextView)convertView.findViewById(R.id.dateText);						
-			if(cursor.getEventDataBaseRow(position).hasAdditionalDate(timeZone, context)) {
-				dtv.getLayoutParams().height = LinearLayout.LayoutParams.WRAP_CONTENT;
-			} else {
-				dtv.getLayoutParams().height = 0;
-			}			
+			setColorToTimeTextView(position, convertView);						
 			break;
 		}				
 		return convertView;		
 	}
+	
+	private void setColorToTimeTextView(int position, View convertView) {
+		int color = chooseColor(cursor.getEventDataBaseRow(position));
+		TextView ttv = (TextView)convertView.findViewById(R.id.timeText);			
+		ttv.setBackgroundColor(color);
+	}
 
+	private void setViewValue(int position, View view) {
+		EventDataBaseRow row = cursor.getEventDataBaseRow(position);
+
+		TextView tt = (TextView)view.findViewById(R.id.timeText);
+		tt.setText(row.formatStartTime(timeZone, context));
+		
+		TextView st = (TextView)view.findViewById(R.id.summaryText);
+		st.setText(row.getEvent().getSummary()); 
+	}		
+	
 	@Override
 	public int getItemViewType(int position) {
 		EventDataBaseRow row = cursor.getEventDataBaseRow(position);

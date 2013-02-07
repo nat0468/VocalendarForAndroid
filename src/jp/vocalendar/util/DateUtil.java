@@ -31,6 +31,7 @@ public class DateUtil {
 		public final String STR_NTH_DAY_FORMAT;
 		public final String STR_AFTER_WEEKDAY_STRING;
 		public final String STR_ALL_DAY;
+		public final String STR_END;
 		
 		ConstString(Context context) {
 			STR_FROM_TO = context.getString(R.string.from_to);
@@ -54,6 +55,8 @@ public class DateUtil {
 			STR_AFTER_WEEKDAY_STRING = context.getString(R.string.after_weekday_string);
 			
 			STR_ALL_DAY = context.getString(R.string.all_day);			
+			
+			STR_END = context.getString(R.string.end);
 		}
 	}
 	

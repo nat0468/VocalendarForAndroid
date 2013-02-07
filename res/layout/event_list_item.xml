@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/eventLinearLayout"
-    android:background="#f0f0f0"
+    android:id="@+id/eventListItemLayout"
+    android:background="#ffffff"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
@@ -10,33 +10,31 @@
 	    style="@style/VocalendarContent"
         android:text="17:30"
         android:textColor="@android:color/white"
-        android:background="#f0f0f0"
+        android:background="@color/normalday"
         android:gravity="center"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:textStyle="bold"
         android:paddingLeft="0dp"
         android:paddingRight="0dp"
         android:layout_width="75sp"
-        android:layout_height="wrap_content"/>
+        android:layout_height="fill_parent"/>
     <LinearLayout
      android:layout_width="fill_parent"
      android:layout_height="wrap_content"
-     android:orientation="vertical">        
-		<TextView android:id="@+id/dateText"
+     android:orientation="vertical">
+
+	    <TextView
+	        android:id="@+id/summaryText"
 	        style="@style/VocalendarContent"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
 	        android:background="@color/event_list_item"
-	        android:textColor="#666666"
-	        android:textSize="16sp"
-	        android:textStyle="normal"
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"/>
-	    <TextView android:id="@+id/summaryText"
-			style="@style/VocalendarContent"
-			android:background="@color/event_list_item"
-		    android:textColor="@android:color/black"
-	        android:textSize="20sp"
-	        android:textStyle="bold"
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"/>
+	        android:paddingBottom="3dp"
+	        android:paddingTop="3dp"
+	        android:text="【CD】"
+	        android:textColor="@android:color/black"
+	        android:textSize="18sp"
+	        android:textStyle="bold" />
+
     </LinearLayout>
 </LinearLayout>

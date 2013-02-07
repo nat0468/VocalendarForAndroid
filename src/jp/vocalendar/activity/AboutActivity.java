@@ -34,10 +34,8 @@ public class AboutActivity extends Activity {
 		CharSequence html = Html.fromHtml(htmlSrc);
 		tv.setText(html);
 
-		/*
-		ImageView imageView = (ImageView)findViewById(R.id.wallpaperImageView);
-		imageView.setImageResource(R.drawable.wallpaper);
-		imageView.setAlpha(64);
-		*/
+		TextView tv2 = (TextView)findViewById(R.id.aboutTextView2); 
+		tv2.setMovementMethod(LinkMovementMethod.getInstance());
+		tv2.setText(Html.fromHtml(getString(R.string.about_message2)));
 	}
 }

@@ -89,6 +89,9 @@ public class StartTime {
 		} else {
 			sb.append(hourAndMinute.toString());
 		}
+		if(continuesFromYesterday) {
+			sb.append("\n" + DateUtil.getString(context).STR_END);
+		}
 		return sb.toString();
 	}
 	

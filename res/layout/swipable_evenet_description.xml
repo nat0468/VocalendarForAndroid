@@ -7,25 +7,33 @@
 
     <LinearLayout
         style="@style/VocalendarContent"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="left"
         android:layout_weight="0.0"
 	    android:background="#e0e0e0"
-        android:orientation="vertical"
-        android:padding="10dp"
-        android:paddingBottom="5dp"
-        android:paddingTop="5dp" >
+        android:orientation="horizontal"
+        android:padding="10dp" >
 
         <ImageView
             android:id="@+id/titleImageView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.6"
+            android:adjustViewBounds="true"
             android:contentDescription="@string/vocalendar"
-            android:layout_width="422px"
-            android:minWidth="422px"
-            android:layout_height="36px"
-            android:minHeight="36px"
+            android:scaleType="fitStart"
             android:src="@drawable/vocalendar_title" />
+
+        <TextView
+            android:id="@+id/spaceTextView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1.0"
+            android:text="" />
+
     </LinearLayout>
+
 
 	<android.support.v4.view.ViewPager
     	xmlns:android="http://schemas.android.com/apk/res/android"
@@ -40,30 +48,30 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.0"
-        android:gravity="fill" >
+        android:gravity="fill">
 
         <Button
             android:id="@+id/previous_button"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1.0"
             android:gravity="center"
             android:text="&lt;" />
         <Button
             android:id="@+id/share_button"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1.0"
             android:text="@string/share_button" />
         <Button
             android:id="@+id/import_button"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1.0"
             android:text="@string/import_button" />
         <Button
             android:id="@+id/next_button"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1.0"
             android:gravity="center"

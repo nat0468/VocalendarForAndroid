@@ -7,23 +7,31 @@
     
     <LinearLayout
         style="@style/VocalendarContent"
-        android:layout_width="match_parent"
+	    android:background="#e0e0e0"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="left"
         android:layout_weight="0.0"
-	    android:background="#e0e0e0"
-        android:orientation="vertical"
-        android:padding="10dp"
-        android:paddingBottom="5dp"
-        android:paddingTop="5dp" >
+        android:orientation="horizontal"
+        android:padding="10dp" >
 
         <ImageView
+            android:id="@+id/titleImageView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.6"
+            android:adjustViewBounds="true"
             android:contentDescription="@string/vocalendar"
-            android:layout_width="422px"
-            android:minWidth="422px"
-            android:layout_height="36px"
-            android:minHeight="36px"
+            android:scaleType="fitStart"
             android:src="@drawable/vocalendar_title" />
+
+        <TextView
+            android:id="@+id/spaceTextView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1.0"
+            android:text="" />
+
     </LinearLayout>
 
     <ImageView
@@ -31,13 +39,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1.0"
-        android:adjustViewBounds="false"
+        android:adjustViewBounds="true"
         android:contentDescription=""
         android:paddingBottom="0dp"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:paddingTop="20dp"
-        android:scaleType="fitCenter"
+        android:scaleType="centerInside"
         android:src="@drawable/wallpaper" />
 
     <TextView

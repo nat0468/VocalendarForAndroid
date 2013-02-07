@@ -12,6 +12,7 @@
        	android:layout_height="wrap_content"
         android:layout_weight="0.0"
        	android:background="@color/separator"
+       	android:textColor="@color/separatorText"
      	android:paddingTop="5sp"
    	 	android:paddingBottom="5sp"
         android:text="date" />

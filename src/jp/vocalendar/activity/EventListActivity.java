@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import jp.vocalendar.Constants;
+import jp.vocalendar.Help;
 import jp.vocalendar.R;
 import jp.vocalendar.model.EventArrayCursor;
 import jp.vocalendar.model.EventArrayCursorAdapter;
@@ -68,6 +69,14 @@ public class EventListActivity extends ListActivity {
 			}
 		});
         
+        Button helpButton = (Button)findViewById(R.id.help_button);
+        helpButton.setOnClickListener(new View.OnClickListener() {			
+			@Override
+			public void onClick(View v) {
+				openHelp();
+			}
+		});
+        
     	setDateToToday();
         if(isUpdateRequired()) {
         	openEventLoadingActivity();
@@ -83,13 +92,8 @@ public class EventListActivity extends ListActivity {
         db.close();
                 
         TimeZone timeZone = TimeZone.getDefault();
-        setListAdapter(new EventArrayCursorAdapter(
-        		this, 
-        		R.layout.event_list_item, 
-        		new EventArrayCursor(events, timeZone, this),
-        		new String[] { "time", "date", "summary" },
-        		new int[]{ R.id.timeText, R.id.dateText, R.id.summaryText },
-        		timeZone));
+        setListAdapter(
+        		new EventArrayCursorAdapter(this, events, timeZone));
 	}
 	
 	@Override
@@ -228,6 +232,9 @@ public class EventListActivity extends ListActivity {
 		startActivityForResult(i, REQUEST_CODE_GET_DAYLY_EVENT);		
 	}
  	
+	private void openHelp() {
+		Help.openHelp(this);
+	}
 	
  
 }

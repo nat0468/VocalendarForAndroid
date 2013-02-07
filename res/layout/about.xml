@@ -3,14 +3,49 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginBottom="20dp"
     android:orientation="vertical"
     tools:context=".activity.AboutActivity" >
 
-    <TextView
-        android:id="@+id/aboutTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="18sp" >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
 
-    </TextView>
+	    <TextView
+	        android:id="@+id/aboutTextView"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/about_message"
+	        android:textSize="18sp" >
+
+    	</TextView>
+
+	    <ImageView
+	        android:id="@+id/imageView1"
+	        android:layout_width="120dp"
+	        android:layout_height="50dp"
+	        android:layout_gravity="center"
+	        android:contentDescription="VOCALENDAR OFFICIAL BADGE"
+	        android:scaleType="fitCenter"
+	        android:src="@drawable/vocalendar_officialbadge_vcl80005" />
+
+	    <TextView
+	        android:id="@+id/aboutCopyrightTextView"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="center"
+	        android:text="(c) 2013 VOCALENDAR" />
+
+	    <TextView
+	        android:id="@+id/aboutTextView2"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="20sp"
+	        android:text="@string/about_message2"
+	        android:textSize="18sp" >
+
+    	</TextView>
+	    	    
+    </LinearLayout>
 </ScrollView>
