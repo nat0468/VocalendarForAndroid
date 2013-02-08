@@ -36,12 +36,12 @@
 &lt;h2&gt;VOCALENDAR %s&lt;/h2&gt;
 &lt;h4&gt;About VOCALENDAR for Android&lt;/h4&gt;
 VOCALENDAR for Android is an application to view the information of events about VOCALOID in \
-&lt;a href="http://vocalender.jp"&gt;VOCALENDAR&lt;/a&gt;&lt;br/&gt;&lt;br/&gt;\
+&lt;a href="http://vocalender.jp"&gt;VOCALENDAR&lt;/a&gt;\
 About VOCALENDAR, please see &lt;a href="http://vocalendar.jp/about/"&gt;here&lt;/a&gt;\
 (Japanese).&lt;br/&gt;\
 &lt;br/&gt;\
 &lt;h4&gt;VOCALENDAR official application&lt;/h4&gt;\
-This application is a VOCALENDAR official application permitted by VOCALENDAR.&lt;br/&gt;\
+This application is developed as a VOCALENDAR official application.&lt;br/&gt;\
 The information of events is the one in VOCALENDAR.
 You can use the information for personal use. But please refrain from commercial use.
 	</string>
@@ -61,8 +61,13 @@ Licensed under the Apache License Version 2.0 \
 OAuthManager.java&lt;br&gt;
 Copyright (c) 2010 Google Inc. Licensed under the Apache License Version 2.0 \
 &lt;a href="http://www.apache.org/licenses/"&gt;http://www.apache.org/licenses/&lt;/a&gt;&lt;br&gt;
+&lt;h4&gt;Thanks&lt;/h4&gt;\
+Great thanks to Yajiuma(@curioustander), who launched VOCALENDAR site and
+adviced UI design for me.&lt;br&gt;\
+And thanks to the VOCALENDAR editors, who tried this application,
+gave advices and supported me.
 	</string>
-	<string name="copyright_vocalendar">(c) 2013 VOCALENDAR</string>
+	<string name="copyright_vocalendar">(c) 2013 VOCALENDAR.</string>
 	<string name="number_of_date_to_get_events">Number of dates to get</string>
 	<string name="google_account">Google Account</string>
 	<string-array name="number_of_date_to_get_events_entries">

@@ -16,6 +16,7 @@
 	        android:id="@+id/aboutTextView"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
+	        style="@style/VocalendarContent"	
 	        android:text="@string/about_message"
 	        android:textSize="18sp" >
 
@@ -35,7 +36,7 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_gravity="center"
-	        android:text="(c) 2013 VOCALENDAR" />
+	        android:text="@string/copyright_vocalendar" />
 
 	    <TextView
 	        android:id="@+id/aboutTextView2"
@@ -43,6 +44,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_marginTop="20sp"
 	        android:text="@string/about_message2"
+	        style="@style/VocalendarContent"	
 	        android:textSize="18sp" >
 
     	</TextView>
