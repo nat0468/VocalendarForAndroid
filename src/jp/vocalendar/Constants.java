@@ -29,6 +29,32 @@ public class Constants {
 	   */
 	  public static final String NUMBER_OF_DATE_TO_GET_EVENTS_PREFERENCE_NAME = "number_of_date_to_get_events_preference";
 	  
+	  /**
+	   * イベント情報の読み込み画面の設定を格納するプリファレンス名
+	   */
+	  public static final String LOADING_PAGE_PREFERENCE_NAME = "loading_page_preference";
+	  
+	  /**
+	   * イベント情報の読み込み画面の設定値：壁紙
+	   */
+	  public static final String LOADING_PAGE_WALLPAPER = "LOADING_PAGE_WALLPAPER";
+
+	  /**
+	   * イベント情報の読み込み画面の設定値：ドット絵アニメーション
+	   */
+	  public static final String LOADING_PAGE_DOT_ANIMATION = "LOADING_PAGE_DOT_ANIMATION";
+
+	  /**
+	   * イベント情報の読み込み画面の設定値：ランダム
+	   */
+	  public static final String LOADING_PAGE_RANDOM = "LOADING_PAGE_RANDOM";
+
+	  /**
+	   * イベント情報の読み込み画面の設定値：表示なし
+	   */
+	  public static final String LOADING_PAGE_NONE = "LOADING_PAGE_NONE";
+	  
+	  
 	  
 	  /**
 	   * onActivityResult request codes:

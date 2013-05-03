@@ -58,6 +58,10 @@ Licensed under the Apache License Version 2.0 \
 OAuthManager.java&lt;br&gt;
 Copyright (c) 2010 Google Inc. Licensed under the Apache License Version 2.0 \
 &lt;a href="http://www.apache.org/licenses/"&gt;http://www.apache.org/licenses/&lt;/a&gt;&lt;br&gt;\
+&lt;h4&gt;イラストや商標について&lt;/h4&gt;\
+このアプリで使用しているイラストはピアプロ・キャラクター・ライセンスに基いてクリプトン・フューチャー・メディア株式会社のキャラクター『初音ミク』を描いたものです。&lt;br&gt;\
+イラストはイラストレーターさんの大切な作品です。無断使用・転載などはおやめください。&lt;br&gt;\
+VOCALOIDならびにボーカロイドはヤマハ株式会社の登録商標です。&lt;br&gt;
 &lt;h4&gt;謝辞&lt;/h4&gt;\
 VOCALENDARを立ち上げ、このアプリのUIデザインに多くのフィードバックを頂いた、
 やじうまさん(@curioustander)に大変感謝しています。&lt;br&gt;\
@@ -74,5 +78,13 @@ VOCALENDAR編集メンバーの皆さんにも感謝いたします。
 	<string name="all_day">終日</string>
 	<string name="illustration_by">Illustration by </string>
 	<string name="no_event">予定なし</string>
-	<string name="help">ヘルプ</string>	
+	<string name="help">ヘルプ</string>
+	<string name="loading_page">読み込み画面の表示</string>
+	<string name="preview_loading_page">読み込み画面のプレビュー</string>	
+	<string-array name="loading_page_entries">
+	    <item>ランダム(毎回変わる)</item>
+	    <item>壁紙(初音ミク)</item>
+	    <item>ドット絵アニメーション</item>
+	    <item>なし</item>
+	</string-array>		
 </resources>

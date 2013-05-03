@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="jp.vocalendar"
-    android:versionCode="9550"
-    android:versionName="0.95.5" >
+    android:versionCode="9561"
+    android:versionName="0.95.61" >
 
     <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="14" />
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -26,6 +26,7 @@
         <activity android:name=".activity.SwipableEventDescriptionActivity"></activity>        
         <activity android:name=".activity.SettingActivity"></activity>
         <activity android:name=".activity.AboutActivity"></activity>
+        <activity android:name=".activity.PreviewLoadingPageActivity"></activity>
         </application>
 
 </manifest>

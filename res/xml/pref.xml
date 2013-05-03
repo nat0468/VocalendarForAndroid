@@ -6,6 +6,18 @@
         			android:entryValues="@array/number_of_date_to_get_events_entriyvalues"
         			android:dialogTitle="@string/number_of_date_to_get_events_dialog"
         			android:defaultValue="3" />
+    <ListPreference android:title="@string/loading_page"
+        			android:key="loading_page_preference"
+        			android:entries="@array/loading_page_entries"
+        			android:entryValues="@array/loading_page_entry_values"
+        			android:dialogTitle="@string/loading_page"
+        			android:defaultValue="LOADING_PAGE_RANDOM" />
+    <Preference android:title="@string/preview_loading_page"
+        		android:key="preview_loading_page">
+        <intent android:action="android.intent.action.VIEW"
+            android:targetClass="jp.vocalendar.activity.PreviewLoadingPageActivity"
+            android:targetPackage="jp.vocalendar" />
+    </Preference>
     <ListPreference android:title="@string/google_account"
         			android:key="selected_account_preference" />
     <Preference android:title="@string/about_vocalendar_app">

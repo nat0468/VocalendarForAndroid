@@ -2,12 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f5f5f5"
+    android:background="#f0f0f0"
     android:orientation="vertical">
     
     <LinearLayout
-        style="@style/VocalendarContent"
-	    android:background="#e0e0e0"
+        style="@style/LoadingContent"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="left"
@@ -34,23 +33,20 @@
 
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/wallpaperImageView"
+    <jp.vocalendar.activity.view.AnimationSurfaceView
+        android:id="@+id/loadingAnimationSurfaceView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1.0"
         android:adjustViewBounds="true"
-        android:contentDescription=""
         android:paddingBottom="0dp"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
-        android:paddingTop="20dp"
-        android:scaleType="centerInside"
-        android:src="@drawable/wallpaper" />
+        android:paddingTop="20dp" />
 
     <TextView
         android:id="@+id/loadingImageCreatorText"
-        style="@style/VocalendarContent"
+        style="@style/LoadingContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"

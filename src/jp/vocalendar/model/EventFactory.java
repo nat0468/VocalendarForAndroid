@@ -6,8 +6,10 @@ import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import jp.vocalendar.R;
 import jp.vocalendar.util.DateUtil;
 
+import android.content.Context;
 import android.util.Log;
 
 
@@ -20,11 +22,15 @@ public class EventFactory {
 	public static Event toVocalendarEvent(
 			String gCalendarId,
 			com.google.api.services.calendar.model.Event ge,
-			TimeZone timeZone) {
+			TimeZone timeZone, Context context) {
 		Event e = new Event();
 		e.setGCalendarId(gCalendarId);
 		e.setGid(ge.getId());
-		e.setSummary(ge.getSummary());
+		if(ge.getSummary() != null) {
+			e.setSummary(ge.getSummary());
+		} else {
+			e.setSummary(context.getString(R.string.no_title));
+		}
 		e.setDescription(ge.getDescription());
 		if(ge.getStart() != null) {
 			if(ge.getStart().getDate() != null) {

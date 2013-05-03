@@ -62,7 +62,7 @@ public class EventComparatorInDate implements Comparator<Event> {
 		// 両方とも終日イベントの場合
 		if(st1.isDateEvent() && st2.isDateEvent()) {
 			// イベント名で比較
-			return e1.getSummary().compareTo(e2.getSummary());
+			return compareSummary(e1, e2);
 		}
 		
 		if(st1.getIndex() == st2.getIndex()) { // 両方とも同じ開始時間の場合			
@@ -73,8 +73,27 @@ public class EventComparatorInDate implements Comparator<Event> {
 				return 1;
 			} 
 			// イベント名で比較
-			return e1.getSummary().compareTo(e2.getSummary());
+			return compareSummary(e1, e2);
 		}
 		return st1.getIndex() - st2.getIndex();		
+	}
+	
+	/**
+	 * イベント名(Event#getSummary())で比較する。
+	 * @param e1
+	 * @param e2
+	 * @return
+	 */
+	private int compareSummary(Event e1, Event e2) {
+		if(e1.getSummary() == null) {
+			if(e2.getSummary() != null) {
+				return Integer.MIN_VALUE;
+			}
+			return 0; // 両方ともnull
+		}
+		if(e2.getSummary() == null) {
+			return Integer.MAX_VALUE;
+		}
+		return e1.getSummary().compareTo(e2.getSummary());
 	}
 }

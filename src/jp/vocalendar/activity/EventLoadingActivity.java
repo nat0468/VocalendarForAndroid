@@ -7,6 +7,9 @@ import java.util.TimeZone;
 
 import jp.vocalendar.Constants;
 import jp.vocalendar.R;
+import jp.vocalendar.activity.view.AnimationSurfaceView;
+import jp.vocalendar.animation.vocalendar.LoadingAnimation;
+import jp.vocalendar.animation.vocalendar.LoadingAnimationUtil;
 import jp.vocalendar.googleapi.OAuthManager;
 import jp.vocalendar.model.Event;
 import jp.vocalendar.model.EventDataBase;
@@ -61,12 +64,6 @@ public class EventLoadingActivity extends Activity implements LoadEventTask.Task
         setContentView(R.layout.loading);
         setTitle(R.string.vocalendar);
         
-        TextView creatorText = (TextView)findViewById(R.id.loadingImageCreatorText);
-        String str = getResources().getText(R.string.illustration_by).toString()
-        				+ " <a href=\"http://www.elrowa.com/\">ELrowa</a>.";
-        creatorText.setText(Html.fromHtml(str));
-		creatorText.setMovementMethod(LinkMovementMethod.getInstance());
-        
         Button cancel = (Button)findViewById(R.id.cancelButton);
         cancel.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -78,16 +75,32 @@ public class EventLoadingActivity extends Activity implements LoadEventTask.Task
 			}
 		});
 		loadingItemView = (TextView)findViewById(R.id.loadingItemView);
-        initWallpaper();
+        initAnimation();
         initAccount();
 	}
 
-	private void initWallpaper() {
-		ImageView iv = (ImageView)findViewById(R.id.wallpaperImageView);
-		iv.setImageResource(R.drawable.wallpaper);
-		//iv.setAlpha(64);
+	protected void initAnimation() {
+		AnimationSurfaceView view = getAnimationSurfaceView();
+		LoadingAnimation anim = makeLoadingAnimation();
+		view.addAnimation(anim);
+		TextView tv = (TextView)findViewById(R.id.loadingImageCreatorText);
+		tv.setMovementMethod(LinkMovementMethod.getInstance());		
+		tv.setText(anim.getCreatorText());
+	}
+
+	private AnimationSurfaceView getAnimationSurfaceView() {
+		AnimationSurfaceView view =
+				(AnimationSurfaceView)findViewById(R.id.loadingAnimationSurfaceView);
+		return view;
 	}
 	
+	private LoadingAnimation makeLoadingAnimation() {
+		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+		String value = pref.getString(
+				Constants.LOADING_PAGE_PREFERENCE_NAME, Constants.LOADING_PAGE_RANDOM);
+		return LoadingAnimationUtil.makeLoadingAnimation(value);
+	}
+
 	private void startLoadEventTask() {
         TimeZone timeZone = TimeZone.getDefault();
 
@@ -230,6 +243,8 @@ public class EventLoadingActivity extends Activity implements LoadEventTask.Task
 		       .setNegativeButton("No", new DialogInterface.OnClickListener() {
 		    	   public void onClick(DialogInterface dialog, int id) {
 		    		   dialog.cancel();
+		    		   setResult(RESULT_CANCELED);
+		    		   finish();
 		    	   }
 		       });
 		AlertDialog alert = builder.create();		
@@ -262,5 +277,18 @@ public class EventLoadingActivity extends Activity implements LoadEventTask.Task
 			Log.e(TAG, "Invalid number of date to get events: " + value);
 		}
 		return 3;
+	}	
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		getAnimationSurfaceView().pause();
+	}
+
+	@Override
+	protected void onRestart() {
+		// TODO Auto-generated method stub
+		super.onRestart();
+		getAnimationSurfaceView().resume();
 	}
 }

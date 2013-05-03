@@ -57,15 +57,20 @@ NON-INFRINGEMENT or MERCHANTABILITY. &lt;br/&gt;\
 Licensed under the Apache License Version 2.0 \
 &lt;a href="http://www.apache.org/licenses/"&gt;http://www.apache.org/licenses/&lt;/a&gt;&lt;br&gt;
 &lt;br&gt;
-&lt;a href="https://code.google.com/p/google-meeting-scheduler/"&gt;google-meeting-scheduler&lt;/a&gt;に含まれる\
+&lt;a href="https://code.google.com/p/google-meeting-scheduler/"&gt;google-meeting-scheduler&lt;/a&gt;\
 OAuthManager.java&lt;br&gt;
 Copyright (c) 2010 Google Inc. Licensed under the Apache License Version 2.0 \
 &lt;a href="http://www.apache.org/licenses/"&gt;http://www.apache.org/licenses/&lt;/a&gt;&lt;br&gt;
+&lt;h4&gt;About illustration and trademark&lt;/h4&gt;\
+Hatsune Miku, which is a Crypton Future Media\'s character, are drawn to illustrations of this application \
+are licensed under PIAPRO Characeter License.&lt;br&gt;\
+Illustrations are copyrighted works of the illustrators. Do not use them without permission.&lt;br&gt;\
+VOCALOID is a registered trademark of Yamaha Corporation.&lt;br&gt;\
 &lt;h4&gt;Thanks&lt;/h4&gt;\
 Great thanks to Yajiuma(@curioustander), who launched VOCALENDAR site and
-adviced UI design for me.&lt;br&gt;\
-And thanks to the VOCALENDAR editors, who tried this application,
-gave advices and supported me.
+adviced me about UI design.&lt;br&gt;\
+And thanks to the VOCALENDAR editors, who tried this application,\
+gave advices and supported me.\
 	</string>
 	<string name="copyright_vocalendar">(c) 2013 VOCALENDAR.</string>
 	<string name="number_of_date_to_get_events">Number of dates to get</string>
@@ -94,4 +99,19 @@ gave advices and supported me.
 	<string name="illustration_by">Illustration by </string>	
 	<string name="no_event">No Event</string>
 	<string name="help">Help</string>
+	<string name="loading_page">Loading Page</string>
+	<string name="preview_loading_page">Preview Loading Page</string>
+	<string-array name="loading_page_entries">
+	    <item>Random</item>
+	    <item>Hatsune Miku Wallpaper</item>
+	    <item>Dot Animation</item>
+	    <item>None</item>
+	</string-array>	
+	<string-array name="loading_page_entry_values">
+	    <item>LOADING_PAGE_RANDOM</item>
+	    <item>LOADING_PAGE_WALLPAPER</item>
+	    <item>LOADING_PAGE_DOT_ANIMATION</item>
+	    <item>LOADING_PAGE_NONE</item>
+	</string-array>
+	<string name="no_title">(No title)</string>
 </resources>

@@ -160,6 +160,8 @@ public class EventListActivity extends ListActivity {
 		    editor.commit();		    
 		    
 			updateList();
+		} else if(requestCode == REQUEST_CODE_GET_DAYLY_EVENT && resultCode == RESULT_CANCELED) {
+			finish(); // アカウント追加でキャンセルされたので終了			
 		} else if(requestCode == REQUEST_CODE_OPEN_SETTINGS && resultCode == RESULT_OK) {
 			setDateToToday();
 			openEventLoadingActivity(); // 設定が更新されたらイベント情報を再読み込み

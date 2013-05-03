@@ -141,7 +141,8 @@ public class GoogleCalendarLoadEventTask extends LoadEventTask {
 			if(canceled) {
 				return null;
 			}
-			events = list.setTimeMin(start).setTimeMax(end).setTimeZone(timeZone.getID()).execute();
+			events = list.setTimeMin(start).setTimeMax(end).setTimeZone(timeZone.getID())
+							.setSingleEvents(true).execute();
 		} catch (HttpResponseException e) {
 			int statusCode = e.getStatusCode();
 			if (statusCode == 401 && (tryNumber - 1) > 0) {
@@ -180,7 +181,8 @@ public class GoogleCalendarLoadEventTask extends LoadEventTask {
 				if(ge.getStatus() != null && !"confirmed".equals(ge.getStatus())) {
 					continue; // confirmed 以外のイベントは無視
 				}						
-				Event e = EventFactory.toVocalendarEvent(calendarId, ge, timeZone);
+				Event e = EventFactory.toVocalendarEvent(
+								calendarId, ge, timeZone, activity);
 				eventList.add(e);
 				publishProgress(e);
 			}
