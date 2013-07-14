@@ -44,7 +44,7 @@ extends AnimationManagerSupport<CanvasAnimation> {
 		}
   	}
 
-	public void runAsynchronous() {
+	public synchronized void runAsynchronous() {
 		m_running = true;
 		
 		beforeInit();
@@ -74,18 +74,18 @@ extends AnimationManagerSupport<CanvasAnimation> {
 		stopUpdateTimer();
 	}
 
-	public void pause() {
+	public synchronized void pause() {
 		m_running = false;
 		stopUpdateTimer();
 	}	
 	
-	public void resume() {
+	public synchronized void resume() {
 		if(!m_running) {
 			runAsynchronous();
 		}
 	}
 	
-	public void cancel() {
+	public synchronized void cancel() {
 		m_running = false;
 		stopUpdateTimer();
 		for(AnimationContainer ac : m_animationContainerList) {
@@ -100,7 +100,7 @@ extends AnimationManagerSupport<CanvasAnimation> {
 	 * 一定時間ごとに呼ばれ、
 	 * Animationの更新を行う。
 	 */
-	protected void update() {
+	protected synchronized void update() {
 		if(!isRunning()) {
 			return;
 		}

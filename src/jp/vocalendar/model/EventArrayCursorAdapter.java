@@ -148,4 +148,8 @@ public class EventArrayCursorAdapter extends SimpleCursorAdapter {
 		}
 		return context.getResources().getColor(R.color.normalday);
 	}
+
+	public EventArrayCursor getEventArrayCursor() {
+		return cursor;
+	}
 }

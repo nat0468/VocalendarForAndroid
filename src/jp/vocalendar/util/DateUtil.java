@@ -4,6 +4,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
+import com.google.api.client.util.DateTime;
+
 import jp.vocalendar.R;
 import android.content.Context;
 import android.text.format.DateFormat;
@@ -228,4 +230,50 @@ public class DateUtil {
 		return utc.getTimeInMillis();
 	}
 	
+	/**
+	 * 指定された年月日の始まりの時間(0時0分0秒)のCalendarを返す。
+	 * @param year
+	 * @param month
+	 * @param date
+	 * @param timeZone
+	 * @return
+	 */
+	public static Calendar getStartTimeOfDay(int year, int month, int date, TimeZone timeZone) {
+		Calendar cal = Calendar.getInstance(timeZone);
+		cal.set(Calendar.YEAR, year);
+		cal.set(Calendar.MONTH, month);
+		cal.set(Calendar.DAY_OF_MONTH, date);		
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+		return cal;
+	}
+	
+	/**
+	 * 指定された年月日(year,month,date)から指定された日数(duration)の開始日と終了日を返す。
+	 * @param year
+	 * @param month
+	 * @param date
+	 * @param timeZone
+	 * @param duration
+	 * @return
+	 */
+	public static DateTime[] makeStartAndEndDateTime(int year, int month, int date, TimeZone timeZone, int duration) {
+        Calendar utcCal = Calendar.getInstance(timeZone);
+        utcCal.set(Calendar.YEAR, year);
+        utcCal.set(Calendar.MONTH, month);
+        utcCal.set(Calendar.DATE, date);        
+        utcCal.set(Calendar.HOUR_OF_DAY, 0);
+        utcCal.set(Calendar.MINUTE, 0);
+        utcCal.set(Calendar.SECOND, 0);
+        utcCal.set(Calendar.MILLISECOND, 0);
+                
+        DateTime[] dates = new DateTime[2];
+    	dates[0] = new DateTime(utcCal.getTime(), timeZone); //開始日時   	
+    	utcCal.add(Calendar.DATE, duration);
+    	dates[1] = new DateTime(utcCal.getTime(), timeZone); //終了日時
+    	return dates;
+	}
+		
 }

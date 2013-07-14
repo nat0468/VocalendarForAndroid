@@ -7,4 +7,6 @@
     <color name="normalday">#aaa</color>
     <color name="item_pressed">#ccc</color>
     <color name="link_text_color">#41A587</color>
+    <color name="background_mint">#00a3af</color>
+    <color name="background_white">#ffffff</color>
 </resources>

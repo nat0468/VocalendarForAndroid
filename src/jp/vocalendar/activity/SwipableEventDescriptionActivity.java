@@ -1,14 +1,16 @@
 package jp.vocalendar.activity;
 
 import jp.vocalendar.R;
+import jp.vocalendar.VocalendarApplication;
 import jp.vocalendar.model.Event;
-import jp.vocalendar.model.EventDataBase;
 import jp.vocalendar.model.EventDataBaseRow;
 import jp.vocalendar.util.CalendarAppUtilICS;
+import jp.vocalendar.util.UncaughtExceptionSavingToFileHandler;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
@@ -16,11 +18,14 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 public class SwipableEventDescriptionActivity extends FragmentActivity {
-	/** Intentに表示するEventDataBaseRowを格納するときに使うキー */
-	public static final String KEY_EVENT_DATA_BASE_ROW = "event_database_row";
+	private static final String TAG = "SwipableEventDescriptionActivity";
+	
+	/** Intentに表示するEventDataBaseRowの
+	 * インデックス(KEY_EVENT_DATA_BASE_ROWS中の位置)を格納するときに使うキー */
+	public static final String KEY_EVENT_INDEX = "event_index";
 	
 	/** ページング用のアダプタ */
-	private EventDescriptionPagerAdapter pagerAdapter;
+	private PagerAdapter pagerAdapter;
 	
 	/** ページング用のビュー */
 	private ViewPager viewPager;
@@ -30,13 +35,26 @@ public class SwipableEventDescriptionActivity extends FragmentActivity {
 	
 	/** 現在表示中のイベント */
 	private EventDataBaseRow currentRow;
+	
+	/** スワイプで表示可能なイベント一覧 */
+	private EventDataBaseRow[] rows;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        UncaughtExceptionSavingToFileHandler.setHandlerIfNotSet(getApplicationContext());
+        
+        VocalendarApplication app = (VocalendarApplication)getApplication();
+        if(app.getEventDataBaseRowArray() == null) {
+        	// プロセスが解放されて、イベント情報が解放されていた場合は、終了(イベント一覧に戻る)する。
+        	Log.d(TAG, "EventDataBaseRowArray is null...");
+        	finish();
+        	return;
+        }
+        
         setContentView(R.layout.swipable_evenet_description);
         
 		setTitle(R.string.vocalendar);
-		setupButtons();				
+		setupButtons();
         initPagerAdapter();        
 		updateEventDescription(getIntent());
     }
@@ -79,25 +97,23 @@ public class SwipableEventDescriptionActivity extends FragmentActivity {
 			}
 		});
 	}
-
+	
 	private void initPagerAdapter() {
-		pagerAdapter =
-        		new EventDescriptionPagerAdapter(
-        				getSupportFragmentManager(), this);
+		VocalendarApplication app = (VocalendarApplication)getApplication();
+    	rows = app.getEventDataBaseRowArray().getNormalRows();
+    	pagerAdapter =
+    			new EventArrayEventDescriptionPagerAdapter(getSupportFragmentManager(), rows);
         viewPager = (ViewPager) findViewById(R.id.swipable_event_description_pager);
         viewPager.setOnPageChangeListener(new ButtonStateUpdater());
         viewPager.setAdapter(pagerAdapter);
 	}
 	
 	private void updateEventDescription(Intent intent) {
-		int eventIndex = 0;
-		EventDataBaseRow row = null;
-    	row = (EventDataBaseRow)intent.getSerializableExtra(KEY_EVENT_DATA_BASE_ROW);
-		if(row == null) { // イベントが存在しない場合は無視
+		eventIndex = intent.getIntExtra(KEY_EVENT_INDEX, Integer.MIN_VALUE);
+		if(eventIndex == Integer.MIN_VALUE) { //存在しない場合は無視
 			finish();
 			return;
 		}
-    	eventIndex = row.getEventIndex();
 		moveToEvent(eventIndex);
 	}
 		
@@ -141,20 +157,17 @@ public class SwipableEventDescriptionActivity extends FragmentActivity {
 		Log.d("SwipableEventDescriptionActivity", "pageIndex:" + pageIndex);
 		
 		this.eventIndex = pageIndex;
-		EventDataBase db = new EventDataBase(this);
-		db.open();	
-        currentRow = db.getEventByEventIndex(pageIndex);
-        db.close();
+        currentRow = rows[pageIndex];
         
 		Button previousButton = (Button)findViewById(R.id.previous_button);
-		if(currentRow.isFirstEvent()) {
+		if(pageIndex == 0) {
 			previousButton.setEnabled(false);
 		} else {
 			previousButton.setEnabled(true);
 		}
 		
 		Button nextButton = (Button)findViewById(R.id.next_button);
-		if((currentRow.getEventIndex() + 1) ==  pagerAdapter.getCount()) {
+		if((pageIndex+1) == rows.length) {
 			nextButton.setEnabled(false);
 		} else {
 			nextButton.setEnabled(true);

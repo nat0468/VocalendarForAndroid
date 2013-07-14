@@ -40,13 +40,8 @@ public abstract class LoadEventTask extends AsyncTask<String, Event, List<EventD
 	protected Activity activity = null;
 	
 	/**
-	 * タスクがキャンセルされたときにtrueになる。
-	 */
-	protected boolean canceled = false;
-
-	/**
 	 * コンストラクタ。
-	 * @param activity イベント読み込み終了時にコールバックするSplashScreenActivity
+	 * @param activity このタスクを実行するActivity
 	 */	
 	public LoadEventTask(Activity activity, TaskCallback taskCallback) {
 		this.activity = activity;
@@ -55,7 +50,7 @@ public abstract class LoadEventTask extends AsyncTask<String, Event, List<EventD
 	
 	@Override
 	protected void onPostExecute(List<EventDataBaseRow> events) {
-		if(taskCallback != null && !canceled) { 
+		if(taskCallback != null && !isCancelled()) { 
 			taskCallback.onPostExecute(events);
 		}		
 	}
@@ -73,8 +68,8 @@ public abstract class LoadEventTask extends AsyncTask<String, Event, List<EventD
 	 */
 	protected void doRetry(int tryNumber) {
 		Log.d(TAG, "doRetry()");
-		this.canceled = true;
 		this.taskCallback.retry(tryNumber);
 		this.taskCallback = null;
+		cancel(false);
 	}
 }

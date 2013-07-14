@@ -96,6 +96,19 @@ public class EventDataBaseRow implements Serializable {
 		this.displayDate = date;
 	}
 	
+	/**
+	 * コピーコンストラクタ
+	 * @param row
+	 */
+	public EventDataBaseRow(EventDataBaseRow row) {
+		this.event = row.getEvent();
+		this.index = row.getIndex();
+		this.eventIndex = row.getEventIndex();
+		this.displayDate = row.getDisplayDate();
+		this.dayKind = row.getDayKind();
+		this.rowType = row.getRowType();		
+	}
+	
 	public int getIndex() {
 		return index;
 	}

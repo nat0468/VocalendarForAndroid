@@ -7,6 +7,7 @@ import java.util.TimeZone;
 
 import jp.vocalendar.Constants;
 import jp.vocalendar.R;
+import jp.vocalendar.VocalendarApplication;
 import jp.vocalendar.activity.view.AnimationSurfaceView;
 import jp.vocalendar.animation.vocalendar.LoadingAnimation;
 import jp.vocalendar.animation.vocalendar.LoadingAnimationUtil;
@@ -16,6 +17,7 @@ import jp.vocalendar.model.EventDataBase;
 import jp.vocalendar.model.EventDataBaseRow;
 import jp.vocalendar.model.GoogleCalendarLoadEventTask;
 import jp.vocalendar.model.LoadEventTask;
+import jp.vocalendar.util.DateUtil;
 import android.accounts.Account;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -46,6 +48,9 @@ public class EventLoadingActivity extends Activity implements LoadEventTask.Task
 	public static String KEY_YEAR = "year";
 	public static String KEY_MONTH = "month";
 	public static String KEY_DATE = "date";	
+	
+	/** イベント取込に認証で失敗して読み込めなかった場合の結果コード */
+	public static int RESULT_AUTH_FAILED = RESULT_FIRST_USER + 1;
 		
 	/**
 	 * 認証系の処理(アカウント追加やアカウント利用許可など)をする時のリクエストコード。
@@ -71,7 +76,7 @@ public class EventLoadingActivity extends Activity implements LoadEventTask.Task
 				if(task != null) {
 					task.cancel(false);
 				}
-				transitToEventListActivity();
+				transitToEventListActivityOnCancel();
 			}
 		});
 		loadingItemView = (TextView)findViewById(R.id.loadingItemView);
@@ -129,8 +134,8 @@ public class EventLoadingActivity extends Activity implements LoadEventTask.Task
         localCal.set(Calendar.MONTH, loadingMonth);
         localCal.set(Calendar.DATE, loadingDateOfMonth);
 		
-		int duration = getNumberOfDateToGetEvent();
-        DateTime[] dates = makeStartAndEndDateTime(
+		int duration = VocalendarApplication.getNumberOfDateToGetEvent(this);
+        DateTime[] dates = DateUtil.makeStartAndEndDateTime(
         		loadingYear, loadingMonth, loadingDateOfMonth, timeZone, duration);
                                 
         Date[] separators = new Date[duration];
@@ -139,37 +144,14 @@ public class EventLoadingActivity extends Activity implements LoadEventTask.Task
         	localCal.add(Calendar.DATE, 1);
         }
         
-		task = new GoogleCalendarLoadEventTask(this, this, 5);
+		task = new GoogleCalendarLoadEventTask(this, this);
 		task.setStartAndEndDate(dates[0], dates[1], separators, timeZone);
 		task.execute(Constants.MAIN_CALENDAR_ID, Constants.BROADCAST_CALENDAR_ID);
 	}
 	
 	/**
-	 * 指定された年月日(year,month,date)から指定された日数(duration)の開始日と終了日を返す。
-	 * @param year
-	 * @param month
-	 * @param date
-	 * @param timeZone
-	 * @param duration
-	 * @return
+	 * イベント読み込みに成功してEventListActivityに遷移
 	 */
-	private DateTime[] makeStartAndEndDateTime(int year, int month, int date, TimeZone timeZone, int duration) {
-        Calendar utcCal = Calendar.getInstance(timeZone);
-        utcCal.set(Calendar.YEAR, year);
-        utcCal.set(Calendar.MONTH, month);
-        utcCal.set(Calendar.DATE, date);        
-        utcCal.set(Calendar.HOUR_OF_DAY, 0);
-        utcCal.set(Calendar.MINUTE, 0);
-        utcCal.set(Calendar.SECOND, 0);
-        utcCal.set(Calendar.MILLISECOND, 0);
-                
-        DateTime[] dates = new DateTime[2];
-    	dates[0] = new DateTime(utcCal.getTime(), timeZone); //開始日時   	
-    	utcCal.add(Calendar.DATE, duration);
-    	dates[1] = new DateTime(utcCal.getTime(), timeZone); //終了日時
-    	return dates;
-	}
-	
 	public void transitToEventListActivity() {
 		Intent i = new Intent();
 		i.putExtra(KEY_YEAR, loadingYear);
@@ -179,6 +161,15 @@ public class EventLoadingActivity extends Activity implements LoadEventTask.Task
 		finish();
 	}
 
+	/**
+	 * キャンセルしてEventListActivityに遷移
+	 */
+	public void transitToEventListActivityOnCancel() {
+		Intent i = new Intent();
+		setResult(RESULT_CANCELED, i);
+		finish();
+	}
+	
 	public void onURIOpening(String uri) {
 		loadingItemView.setText("開いています: " + uri);		
 	}
@@ -243,7 +234,7 @@ public class EventLoadingActivity extends Activity implements LoadEventTask.Task
 		       .setNegativeButton("No", new DialogInterface.OnClickListener() {
 		    	   public void onClick(DialogInterface dialog, int id) {
 		    		   dialog.cancel();
-		    		   setResult(RESULT_CANCELED);
+		    		   setResult(RESULT_AUTH_FAILED);
 		    		   finish();
 		    	   }
 		       });
@@ -263,21 +254,6 @@ public class EventLoadingActivity extends Activity implements LoadEventTask.Task
 			initAccount();
 		}
 	}
-	
-	/**
-	 * イベント取得日数を返す。
-	 * @return
-	 */
-	private int getNumberOfDateToGetEvent() {		
-		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-		String value = pref.getString(Constants.NUMBER_OF_DATE_TO_GET_EVENTS_PREFERENCE_NAME, "3");
-		try {
-			return Integer.parseInt(value);
-		} catch(NumberFormatException e) {
-			Log.e(TAG, "Invalid number of date to get events: " + value);
-		}
-		return 3;
-	}	
 	
 	@Override
 	protected void onPause() {

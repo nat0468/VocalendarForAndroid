@@ -1,6 +1,7 @@
 package jp.vocalendar.model;
 
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import android.content.ContentValues;
@@ -121,6 +122,19 @@ public class EventDataBase {
 		}
 		c.close();
 		return events;
+	}
+	
+	public EventDataBaseRowArray getEventDataBaseRowArray() {
+		EventDataBaseRow[] events = getAllEvents();
+		LinkedList<EventDataBaseRow> normalEvents = new LinkedList<EventDataBaseRow>();
+		for (int i = 0; i < events.length; i++) {
+			if(events[i].getRowType() == EventDataBaseRow.TYPE_NORMAL_EVENT) {
+				normalEvents.add(events[i]);
+			}
+		}
+		return new EventDataBaseRowArray(
+				events,
+				normalEvents.toArray(new EventDataBaseRow[normalEvents.size()]));
 	}
 	
 	private EventDataBaseRow getEvent(Cursor c) {

@@ -229,5 +229,18 @@ public class EventUtil {
 				break;
 		}
 	}
+
+	/**
+	 * ダミーのイベント情報を作成する。
+	 * @param eventSummary
+	 * @return
+	 */
+	public static Event generateDummyEvent(String eventSummary) {
+		Event e = new Event();
+		e.setSummary(eventSummary);
+		e.setStartDateTime(new Date());
+		e.setEndDateTime(new Date(System.currentTimeMillis() + 1000 * 60));
+		return e;
+	}	
 	
 }

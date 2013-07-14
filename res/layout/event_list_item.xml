@@ -25,10 +25,9 @@
 
 	    <TextView
 	        android:id="@+id/summaryText"
-	        style="@style/VocalendarContent"
+	        style="@style/VocalendarContentWithBackground"
 	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
-	        android:background="@color/event_list_item"
 	        android:paddingBottom="3dp"
 	        android:paddingTop="3dp"
 	        android:text="【CD】"

@@ -54,6 +54,15 @@ public class Constants {
 	   */
 	  public static final String LOADING_PAGE_NONE = "LOADING_PAGE_NONE";
 	  
+	  /**
+	   * イベント一覧画面でもっと読み込む時に取得するイベント数を格納するプリファレンス名
+	   */
+	  public static final String NUMBER_OF_DATE_TO_LOAD_MORE_EVENTS_PREFRENCE_NAME = "number_of_date_to_load_more_events_preference";
+
+	  /**
+	   * タップ無しで自動でもっとイベントを読み込むかどうかを格納するプリファレンス名
+	   */
+	  public static final String LOAD_MORE_EVENT_WITHOUT_TAP = "load_more_event_without_tap";
 	  
 	  
 	  /**
@@ -72,6 +81,5 @@ public class Constants {
 	   * VOCALENAR 放送系 のID
 	   */
 	  public static final String BROADCAST_CALENDAR_ID = "5fsoru1dfaga56mcleu5mp76kk@group.calendar.google.com";
-	  
 	  
 }

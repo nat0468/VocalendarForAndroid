@@ -26,7 +26,7 @@ import com.google.api.services.calendar.CalendarRequest;
 import com.google.api.services.calendar.model.Events;
 
 public class GoogleCalendarLoadEventTask extends LoadEventTask {
-	private static String TAG = "LoadEventTask";  
+	private static String TAG = "GoogleCalendarLoadEventTask";  
 	/**
 	 * イベント情報を読み込む開始日(この日時自体は含む)
 	 */
@@ -49,7 +49,19 @@ public class GoogleCalendarLoadEventTask extends LoadEventTask {
 	 * 認証失敗時の残り試行回数。
 	 */
 	private int tryNumber = 5;
+	
+	/** 残り試行回数のデフォルト値 */
+	private static final int DEFAULT_TRY_NUMBER = 5;
     
+    /**
+     * コンストラクタ。
+     * @param activity このタスクを実行するActivity
+     * @param taskCallback イベント読み込み終了時にコールバックする
+     */
+    public GoogleCalendarLoadEventTask(Activity activity, TaskCallback taskCallback) {
+        this(activity, taskCallback, DEFAULT_TRY_NUMBER);
+    }
+	
     /**
      * コンストラクタ。
      * @param activity イベント読み込み終了時にコールバックするSplashScreenActivity
@@ -138,7 +150,7 @@ public class GoogleCalendarLoadEventTask extends LoadEventTask {
 		
 		Events events = null;
 		try {
-			if(canceled) {
+			if(isCancelled()) {
 				return null;
 			}
 			events = list.setTimeMin(start).setTimeMax(end).setTimeZone(timeZone.getID())

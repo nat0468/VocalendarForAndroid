@@ -10,12 +10,12 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.widget.Button;
 
-public class EventDescriptionPagerAdapter extends FragmentStatePagerAdapter {
+public class EventDatabaseEventDescriptionPagerAdapter extends FragmentStatePagerAdapter {
 	private Activity activity;
 	
 	private int numberOfEvents = -1;
 	
-	public EventDescriptionPagerAdapter(FragmentManager fm, Activity activity) {
+	public EventDatabaseEventDescriptionPagerAdapter(FragmentManager fm, Activity activity) {
 		super(fm);
 		this.activity = activity;
 	}

@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="jp.vocalendar"
-    android:versionCode="9561"
-    android:versionName="0.95.61" >
+    android:versionCode="9600"
+    android:versionName="0.96.0-RC20130714" >
 
     <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="14" />
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
     <uses-permission android:name="android.permission.USE_CREDENTIALS"/>
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:icon="@drawable/ic_vocalendar"
+        android:name="jp.vocalendar.VocalendarApplication"
         android:label="@string/app_name" android:theme="@style/Vocalendar">
         <activity
             android:name=".activity.EventListActivity"
@@ -27,6 +29,7 @@
         <activity android:name=".activity.SettingActivity"></activity>
         <activity android:name=".activity.AboutActivity"></activity>
         <activity android:name=".activity.PreviewLoadingPageActivity"></activity>
+        <activity android:name="jp.vocalendar.util.ExceptionReportActivity"></activity>
         </application>
 
 </manifest>

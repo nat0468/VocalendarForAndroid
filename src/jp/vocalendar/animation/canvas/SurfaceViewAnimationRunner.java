@@ -53,7 +53,9 @@ implements AnimationManager<CanvasAnimation>, SurfaceHolder.Callback {
 	@Override
 	protected void stopUpdateTimer() {
 		Log.d(TAG, "stopUpdateTimer");
-	    m_timer.cancel();
+		if(m_timer != null) { // startUpdateTimer()が呼ばれる前に呼ばれた場合は無視
+		    m_timer.cancel();			
+		}
 	}
 	
 	@Override

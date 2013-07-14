@@ -1,5 +1,7 @@
 package jp.vocalendar.model;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.TimeZone;
 
 import android.content.Context;
@@ -78,7 +80,7 @@ public class EventArrayCursor extends AbstractCursor implements Cursor {
 
 	@Override
 	public String getString(int column) {
-		Log.d("EventListCursor", "getString(" + column + ") for " + currentRow.getEvent().toString());		
+		//Log.d("EventListCursor", "getString(" + column + ") for " + currentRow.getEvent().toString());		
 		switch(column) {
 		case 0: // _id
 			return Integer.toString(currentPosition); 
@@ -119,4 +121,75 @@ public class EventArrayCursor extends AbstractCursor implements Cursor {
 		return events[position];
 	}
 
+	/**
+	 * 末尾にイベントを追加したイベント配列を返す。
+	 * このCursorの内部状態は変更されない。変更にはupdateEventDataBaseRows()を呼ぶ。
+	 * @param eventsToAppend
+	 * @return
+	 */
+	public List<EventDataBaseRow> getAppendedEventDataBaseRows(EventDataBaseRow[] eventsToAppend) {
+		EventDataBaseRow[] oldEvents = events;
+		List<EventDataBaseRow> result = new LinkedList<EventDataBaseRow>();
+		int eventIndex = 0;
+		for(int i =0; i < oldEvents.length; i++) {
+			EventDataBaseRow e = new EventDataBaseRow(oldEvents[i]);
+			if(e.getRowType() == EventDataBaseRow.TYPE_NORMAL_EVENT) {
+				e.setEventIndex(eventIndex++);
+			}
+			result.add(e);
+		}
+		for(int i = 0; i < eventsToAppend.length; i++) {
+			EventDataBaseRow e = eventsToAppend[i];
+			if(e.getRowType() == EventDataBaseRow.TYPE_NORMAL_EVENT) {
+				e.setEventIndex(eventIndex++);
+			}			
+			result.add(e);
+		}
+		return result;
+	}
+	
+	/**
+	 * 先頭にイベントを追加したイベント配列を返す。
+	 * このCursorの内部状態は変更されない。変更にはupdateEventDataBaseRows()を呼ぶ。
+	 * @param eventsToInsert
+	 * @return
+	 */
+	public List<EventDataBaseRow> getInsertedEventDataBaseRows(EventDataBaseRow[] eventsToInsert) {
+		EventDataBaseRow[] oldEvents = events;
+		List<EventDataBaseRow> result = new LinkedList<EventDataBaseRow>();
+		int i = 0;
+		int eventIndex = 0;
+		for(; i < eventsToInsert.length; i++) {
+			EventDataBaseRow e = eventsToInsert[i];
+			if(e.getRowType() == EventDataBaseRow.TYPE_NORMAL_EVENT) {
+				e.setEventIndex(eventIndex++);
+			}
+			result.add(e);
+		}
+		for(; i < eventsToInsert.length + oldEvents.length; i++) {
+			EventDataBaseRow e = new EventDataBaseRow(oldEvents[i - eventsToInsert.length]);
+			if(e.getRowType() == EventDataBaseRow.TYPE_NORMAL_EVENT) {
+				e.setEventIndex(eventIndex++);
+			}
+			result.add(e);
+		}
+		return result;
+	}
+
+	/**
+	 * イベント配列の内容を更新する
+	 * @param rows
+	 */
+	public void updateEventDataBaseRows(EventDataBaseRow[] rows) {
+		events = rows;
+		onChange(true);
+	}
+
+	/**
+	 * イベント配列を返す。
+	 * @return
+	 */
+	public EventDataBaseRow[] getEventDataBaseRows() {
+		return events;
+	}
 }

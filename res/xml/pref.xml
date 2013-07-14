@@ -3,9 +3,18 @@
     <ListPreference android:title="@string/number_of_date_to_get_events"
         			android:key="number_of_date_to_get_events_preference"
         			android:entries="@array/number_of_date_to_get_events_entries"
-        			android:entryValues="@array/number_of_date_to_get_events_entriyvalues"
+        			android:entryValues="@array/number_of_date_to_get_events_entryvalues"
         			android:dialogTitle="@string/number_of_date_to_get_events_dialog"
         			android:defaultValue="3" />
+    <ListPreference android:title="@string/number_of_date_to_load_more_events"
+        			android:key="number_of_date_to_load_more_events_preference"
+        			android:entries="@array/number_of_date_to_load_more_entries"
+        			android:entryValues="@array/number_of_date_to_load_more_entryvalues"
+        			android:dialogTitle="@string/number_of_date_to_get_events_dialog"
+        			android:defaultValue="3" />    
+    <CheckBoxPreference android:title="@string/load_more_event_without_tap" 
+        			android:key="load_more_event_without_tap"
+        			android:defaultValue="false" />
     <ListPreference android:title="@string/loading_page"
         			android:key="loading_page_preference"
         			android:entries="@array/loading_page_entries"
@@ -32,4 +41,5 @@
     <Preference android:title="@string/back"
         		android:key="back">
     </Preference>
+    
 </PreferenceScreen>

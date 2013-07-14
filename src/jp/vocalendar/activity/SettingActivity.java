@@ -10,6 +10,7 @@ import android.accounts.Account;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
@@ -33,7 +34,9 @@ implements OnPreferenceChangeListener, OnPreferenceClickListener	{
     	setTitle(R.string.setting);
     	addPreferencesFromResource(R.xml.pref);
     	
-    	initNumberODatePreference();
+    	initNumberOfDatePreference();
+    	initNumberOfDateToLoadMoreEventsPreference();
+    	initLoadMoreWithoutTapPreference();
     	initLoadingPagePreference();
     	initAccountPreference();
     	
@@ -41,13 +44,27 @@ implements OnPreferenceChangeListener, OnPreferenceClickListener	{
     	back.setOnPreferenceClickListener(this);    	
 	}
 	
-	private void initNumberODatePreference() {
+	private void initNumberOfDatePreference() {
 		ListPreference numberOfDatePref = (ListPreference)getPreferenceScreen()
     			.findPreference(Constants.NUMBER_OF_DATE_TO_GET_EVENTS_PREFERENCE_NAME);
     	numberOfDatePref.setSummary(numberOfDatePref.getEntry());
     	numberOfDatePref.setOnPreferenceChangeListener(this);
 	}
 
+	private void initNumberOfDateToLoadMoreEventsPreference() {
+		ListPreference numberOfDateToLoadMorePref = (ListPreference)getPreferenceScreen()
+    			.findPreference(Constants.NUMBER_OF_DATE_TO_LOAD_MORE_EVENTS_PREFRENCE_NAME);
+		numberOfDateToLoadMorePref.setSummary(numberOfDateToLoadMorePref.getEntry());
+		numberOfDateToLoadMorePref.setOnPreferenceChangeListener(this);
+	}
+
+	private void initLoadMoreWithoutTapPreference() {
+		CheckBoxPreference pref = (CheckBoxPreference)getPreferenceScreen()
+				.findPreference(Constants.LOAD_MORE_EVENT_WITHOUT_TAP);
+		pref.setOnPreferenceChangeListener(this);
+	}
+
+	
 	private void initLoadingPagePreference() {
 		ListPreference loadingPagePref = (ListPreference)getPreferenceScreen()
 				.findPreference(Constants.LOADING_PAGE_PREFERENCE_NAME);
@@ -74,11 +91,15 @@ implements OnPreferenceChangeListener, OnPreferenceClickListener	{
 	public boolean onPreferenceChange(Preference preference, Object newValue) {
 		if(preference.getKey().equals(Constants.NUMBER_OF_DATE_TO_GET_EVENTS_PREFERENCE_NAME)) {
 			preference.setSummary(newValue.toString());
+		} else if(preference.getKey().equals(Constants.NUMBER_OF_DATE_TO_LOAD_MORE_EVENTS_PREFRENCE_NAME)) {
+			preference.setSummary(newValue.toString());
 		} else if(preference.getKey().equals(Constants.LOADING_PAGE_PREFERENCE_NAME)) {
 			preference.setSummary(
 					LoadingAnimationUtil.getAnimationName(newValue.toString(), this));
 		} else if(preference.getKey().equals(Constants.SELECTED_ACCOUNT_PREFERENECE_NAME)) {
 			preference.setSummary(newValue.toString());
+		} else if(preference.getKey().equals(Constants.LOAD_MORE_EVENT_WITHOUT_TAP)) {
+			// なにもしない  setResult(RESULT_OK)を実行する
 		} else {
 			return false;
 		}

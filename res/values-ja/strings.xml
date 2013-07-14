@@ -11,6 +11,7 @@
   	<string name="google_account_required">Googleアカウントが必要です。アカウントを追加して下さい。</string>
   	<string name="add_account">アカウント追加</string>  		
   	<string name="loading_events">読み込み中...</string>  		  	
+  	<string name="loading_events_failed">読み込み失敗</string>  		  	
   	<string name="today">今日</string>		
   	<string name="from_to"> ~ </string>
   	<string name="to">~</string>	
@@ -70,6 +71,7 @@ VOCALENDAR編集メンバーの皆さんにも感謝いたします。
 		</string>
 	<string name="copyright_vocalendar">(c) 2013 VOCALENDAR.</string>
 	<string name="number_of_date_to_get_events">取得イベント日数</string>
+	<string name="number_of_date_to_load_more_events">もっと読み込む時の取得日数</string>	
 	<string name="google_account">Googleアカウント</string>
 	<string name="number_of_date_to_get_events_dialog">日数の選択</string>
 	<string name="share_button">共有</string>
@@ -87,4 +89,8 @@ VOCALENDAR編集メンバーの皆さんにも感謝いたします。
 	    <item>ドット絵アニメーション</item>
 	    <item>なし</item>
 	</string-array>		
+	<string name="load_more">もっと読み込む</string>	
+	<string name="exception_report_dialog_title">前回起動時に予期しない例外が発生しました。下記の例外ログを開発者に連絡して下さい。</string>
+	<string name="tap_to_load_more">タップしてもっと読み込む</string>
+	<string name="load_more_event_without_tap">タップなしでもっと読み込む</string>			
 </resources>

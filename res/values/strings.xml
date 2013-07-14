@@ -10,7 +10,8 @@
   	<string name="choose_account_title">Choose account</string>
   	<string name="google_account_required">Google account is required. Add an account.</string>  		
   	<string name="add_account">Add account</string>  	
-  	<string name="loading_events">Loading...</string>		
+  	<string name="loading_events">Loading...</string>
+  	<string name="loading_events_failed">Failed to load.</string>   		
   	<string name="today">Today</string>
   	<string name="from_to"> - </string>			
   	<string name="to">-</string>			
@@ -74,6 +75,7 @@ gave advices and supported me.\
 	</string>
 	<string name="copyright_vocalendar">(c) 2013 VOCALENDAR.</string>
 	<string name="number_of_date_to_get_events">Number of dates to get</string>
+	<string name="number_of_date_to_load_more_events">Number of dates to load more</string>
 	<string name="google_account">Google Account</string>
 	<string-array name="number_of_date_to_get_events_entries">
 	    <item>1</item>
@@ -83,7 +85,7 @@ gave advices and supported me.\
 	    <item>10</item>
 		<item>14</item>
 	</string-array>	
-	<string-array name="number_of_date_to_get_events_entriyvalues">
+	<string-array name="number_of_date_to_get_events_entryvalues">
 	    <item>1</item>
 	    <item>3</item>
 	    <item>5</item>
@@ -92,6 +94,22 @@ gave advices and supported me.\
 		<item>14</item>
 	</string-array>
 	<string name="number_of_date_to_get_events_dialog">Select number of date</string>
+	<string-array name="number_of_date_to_load_more_entries">
+	    <item>1</item>
+	    <item>3</item>
+	    <item>5</item>
+	    <item>7</item>
+	    <item>10</item>
+		<item>14</item>
+	</string-array>	
+		<string-array name="number_of_date_to_load_more_entryvalues">
+	    <item>1</item>
+	    <item>3</item>
+	    <item>5</item>
+	    <item>7</item>
+	    <item>10</item>
+		<item>14</item>
+	</string-array>
 	<string name="share_button">Share</string>
 	<string name="import_button">Import</string>
 	<string name="share_footer">from http://vocalendar.jp</string>
@@ -114,4 +132,8 @@ gave advices and supported me.\
 	    <item>LOADING_PAGE_NONE</item>
 	</string-array>
 	<string name="no_title">(No title)</string>
+	<string name="load_more">Load More</string>
+	<string name="exception_report_dialog_title">Unexcepted exception occurred at last execution. Please report the developer the following exception log.</string>
+	<string name="tap_to_load_more">Tap to Load More</string>
+	<string name="load_more_event_without_tap">Load More Without Tap</string>
 </resources>

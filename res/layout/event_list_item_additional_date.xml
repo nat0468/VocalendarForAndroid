@@ -25,10 +25,9 @@
 
 		<TextView
 		    android:id="@+id/dateText"
-		    style="@style/VocalendarContent"
+		    style="@style/VocalendarContentWithBackground"
 		    android:layout_width="fill_parent"
 		    android:layout_height="wrap_content"
-		    android:background="@color/event_list_item"
 		    android:paddingTop="3dp"
 		    android:text="毎週日曜日"
 		    android:textColor="#666666"
@@ -37,11 +36,10 @@
 
 	    <TextView
 	        android:id="@+id/summaryText"
-	        style="@style/VocalendarContent"
+	        style="@style/VocalendarContentWithBackground"
 	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
 	        android:layout_marginTop="-1sp"
-	        android:background="@color/event_list_item"
 	        android:paddingBottom="3dp"
 	        android:paddingTop="0dp"
 	        android:text="【CD】"
