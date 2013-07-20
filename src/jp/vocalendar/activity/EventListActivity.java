@@ -87,6 +87,15 @@ public class EventListActivity extends ListActivity {
 	 * 読み込みキャンセルを行うとfalseに戻る。 */
 	private boolean autoLoadingNextEvents = false;
 	
+	// TODO
+	/**
+	 * イベント一覧表示後にスクロール移動したときにtrueになる。
+	 * タップなしでもっと読み込む設定のときに、画面に表示するイベント数が画面より少ないときは、
+	 * 強制的にタップして読み込む動きにするために使う。
+	 * これがtrueの場合に、上下端
+	 */
+	private boolean isScrolled = false;
+	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -360,12 +369,27 @@ public class EventListActivity extends ListActivity {
 			return; // 無視
 		}
 		if(autoLoadingPreviousEvents && firstVisibleItem == 0) { // ListView最上端
+			if(visibleItemCount == totalItemCount) { // スクロールせずに全リスト(最上端)が見える場合は自動読み込み無効化
+				Log.d(TAG,
+						"onListScroll():visibleItemCount==totalItemCount:" + visibleItemCount +
+						" auto loading disabled.");
+				autoLoadingPreviousEvents = false;
+				return;
+			}
 			if(!loadMorePreviousEventView.isLoading()) {
 				loadPreviousEventsTapped();
+				return;
 			}
 		}
 		if(autoLoadingNextEvents &&
 				totalItemCount == (firstVisibleItem + visibleItemCount)) { // ListView最下端
+			if(visibleItemCount == totalItemCount) { // スクロールせずに全リスト(最下端)が見える場合は自動読み込み無効化
+				Log.d(TAG,
+						"onListScroll():visibleItemCount==totalItemCount:" + visibleItemCount +
+						"auto loading disabled.");
+				autoLoadingNextEvents = false;
+				return;
+			}
 			if(!loadMoreNextEventView.isLoading()) {
 				loadNextEventsTapped();
 			}
@@ -380,7 +404,9 @@ public class EventListActivity extends ListActivity {
 				loadMorePreviousEventTask.cancel(true);
 			} else {
 				loadMorePreviousEventView.setLoading(true);
-				loadPreviousEvents();
+				loadPreviousEvents();						
+				// もっと読み込むをタップしてキャンセルした場合、もう一度タップしたら、もっと読み込む設定を復元する。
+				autoLoadingPreviousEvents = VocalendarApplication.getLoadMoreEventWithoutTap(this);
 			}
 		}
 	}
@@ -502,6 +528,8 @@ public class EventListActivity extends ListActivity {
 			} else {
 				loadMoreNextEventView.setLoading(true);
 				loadNextEvents();
+				// もっと読み込むをタップしてキャンセルした場合、もう一度タップしたら、もっと読み込む設定を復元する。
+				autoLoadingNextEvents = VocalendarApplication.getLoadMoreEventWithoutTap(this);
 			}
 		}
 	}
@@ -583,6 +611,10 @@ public class EventListActivity extends ListActivity {
 	protected void onResume() {
 		super.onResume();		
 		// 起動時または設定画面から戻ってきた時を想定して、タップ無しでもっと読み込む設定を更新
+		resetAutoLosdingSetting();
+	}
+
+	private void resetAutoLosdingSetting() {
 		boolean autoLoading = VocalendarApplication.getLoadMoreEventWithoutTap(this);
 		autoLoadingNextEvents = autoLoadingPreviousEvents = autoLoading;
 	}

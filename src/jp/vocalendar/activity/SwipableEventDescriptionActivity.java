@@ -119,7 +119,6 @@ public class SwipableEventDescriptionActivity extends FragmentActivity {
 		
 	private void moveToEvent(int eventIndex)
 	{
-		pageIndexUpdated(eventIndex);
 		viewPager.setCurrentItem(eventIndex);
 	}
 	

@@ -64,8 +64,6 @@ public class EventArrayCursor extends AbstractCursor implements Cursor {
 
 	@Override
 	public long getLong(int column) {
-		Log.d("EventListCursor", "getLong(" + column + ")");		
-		
 		switch(column) {
 		case 0: // _id
 			return currentPosition;
