@@ -31,6 +31,7 @@
 		    android:paddingTop="3dp"
 		    android:text="毎週日曜日"
 		    android:textColor="#666666"
+	        android:background="@color/event_list_item"
 		    android:textSize="16sp"
 		    android:textStyle="normal" />
 
@@ -44,6 +45,7 @@
 	        android:paddingTop="0dp"
 	        android:text="【CD】"
 	        android:textColor="@android:color/black"
+	        android:background="@color/event_list_item"
 	        android:textSize="18sp"
 	        android:textStyle="bold" />
 

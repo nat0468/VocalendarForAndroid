@@ -32,6 +32,7 @@
 	        android:paddingTop="3dp"
 	        android:text="【CD】"
 	        android:textColor="@android:color/black"
+	        android:background="@color/event_list_item"	        
 	        android:textSize="18sp"
 	        android:textStyle="bold" />
 
