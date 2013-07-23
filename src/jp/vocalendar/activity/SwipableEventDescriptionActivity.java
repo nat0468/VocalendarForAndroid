@@ -119,7 +119,14 @@ public class SwipableEventDescriptionActivity extends FragmentActivity {
 		
 	private void moveToEvent(int eventIndex)
 	{
+		int currentItem = viewPager.getCurrentItem();
 		viewPager.setCurrentItem(eventIndex);
+		if(currentItem == eventIndex) {
+			Log.d(TAG, "moveToEvent():currentItem==eventIndex:" + eventIndex);
+			// viewPagerのcurrentItemが変化しない場合は、ButtonStateUpdaterのonPageSelected()が呼ばれず、
+			// pageIndexUpdated()が呼ばれないため、明示的に呼び出し。 
+			pageIndexUpdated(eventIndex);
+		}
 	}
 	
 		
