@@ -1,12 +1,16 @@
 package jp.vocalendar.activity;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.TimeZone;
 
 import jp.vocalendar.R;
 import jp.vocalendar.model.EventDataBaseRow;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Html;
+import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +19,7 @@ import android.view.ViewGroup;
 import android.webkit.ConsoleMessage;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class EventDescriptionFragment extends Fragment {
@@ -38,6 +43,21 @@ public class EventDescriptionFragment extends Fragment {
 		
 		TextView summary = (TextView)view.findViewById(R.id.detailSummaryText);
 		summary.setText(row.getEvent().getSummary());
+		
+		String l = row.getEvent().getLocation();
+		TextView location = (TextView)view.findViewById(R.id.locationTextView);
+		if(l != null) {
+			if(l.startsWith("http://") || l.startsWith("https://")) { // 場所がURLの場合
+				location.setText(makeAnchorHtml(l));
+			} else { // 場所が地名の場合
+				location.setText(makeGoogleMapAnchorHtml(l));
+			}
+			location.setMovementMethod(LinkMovementMethod.getInstance());
+		} else {
+			LinearLayout edfl = (LinearLayout)view.findViewById(R.id.eventDescriptionFragmentLayout);
+			LinearLayout lll = (LinearLayout)view.findViewById(R.id.locationLinearLayout);
+			edfl.removeView(lll);
+		}
 		
 		TextView desc = (TextView)view.findViewById(R.id.detailDescriptionText);
 		if(desc != null) {
@@ -88,4 +108,41 @@ public class EventDescriptionFragment extends Fragment {
 				+ "<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p='http';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>";		
 	}
     
+	/**
+	 * 指定されたURLへのアンカーHTMLタグを作成する
+	 * @param link
+	 * @return
+	 */
+	private static Spanned makeAnchorHtml(String link) {
+		StringBuilder a = new StringBuilder();
+		a.append("<a href=\"");
+		a.append(link);
+		a.append("\">");
+		a.append(link);
+		a.append("</a>");
+		return Html.fromHtml(a.toString());		
+	}
+	
+	/**
+	 * Google Mapを起動して、指定された地名を検索するアンカーHTMLタグを作成する。
+	 * @param location
+	 * @return
+	 */
+	private Spanned makeGoogleMapAnchorHtml(String location) {
+		StringBuilder a = new StringBuilder();
+		a.append(location);
+		// a.append(" (<a href=\"geo:35.684263, 139.748161?q="); // 皇居の位置を中心に検索
+		a.append(" (<a href=\"geo:0,0?q="); // 皇居の位置を中心に検索
+		try {
+			a.append(URLEncoder.encode(location, "UTF-8")); // TODO 懸案：UTF-8固定で大丈夫？
+		} catch (UnsupportedEncodingException e) {
+			// ここに来る事はまず無い
+			e.printStackTrace();
+			a.append(e.getMessage());
+		}
+		a.append("\">");
+		a.append(getResources().getString(R.string.map));
+		a.append("</a>)");
+		return Html.fromHtml(a.toString());				
+	}
 }

@@ -37,6 +37,8 @@ public class EventDataBase {
 			EventDataBaseHelper.COLUMN_DISPLAY_DATE,
 			EventDataBaseHelper.COLUMN_ROW_TYPE,
 			EventDataBaseHelper.COLUMN_DAY_KIND, // 15
+			EventDataBaseHelper.COLUMN_LOCATION,
+			
 	};
 	
 	private EventDataBaseHelper helper;
@@ -80,6 +82,7 @@ public class EventDataBase {
 			v.put(EventDataBaseHelper.COLUMN_GID, event.getGid());		
 			v.put(EventDataBaseHelper.COLUMN_GCALENDAR_ID, event.getGCalendarId());
 			v.put(EventDataBaseHelper.COLUMN_SUMMARY, event.getSummary());
+			v.put(EventDataBaseHelper.COLUMN_LOCATION, event.getLocation());
 			v.put(EventDataBaseHelper.COLUMN_DESCRIPTION, event.getDescription());
 			if(event.getStartDate() != null) {
 				v.put(EventDataBaseHelper.COLUMN_START_DATE, event.getStartDate().getTime());
@@ -161,7 +164,7 @@ public class EventDataBase {
 		
 		Date dispDate = new Date(c.getLong(13)); 
 		int rowType = c.getInt(14);
-		int index = c.getInt(11);
+		int index = c.getInt(11);					
 		
 		switch(rowType) {
 		case EventDataBaseRow.TYPE_SEPARATOR:
@@ -169,6 +172,9 @@ public class EventDataBase {
 		case EventDataBaseRow.TYPE_NO_EVENT:
 			return EventDataBaseRow.makeNoEventRow(index, dispDate);
 		}
+		
+		e.setLocation(c.getString(16));
+		
 		return new EventDataBaseRow(
 				e, index, c.getInt(12), dispDate, c.getInt(15));		
 	}

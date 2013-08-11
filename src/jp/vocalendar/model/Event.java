@@ -29,6 +29,8 @@ public class Event implements Serializable {
 	private String summary;
 	/** 説明 */
 	private String description;
+	/** 場所 */
+	private String location;
 	/** 開始日(1日の予定の場合に使う)。nullの場合は通常の予定。 */
 	private Date startDate;
 	/** 開始日時(1日の予定でない通常の予定の場合に使う)。nullの場合は1日の予定。 */
@@ -390,5 +392,11 @@ public class Event implements Serializable {
 	public String getDetailUrl() {
 		return "http://vocalendar.jp/detail/?feedurl=https://www.google.com/calendar/feeds/" + 
 				Uri.encode(gCalendarId) + "/public/full/" + gid;
+	}
+	public String getLocation() {
+		return location;
+	}
+	public void setLocation(String location) {
+		this.location = location;
 	}
 }

@@ -9,7 +9,7 @@ import android.util.Log;
 public class EventDataBaseHelper extends SQLiteOpenHelper {
 	private static final String TAG = "EventDataBaseHelper";
 	
-	public static final int DATABASE_VERSION = 10;
+	public static final int DATABASE_VERSION = 11;
 	
 	public static final String DATABASE_NAME = "EventDataBase";
 	public static final String EVENT_TABLE_NAME = "events";
@@ -30,6 +30,7 @@ public class EventDataBaseHelper extends SQLiteOpenHelper {
 	public static final String COLUMN_DISPLAY_DATE = "display_date";
 	public static final String COLUMN_ROW_TYPE = "row_type";
 	public static final String COLUMN_DAY_KIND = "day_kind";
+	public static final String COLUMN_LOCATION = "location";
 	
 	private static final String CREATE_TABLE_SQL =
 			"CREATE TABLE " + EVENT_TABLE_NAME + " (" +
@@ -48,7 +49,8 @@ public class EventDataBaseHelper extends SQLiteOpenHelper {
 					COLUMN_BY_WEEKDAY_OCCURRENCE + " integer," +
 					COLUMN_DISPLAY_DATE + " integer," +
 					COLUMN_ROW_TYPE + " integer," +
-					COLUMN_DAY_KIND + " integer);";
+					COLUMN_DAY_KIND + " integer," +
+					COLUMN_LOCATION + " text);";
 
 	private static final String DROP_TABLE_SQL = 
 			"DROP TABLE " + EVENT_TABLE_NAME + ";";

@@ -136,4 +136,6 @@ gave advices and supported me.\
 	<string name="exception_report_dialog_title">Unexcepted exception occurred at last execution. Please report the developer the following exception log.</string>
 	<string name="tap_to_load_more">Tap to Load More</string>
 	<string name="load_more_event_without_tap">Load More Without Tap</string>
+	<string name="location_plus_colon">Location: </string>
+	<string name="map">map</string>	
 </resources>

@@ -92,5 +92,7 @@ VOCALENDAR編集メンバーの皆さんにも感謝いたします。
 	<string name="load_more">もっと読み込む</string>	
 	<string name="exception_report_dialog_title">前回起動時に予期しない例外が発生しました。下記の例外ログを開発者に連絡して下さい。</string>
 	<string name="tap_to_load_more">タップしてもっと読み込む</string>
-	<string name="load_more_event_without_tap">タップなしでもっと読み込む</string>			
+	<string name="load_more_event_without_tap">タップなしでもっと読み込む</string>
+	<string name="location_plus_colon">場所：</string>
+	<string name="map">地図</string>		
 </resources>

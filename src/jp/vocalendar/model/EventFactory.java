@@ -32,6 +32,7 @@ public class EventFactory {
 			e.setSummary(context.getString(R.string.no_title));
 		}
 		e.setDescription(ge.getDescription());
+		e.setLocation(ge.getLocation());
 		if(ge.getStart() != null) {
 			if(ge.getStart().getDate() != null) {
 				e.setStartDate(parseDate(ge.getStart().getDate()));
