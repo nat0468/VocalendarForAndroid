@@ -136,6 +136,7 @@ public class GoogleCalendarLoadEventTask extends LoadEventTask {
 				allEventList.addAll(loadEvents(id, start, end));				
 			} catch(IOException e) {
 				Log.e(TAG, "loadEvents(" + id + ") fails.", e);
+				this.exception = e; 
 				return null;
 			}
 		}	
@@ -162,7 +163,7 @@ public class GoogleCalendarLoadEventTask extends LoadEventTask {
 				OAuthManager.getInstance().doLogin(true, activity,
 					new OAuthManager.AuthHandler() {
 						@Override
-						public void handleAuth(Account account, String authToken) {
+						public void handleAuth(Account account, String authToken, Exception ex) {
 							tryNumber--;
 							Log.e(TAG, "doRetry: " + tryNumber);
 							doRetry(tryNumber);
@@ -210,7 +211,7 @@ public class GoogleCalendarLoadEventTask extends LoadEventTask {
 						OAuthManager.getInstance().doLogin(true, activity,
 							new OAuthManager.AuthHandler() {
 								@Override
-								public void handleAuth(Account account, String authToken) {
+								public void handleAuth(Account account, String authToken, Exception ex) {
 									tryNumber--;
 									Log.e(TAG, "doRetry: " + tryNumber);
 									doRetry(tryNumber);

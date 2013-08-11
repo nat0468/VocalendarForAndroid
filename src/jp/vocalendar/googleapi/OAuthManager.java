@@ -57,10 +57,21 @@ public class OAuthManager {
      * @param account The selected account or null if none could be found
      * @param authToken The authorization token or null if access has been
      *        denied.
+     * @param exception 例外発生時の例外を指定。処理成功時はnullを指定。
+     * OperationCanceledException, IOException, AuthenticatorException,
+     * NoAccountException のいずれかが入る。
      */
-    public void handleAuth(Account account, String authToken);
+    public void handleAuth(Account account, String authToken, Exception exception);
   }
 
+  /**
+   * 利用可能なアカウントがない時に使われる例外。
+   * AuthHandlerのhandleAuthメソッドの引数exceptionに指定することを想定。
+   */
+  public class NoAccountException extends Exception {
+	  
+  }
+  
   /** The chosen account. */
   private Account account;
 
@@ -146,7 +157,7 @@ public class OAuthManager {
 	Log.d(TAG, "doLogin:" + accountName + "," + invalidate + "," + accountName + "," + callback);
     if (account != null && accountName.equals(account.name)) {
       if (!invalidate && authToken != null) {
-        callback.handleAuth(account, authToken);
+        callback.handleAuth(account, authToken, null);
       } else {
         if (authToken != null && invalidate) {
           final AccountManager accountManager = AccountManager.get(activity);
@@ -195,18 +206,18 @@ public class OAuthManager {
                   authorize(account, false, context, callback);
                 } else {
                   // Return the token to the callback.
-                  callback.handleAuth(account, authToken);
+                  callback.handleAuth(account, authToken, null);
                 }
               }
             } catch (OperationCanceledException e) {
               Log.e(TAG, "Operation Canceled", e);
-              callback.handleAuth(null, null);
+              callback.handleAuth(null, null, e);
             } catch (IOException e) {
               Log.e(TAG, "IOException", e);
-              callback.handleAuth(null, null);
+              callback.handleAuth(null, null, e); 
             } catch (AuthenticatorException e) {
               Log.e(TAG, "Authentication Failed", e);
-              callback.handleAuth(null, null);
+              callback.handleAuth(null, null, e);
             }
           }
         }, null /* handler */);
@@ -227,7 +238,7 @@ public class OAuthManager {
     final Account[] accounts = new GoogleAccountManager(activity).getAccounts();
 
     if (accounts.length < 1) {
-      callback.handleAuth(null, null);
+      callback.handleAuth(null, null, new NoAccountException());
     } else if (accounts.length == 1) {
       gotAccount(accounts[0], invalidate, activity, callback);
     } else if (accountName != null && accountName.length() > 0) {
@@ -258,7 +269,7 @@ public class OAuthManager {
       builder.setOnCancelListener(new OnCancelListener() {
         @Override
         public void onCancel(DialogInterface dialog) {
-          callback.handleAuth(null, null);
+          callback.handleAuth(null, null, new OperationCanceledException());
         }
       });
       builder.show();

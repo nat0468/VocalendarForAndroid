@@ -1,5 +1,6 @@
 package jp.vocalendar.activity;
 
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -18,12 +19,14 @@ import jp.vocalendar.model.EventDataBaseRow;
 import jp.vocalendar.model.GoogleCalendarLoadEventTask;
 import jp.vocalendar.model.LoadEventTask;
 import jp.vocalendar.util.DateUtil;
+import jp.vocalendar.util.DialogUtil;
 import android.accounts.Account;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
@@ -34,6 +37,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.api.client.util.DateTime;
 
@@ -181,7 +185,8 @@ public class EventLoadingActivity extends Activity implements LoadEventTask.Task
 	}
 	
 	public void onPostExecute(List<EventDataBaseRow> events) {
-		if(events == null) {
+		if(events == null) { // エラー時の処理
+			doLoadingError();
 			return;
 		}		
 		loadingItemView.setText("表示準備中");
@@ -193,6 +198,24 @@ public class EventLoadingActivity extends Activity implements LoadEventTask.Task
 		db.close();		
 		
 		transitToEventListActivity();
+	}
+
+	/**
+	 * イベント読み込みタスクで読み込み失敗時の処理。
+	 */
+	private void doLoadingError() {
+		if(task.getStatus() == Status.FINISHED) {
+			String msg = null;
+			if(task.getException() instanceof IOException) { // 通信エラー
+				msg = getResources().getString(R.string.communication_error);
+			} else { // 予期しないエラー
+				msg = getResources().getString(R.string.unexpected_error);
+			}
+			if(task.getException().getMessage() != null) {
+				msg = msg + ": " + task.getException().getMessage();
+			}
+			DialogUtil.openErrorDialog(this, msg);
+		}
 	}
 	
 	/**
@@ -208,15 +231,23 @@ public class EventLoadingActivity extends Activity implements LoadEventTask.Task
 	private void initAccount() {
 		OAuthManager.getInstance().doLogin(false, this, new OAuthManager.AuthHandler() {			
 			@Override
-			public void handleAuth(Account account, String authToken) {
-				onAuthToken(account, authToken);
+			public void handleAuth(Account account, String authToken, Exception ex) {
+				onAuthToken(account, authToken, ex);
 			}
 		});
 	}
 	
-	private void onAuthToken(Account account, String authToken) {
+	private void onAuthToken(Account account, String authToken, Exception ex) {
 		if(account == null || authToken == null) {
-			showGoogleAccountRequredDialog();
+			if(ex instanceof IOException) {
+				String m = getResources().getString(R.string.communication_error);
+				if(ex.getMessage() != null) {
+					m = m + ": " + ex.getMessage();
+				}				
+				DialogUtil.openErrorDialog(this, m);
+			} else {
+				showGoogleAccountRequredDialog();
+			}
 			return;
 		}
 		Log.i(TAG, "onAuthToken: " + account.name + "," + authToken);

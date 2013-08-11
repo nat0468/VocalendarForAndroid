@@ -46,9 +46,13 @@ public class EventListActivityLoadEventTask extends GoogleCalendarLoadEventTask 
 	 */
 	protected List<EventDataBaseRow> doInBackground(String... ids) {
 		if(OAuthManager.getInstance().getAccount() == null) {
-			initAccount(); // アカウント情報未設定の場合(まだ一回もイベント読み込みしていない名哀)は初期化
+			initAccount(); // アカウント情報未設定の場合(まだ一回もイベント読み込みしていない場合)は初期化
 		}		
 		List<EventDataBaseRow> result = super.doInBackground(ids);
+		if(result == null) {
+			return null; // 読み込みに失敗したので、何もせずに返る
+		}
+		
 		List<EventDataBaseRow> allRows = null;
 		if(loadMorePreviousEvent) {
 			allRows = eventArrayCursor.getInsertedEventDataBaseRows(
@@ -76,7 +80,8 @@ public class EventListActivityLoadEventTask extends GoogleCalendarLoadEventTask 
 	private void initAccount() {
 		OAuthManager.getInstance().doLogin(false, activity, new OAuthManager.AuthHandler() {			
 			@Override
-			public void handleAuth(Account account, String authToken) {
+			public void handleAuth(Account account, String authToken, Exception ex) {
+				// TODO エラー処理
 				Log.d(TAG, "Unexpected handleAuth called.");
 			}
 		});

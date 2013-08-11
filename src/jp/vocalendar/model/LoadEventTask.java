@@ -1,7 +1,11 @@
 package jp.vocalendar.model;
 
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+
+import jp.vocalendar.R;
+import jp.vocalendar.util.DialogUtil;
 
 import android.app.Activity;
 import android.os.AsyncTask;
@@ -40,6 +44,11 @@ public abstract class LoadEventTask extends AsyncTask<String, Event, List<EventD
 	protected Activity activity = null;
 	
 	/**
+	 * タスク実行中に発生した例外
+	 */
+	protected Exception exception = null;
+	
+	/**
 	 * コンストラクタ。
 	 * @param activity このタスクを実行するActivity
 	 */	
@@ -71,5 +80,13 @@ public abstract class LoadEventTask extends AsyncTask<String, Event, List<EventD
 		this.taskCallback.retry(tryNumber);
 		this.taskCallback = null;
 		cancel(false);
+	}
+
+	/**
+	 * タスク実行中に発生した例外
+	 * @return
+	 */
+	public Exception getException() {
+		return exception;
 	}
 }
