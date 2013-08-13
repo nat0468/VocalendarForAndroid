@@ -5,6 +5,7 @@ import jp.vocalendar.VocalendarApplication;
 import jp.vocalendar.model.Event;
 import jp.vocalendar.model.EventDataBaseRow;
 import jp.vocalendar.util.CalendarAppUtilICS;
+import jp.vocalendar.util.UncaughtExceptionSavingHandler;
 import jp.vocalendar.util.UncaughtExceptionSavingToFileHandler;
 import android.content.Intent;
 import android.os.Build;
@@ -41,7 +42,7 @@ public class SwipableEventDescriptionActivity extends FragmentActivity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        UncaughtExceptionSavingToFileHandler.setHandlerIfNotSet(getApplicationContext());
+        UncaughtExceptionSavingHandler.init(this);
         
         VocalendarApplication app = (VocalendarApplication)getApplication();
         if(app.getEventDataBaseRowArray() == null) {

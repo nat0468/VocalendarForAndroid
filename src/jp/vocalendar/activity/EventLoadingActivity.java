@@ -20,6 +20,7 @@ import jp.vocalendar.model.GoogleCalendarLoadEventTask;
 import jp.vocalendar.model.LoadEventTask;
 import jp.vocalendar.util.DateUtil;
 import jp.vocalendar.util.DialogUtil;
+import jp.vocalendar.util.UncaughtExceptionSavingHandler;
 import android.accounts.Account;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -70,6 +71,8 @@ public class EventLoadingActivity extends Activity implements LoadEventTask.Task
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		UncaughtExceptionSavingHandler.init(this);
+		
         setContentView(R.layout.loading);
         setTitle(R.string.vocalendar);
         

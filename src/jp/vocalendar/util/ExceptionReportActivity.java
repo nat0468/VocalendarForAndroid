@@ -1,5 +1,7 @@
 package jp.vocalendar.util;
 
+import java.io.IOException;
+
 import jp.vocalendar.R;
 import android.app.Activity;
 import android.os.Bundle;
@@ -18,13 +20,17 @@ public class ExceptionReportActivity extends Activity {
 	    setContentView(R.layout.exception_report);
 	    
 	    EditText text = (EditText)findViewById(R.id.reportText);
-	    text.setText(UncaughtExceptionSavingToFileHandler.loadExceptionReportFile());
+	    try {
+			text.setText(UncaughtExceptionSavingToFileHandler.loadExceptionReportFile(this));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	    
 	    Button b = (Button)findViewById(R.id.backButton);
 	    b.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				UncaughtExceptionSavingToFileHandler.removeReportFile();
+				UncaughtExceptionSavingHandler.removeReportFile(ExceptionReportActivity.this);
 				finish();
 			}
 		});

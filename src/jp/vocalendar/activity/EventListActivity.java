@@ -22,6 +22,7 @@ import jp.vocalendar.model.EventDataBaseRowArray;
 import jp.vocalendar.model.EventListActivityLoadEventTask;
 import jp.vocalendar.model.LoadEventTask;
 import jp.vocalendar.util.DateUtil;
+import jp.vocalendar.util.UncaughtExceptionSavingHandler;
 import jp.vocalendar.util.UncaughtExceptionSavingToFileHandler;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -100,10 +101,8 @@ public class EventListActivity extends ListActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        UncaughtExceptionSavingToFileHandler.setHandlerIfNotSet(getApplicationContext());
-        UncaughtExceptionSavingToFileHandler.startExceptionReportActivityIfAvailable(this);
-        //UncaughtExceptionSavingToFileHandler.showExceptionReportFileDialogIfAvailable(this);
-        
+        UncaughtExceptionSavingHandler.init(this);
+
         setContentView(R.layout.event_list);
         
         setupButtons();
@@ -352,6 +351,9 @@ public class EventListActivity extends ListActivity {
 	}
  	
 	private void openHelp() {
+		if(true) {
+			throw new RuntimeException();
+		}
 		Help.openHelp(this);
 	}
 	
