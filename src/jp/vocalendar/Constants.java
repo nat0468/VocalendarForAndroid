@@ -4,6 +4,11 @@ package jp.vocalendar;
  * Vocalendarアプリで使う定数を集めたクラス。
  */
 public class Constants {
+	/**
+	 * デバッグモードで実行する場合はtrue(例外レポート機能がオンになる)
+	 */
+	public static final boolean DEBUG_MODE = true;	
+	
 	  /**
 	   * API操作に使うアカウント種別
 	   */

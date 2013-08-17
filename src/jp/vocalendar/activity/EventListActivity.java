@@ -351,9 +351,6 @@ public class EventListActivity extends ListActivity {
 	}
  	
 	private void openHelp() {
-		if(true) {
-			throw new RuntimeException();
-		}
 		Help.openHelp(this);
 	}
 	
