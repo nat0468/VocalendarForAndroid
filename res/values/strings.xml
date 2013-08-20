@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Vocalendar</string>
+    <string name="app_name">VOCALENDAR</string>
     <string name="vocalendar">VOCALENDAR</string>
     <string name="setting">Settings</string>
     <string name="about_vocalendar_app">About this application</string>
@@ -140,4 +140,5 @@ gave advices and supported me.\
 	<string name="map">map</string>	
 	<string name="communication_error">Communication Error</string>
 	<string name="unexpected_error">Unexpected Error</string>
+	<string name="search_events">Search events</string>
 </resources>

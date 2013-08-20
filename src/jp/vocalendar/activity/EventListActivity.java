@@ -39,6 +39,7 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -153,6 +154,16 @@ public class EventListActivity extends ListActivity {
 		        }
 				*/
 				openHelp();
+			}
+		});
+        
+        ImageButton searchButton = (ImageButton)findViewById(R.id.searchButton);
+        searchButton.setOnClickListener(new View.OnClickListener() {			
+			@Override
+			public void onClick(View v) {
+				Log.d(TAG, "Serach Button Pressed!");
+				Intent intent = new Intent(EventListActivity.this, SearchableEventActivity.class);
+				startActivity(intent);
 			}
 		});
 	}
@@ -352,6 +363,10 @@ public class EventListActivity extends ListActivity {
  	
 	private void openHelp() {
 		Help.openHelp(this);
+	}
+
+	private void openSearch() {
+		
 	}
 	
 	/**

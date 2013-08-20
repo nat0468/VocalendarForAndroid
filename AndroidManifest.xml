@@ -29,6 +29,16 @@
         <activity android:name=".activity.AboutActivity"></activity>
         <activity android:name=".activity.PreviewLoadingPageActivity"></activity>
         <activity android:name="jp.vocalendar.util.ExceptionReportActivity"></activity>
-        </application>
+        <activity android:name=".activity.SearchableEventActivity">
+        	<intent-filter>
+            	<action android:name="android.intent.action.SEARCH" />
+        	</intent-filter>
+        	<meta-data android:name="android.app.searchable"
+            	       android:resource="@xml/searchable"/>            
+        </activity>
+        
+        <meta-data android:name="android.app.default_searchable"
+                   android:value=".activity.SearchableEventActivity" />
+	</application>
 
 </manifest>
