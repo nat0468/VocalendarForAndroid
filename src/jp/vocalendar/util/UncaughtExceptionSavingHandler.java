@@ -95,6 +95,9 @@ public abstract class UncaughtExceptionSavingHandler implements UncaughtExceptio
 	}
 
 	private static boolean isExceptionReportExist(Activity activity) {
+		if(!isDebuggable()) {
+			return false;
+		}
 		UncaughtExceptionSavingHandler handler =
 				getUncaughtExceptionSavingHandler(activity);
 		return handler.isExceptionReportExist();
