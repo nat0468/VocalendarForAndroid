@@ -141,4 +141,7 @@ gave advices and supported me.\
 	<string name="communication_error">Communication Error</string>
 	<string name="unexpected_error">Unexpected Error</string>
 	<string name="search_events">Search events</string>
+	<string name="searching">Searching...</string>
+	<string name="tap_to_search_more">Tap to Seach More</string>
+	
 </resources>

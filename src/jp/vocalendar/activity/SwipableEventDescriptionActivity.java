@@ -26,10 +26,10 @@ public class SwipableEventDescriptionActivity extends FragmentActivity {
 	public static final String KEY_EVENT_INDEX = "event_index";
 	
 	/** ページング用のアダプタ */
-	private PagerAdapter pagerAdapter;
+	protected PagerAdapter pagerAdapter;
 	
 	/** ページング用のビュー */
-	private ViewPager viewPager;
+	protected ViewPager viewPager;
 	
 	/** 表示中のイベントインデックス(0始まり) */
 	private int eventIndex = 0;
@@ -99,7 +99,7 @@ public class SwipableEventDescriptionActivity extends FragmentActivity {
 		});
 	}
 	
-	private void initPagerAdapter() {
+	protected void initPagerAdapter() {
 		VocalendarApplication app = (VocalendarApplication)getApplication();
     	rows = app.getEventDataBaseRowArray().getNormalRows();
     	pagerAdapter =
@@ -109,7 +109,7 @@ public class SwipableEventDescriptionActivity extends FragmentActivity {
         viewPager.setAdapter(pagerAdapter);
 	}
 	
-	private void updateEventDescription(Intent intent) {
+	protected void updateEventDescription(Intent intent) {
 		eventIndex = intent.getIntExtra(KEY_EVENT_INDEX, Integer.MIN_VALUE);
 		if(eventIndex == Integer.MIN_VALUE) { //存在しない場合は無視
 			finish();

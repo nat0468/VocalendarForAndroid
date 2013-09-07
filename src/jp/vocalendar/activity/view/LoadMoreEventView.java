@@ -6,7 +6,6 @@ import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -24,12 +23,23 @@ public class LoadMoreEventView extends LinearLayout {
 	private TextView textView;
 	private int heightPixel;
 	
+	private int loadingEventsText = R.string.loading_events;
+	private int tapToLoadMoreText = R.string.tap_to_load_more;
+	
 	/** 読み込み中表示かどうか。読み込み中ならtrue */
 	private boolean isLoading = false;
 	
 	public LoadMoreEventView(Context context, AttributeSet attrs) {
 		super(context, attrs);
+		readAttrs(attrs);
 		initChildren();
+	}
+	
+	private void readAttrs(AttributeSet attrs) {
+		loadingEventsText = 
+				attrs.getAttributeResourceValue(null, "loading_events_test", R.string.loading_events);
+		tapToLoadMoreText =
+				attrs.getAttributeResourceValue(null, "tap_to_load_more_text", R.string.tap_to_load_more);
 	}
 	
 	private void initChildren() {
@@ -45,7 +55,7 @@ public class LoadMoreEventView extends LinearLayout {
 		addView(progressBar, params);
 		
 		textView = new TextView(getContext());
-		textView.setText(R.string.tap_to_load_more);
+		textView.setText(tapToLoadMoreText);
 		textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.load, 0, 0, 0);
 		textView.setGravity(Gravity.CENTER_VERTICAL);
 		params = new LinearLayout.LayoutParams(
@@ -69,13 +79,29 @@ public class LoadMoreEventView extends LinearLayout {
 		this.isLoading = isLoading;
 		if(isLoading) {
 			progressBar.setVisibility(View.VISIBLE);
-			textView.setText(R.string.loading_events);
+			textView.setText(loadingEventsText);
 			textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
 		} else {
 			progressBar.setVisibility(View.GONE);
-			textView.setText(R.string.tap_to_load_more);
+			textView.setText(tapToLoadMoreText);
 			textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.load, 0, 0, 0);
 		}
+	}
+
+	/**
+	 * 読み込み中のテキストを設定する
+	 * @param loadingEventsText
+	 */
+	public void setLoadingEventsText(int loadingEventsText) {
+		this.loadingEventsText = loadingEventsText;
+	}
+
+	/**
+	 * タップするともっと読み込むテキストを設定する
+	 * @param tapToLoadMoreText
+	 */
+	public void setTapToLoadMoreText(int tapToLoadMoreText) {
+		this.tapToLoadMoreText = tapToLoadMoreText;
 	}
 	
 	
