@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jp.vocalendar.activity.view.LoadMoreEventView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/event_list_load_more"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    loading_events_text="@string/searching"
+    tap_to_load_more_text="@string/tap_to_search_more" >
+</jp.vocalendar.activity.view.LoadMoreEventView>
