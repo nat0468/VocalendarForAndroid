@@ -15,6 +15,12 @@
     <CheckBoxPreference android:title="@string/load_more_event_without_tap" 
         			android:key="load_more_event_without_tap"
         			android:defaultValue="false" />
+    <ListPreference android:title="@string/number_of_events_to_search_more"
+        			android:key="number_of_events_to_search_more_preference"
+        			android:entries="@array/number_of_events_to_search_more_entries"
+        			android:entryValues="@array/number_of_events_to_search_more_entryvalues"
+        			android:dialogTitle="@string/number_of_events_to_search_more_dialog"
+        			android:defaultValue="20" />    
     <ListPreference android:title="@string/loading_page"
         			android:key="loading_page_preference"
         			android:entries="@array/loading_page_entries"
@@ -27,6 +33,12 @@
             android:targetClass="jp.vocalendar.activity.PreviewLoadingPageActivity"
             android:targetPackage="jp.vocalendar" />
     </Preference>
+    <ListPreference android:title="@string/color_theme"
+        			android:key="color_theme_preference"
+        			android:entries="@array/color_theme_entries"
+        			android:entryValues="@array/color_theme_entry_values"
+        			android:dialogTitle="@string/color_theme"
+        			android:defaultValue="DEFAULT_THEME" />
     <ListPreference android:title="@string/google_account"
         			android:key="selected_account_preference" />
     <Preference android:title="@string/about_vocalendar_app">

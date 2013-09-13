@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
+
 import jp.vocalendar.R;
 import jp.vocalendar.util.DialogUtil;
 
@@ -31,7 +32,7 @@ public abstract class LoadEventTask extends AsyncTask<String, Event, List<EventD
 		public void retry(int retryNumber);
 	}
 	
-	private static String TAG = "LoadEventTask";
+	protected static final String TAG = "LoadEventTask";
 
 	/**
 	 * イベント読み込み終了時にコールバックするTaskCallback

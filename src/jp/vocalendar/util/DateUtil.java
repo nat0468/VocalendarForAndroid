@@ -101,6 +101,21 @@ public class DateUtil {
 		cal2.setTime(date2);		
 		return equalYMD(cal1, cal2);
 	}
+	
+	/**
+	 * 2つの日付date1, date2の年月日が date1 < date2 ならばtrueを返す。 
+	 * @param date1
+	 * @param date2
+	 * @param timeZone
+	 * @return
+	 */
+	public static boolean greaterYMD(Date date1, Date date2, TimeZone timeZone) {
+		Calendar cal1 = Calendar.getInstance(timeZone);
+		cal1.setTime(date1);
+		Calendar cal2 = Calendar.getInstance(timeZone);
+		cal2.setTime(date2);		
+		return cal1.before(cal2) && !equalYMD(cal1, cal2);		
+	}
 
 	public static Date formatDateTime(Date date, Date dateTime, StringBuilder sb) {
 		if(dateTime != null) {

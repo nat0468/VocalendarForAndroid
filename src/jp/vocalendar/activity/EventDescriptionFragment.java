@@ -6,6 +6,9 @@ import java.util.TimeZone;
 
 import jp.vocalendar.R;
 import jp.vocalendar.model.EventDataBaseRow;
+import jp.vocalendar.model.ColorTheme;
+import android.app.Activity;
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -25,6 +28,9 @@ import android.widget.TextView;
 public class EventDescriptionFragment extends Fragment {
     public static final String ARG_EVENT_DATABASE_ROW = "EVENT_DATABASE_ROW";
 
+    private Context context;
+    private ColorTheme themeColor;
+    
     @Override
     public View onCreateView(LayoutInflater inflater,
             ViewGroup container, Bundle savedInstanceState) {
@@ -37,9 +43,12 @@ public class EventDescriptionFragment extends Fragment {
         return rootView;
     }
     
-    private void updateView(View view, EventDataBaseRow row) {
+    private void updateView(View view, EventDataBaseRow row) {    	
+    	
 		TextView date = (TextView)view.findViewById(R.id.detailDateText);
 		date.setText(row.getEvent().formatDateTime(TimeZone.getDefault(), getActivity())); // デフォルトのタイムゾーン
+		date.setBackgroundColor(themeColor.getDarkBackgroundColor());
+		date.setTextColor(themeColor.getDarkTextColor());
 		
 		TextView summary = (TextView)view.findViewById(R.id.detailSummaryText);
 		summary.setText(row.getEvent().getSummary());
@@ -144,5 +153,12 @@ public class EventDescriptionFragment extends Fragment {
 		a.append(getResources().getString(R.string.map));
 		a.append("</a>)");
 		return Html.fromHtml(a.toString());				
+	}
+
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		this.context = activity;
+		this.themeColor = new ColorTheme(context);
 	}
 }

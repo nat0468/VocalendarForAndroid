@@ -6,8 +6,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import android.accounts.Account;
-import android.util.Log;
 
 import jp.vocalendar.activity.EventListActivity;
 import jp.vocalendar.googleapi.OAuthManager;
@@ -77,16 +75,6 @@ public class EventListActivityLoadEventTask extends GoogleCalendarLoadEventTask 
 		return result;
 	}
     
-	private void initAccount() {
-		OAuthManager.getInstance().doLogin(false, activity, new OAuthManager.AuthHandler() {			
-			@Override
-			public void handleAuth(Account account, String authToken, Exception ex) {
-				// TODO エラー処理
-				Log.d(TAG, "Unexpected handleAuth called.");
-			}
-		});
-	}
-
 	public EventDataBaseRowArray getEventDataBaseRowArray() {
 		return eventDataBaseRowArray;
 	}

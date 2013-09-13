@@ -10,4 +10,32 @@
     <color name="background_mint">#00a3af</color>
     <color name="background_white">#ffffff</color>
     <color name="no_information_text_color">#cccccc</color>
+    
+    <!-- デフォルトテーマ -->
+    <color name="dark_background_default">#666666</color>
+    <color name="dark_text_color_default">#ffffff</color>
+    <color name="light_background_default">#fff</color>
+    <color name="light_background_pressed_default">#ccc</color>
+    <color name="light_text_color_default">#000000</color>
+    
+    <!-- 初音ミクテーマ -->
+    <color name="dark_background_miku">#009c91</color>
+    <color name="dark_text_color_miku">#ffffff</color>
+    <color name="light_background_miku">#d0fff9</color> <!-- #90ffec -->
+    <color name="light_background_pressed_miku">#2ae1bf</color>
+    <color name="light_text_color_miku">#000000</color>
+
+    <!-- 鏡音リン・レンテーマ -->
+    <color name="dark_background_rinlen">#fab42b</color>
+    <color name="dark_text_color_rinlen">#ffffff</color>
+    <color name="light_background_rinlen">#f4f9b6</color>
+    <color name="light_background_pressed_rinlen">#ffe978</color>
+    <color name="light_text_color_rinlen">#000000</color>
+
+    <!-- SF-A2 開発コード miki -->
+    <color name="dark_background_miki">#f07b72</color>
+    <color name="dark_text_color_miki">#ffffff</color>
+    <color name="light_background_miki">#ffdfdf</color> <!-- 255, 223, 223 -->
+    <color name="light_background_pressed_miki">#ffb9b4</color>
+    <color name="light_text_color_miki">#000000</color>
 </resources>

@@ -1,6 +1,7 @@
 package jp.vocalendar.activity.view;
 
 import jp.vocalendar.R;
+import jp.vocalendar.model.ColorTheme;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -62,7 +63,7 @@ public class LoadMoreEventView extends LinearLayout {
 				ViewGroup.LayoutParams.WRAP_CONTENT, heightPixel);
 		addView(textView, params);
 	}
-
+	
 	private int toPixel(int dp) {
 		return (int)(dp * getResources().getDisplayMetrics().density);
 	}

@@ -49,4 +49,30 @@ public class VocalendarApplication extends Application {
 		boolean value = pref.getBoolean(Constants.LOAD_MORE_EVENT_WITHOUT_TAP, false);
 		return value;
 	}
+	
+	/**
+	 * もっと検索する時の取得イベント数を返す。
+	 * @param context
+	 * @return
+	 */
+	public static int getNumberOfEventToSearchMore(Context context) {
+		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+		String value = pref.getString(Constants.NUMBER_OF_EVENTS_TO_SEARCH_MORE_PREFERENCE_NAME, "20");
+		try {
+			return Integer.parseInt(value);
+		} catch(NumberFormatException e) {
+			Log.e(TAG, "Invalid number of date to get events: " + value);
+		}
+		return 20;
+	}
+	
+	/**
+	 * カラーテーマを返す
+	 * @param context
+	 * @return
+	 */
+	public static String getColorTheme(Context context) {
+		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+		return pref.getString(Constants.COLOR_THEME_PREFERENCE_NAME, "THEME_DEFAULT");		
+	}
 }

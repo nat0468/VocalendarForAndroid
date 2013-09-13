@@ -54,6 +54,22 @@ public class EventUtil {
 	}
 	
 	/**
+	 * 開始時間を返す。
+	 * 日付イベントなら「終日」を返す。
+	 */
+	public static StartTime getStartTime(Event event, TimeZone timeZone) {
+		if(event.isDateEvent()) {
+			return new StartTime(); // 日付イベントなら「終日」
+		}
+		// 開始時間を返す
+		Calendar calEvent = Calendar.getInstance(timeZone);
+		calEvent.setTime(event.getStartDateTime());
+		return new StartTime(
+				calEvent.get(Calendar.HOUR_OF_DAY),
+				calEvent.get(Calendar.MINUTE), false);					
+	}
+
+	/**
 	 * 指定された日付において日付イベントと見なせる場合にtrueを返す。
 	 * 期間イベントの場合に、開始日時と終了日時の間にある日付の場合に、
 	 * 日付イベントと見なす。

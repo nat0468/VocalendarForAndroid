@@ -63,13 +63,22 @@ public class Constants {
 	   * イベント一覧画面でもっと読み込む時に取得するイベント数を格納するプリファレンス名
 	   */
 	  public static final String NUMBER_OF_DATE_TO_LOAD_MORE_EVENTS_PREFRENCE_NAME = "number_of_date_to_load_more_events_preference";
-
+	 	 
 	  /**
 	   * タップ無しで自動でもっとイベントを読み込むかどうかを格納するプリファレンス名
 	   */
 	  public static final String LOAD_MORE_EVENT_WITHOUT_TAP = "load_more_event_without_tap";
+	  	  
+	  /**
+	   * 検索画面でもっと検索する時に取得するイベント数を格納するプリファレンス名
+	   */
+	  public static final String NUMBER_OF_EVENTS_TO_SEARCH_MORE_PREFERENCE_NAME = "number_of_events_to_search_more_preference";
 	  
-	  
+	  /**
+	   * 画面の色テーマを格納するプリファレンス名
+	   */
+	  public static final String COLOR_THEME_PREFERENCE_NAME = "color_theme_preference";
+
 	  /**
 	   * onActivityResult request codes:
 	   */
@@ -87,4 +96,5 @@ public class Constants {
 	   */
 	  public static final String BROADCAST_CALENDAR_ID = "5fsoru1dfaga56mcleu5mp76kk@group.calendar.google.com";
 	  
+	  public static final String[] CALENDER_IDS = new String[] { MAIN_CALENDAR_ID, BROADCAST_CALENDAR_ID };	  
 }

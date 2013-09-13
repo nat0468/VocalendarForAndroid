@@ -26,7 +26,7 @@ public class EventDataBaseRow implements Serializable {
 	/** イベント情報 */
 	private Event event = null;	
 	
-	/** このイベントを表示する日付。日時表示のソート順や表示文字列に使われる */
+	/** このイベントを表示する日付。日時表示のソート順や表示文字列に使われる。null指定可 */
 	private Date displayDate = null;
 	
 	/** インデックス。表示順をイベントデータベース挿入時と同じ順番に維持するために追加された序数 */
@@ -145,7 +145,10 @@ public class EventDataBaseRow implements Serializable {
 	 * @return
 	 */
 	public String formatStartTime(TimeZone timeZone, Context context) {
-		return EventUtil.getStartTime(event, displayDate, timeZone).toString(context);				
+		if(displayDate != null) {
+			return EventUtil.getStartTime(event, displayDate, timeZone).toString(context);
+		}
+		return EventUtil.getStartTime(event, timeZone).toString(context);
 	}
 
 	/**

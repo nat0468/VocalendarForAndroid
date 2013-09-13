@@ -13,6 +13,7 @@ import jp.vocalendar.Help;
 import jp.vocalendar.R;
 import jp.vocalendar.VocalendarApplication;
 import jp.vocalendar.activity.view.LoadMoreEventView;
+import jp.vocalendar.model.ColorTheme;
 import jp.vocalendar.model.Event;
 import jp.vocalendar.model.EventArrayCursor;
 import jp.vocalendar.model.EventArrayCursorAdapter;
@@ -52,7 +53,7 @@ public class EventListActivity extends ListActivity {
 	// EventListLoadingActivityを呼ぶためのリクエストコード
 	private static int REQUEST_CODE_GET_DAYLY_EVENT = 1;
 	// SettingActivityを呼ぶためのリクエストコード
-	private static int REQUEST_CODE_OPEN_SETTINGS = 2;
+	private static int REQUEST_CODE_OPEN_SETTINGS = 2;	
 
 	/** 
 	 * イベントを読み込む日付。
@@ -98,12 +99,15 @@ public class EventListActivity extends ListActivity {
 	 */
 	private boolean isScrolled = false;
 	
+	private ColorTheme colorTheme;
+	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         UncaughtExceptionSavingHandler.init(this);
-
+        
+        colorTheme = new ColorTheme(this);
         setContentView(R.layout.event_list);
         
         setupButtons();
@@ -161,9 +165,7 @@ public class EventListActivity extends ListActivity {
         searchButton.setOnClickListener(new View.OnClickListener() {			
 			@Override
 			public void onClick(View v) {
-				Log.d(TAG, "Serach Button Pressed!");
-				Intent intent = new Intent(EventListActivity.this, SearchableEventActivity.class);
-				startActivity(intent);
+				openSearch();
 			}
 		});
 	}
@@ -174,6 +176,7 @@ public class EventListActivity extends ListActivity {
 		lv.addHeaderView(loadMorePreviousEventView, null, true);
 		loadMoreNextEventView = loadMoreEventView();
 		lv.addFooterView(loadMoreNextEventView, null, true);
+		applyColorThemeToLoadMoreEventView();
 		
 		lv.setOnScrollListener(new AbsListView.OnScrollListener() {			
 			@Override
@@ -187,6 +190,11 @@ public class EventListActivity extends ListActivity {
 				onListScroll(view, firstVisibleItem, visibleItemCount, totalItemCount);
 			}
 		});
+	}
+	
+	private void applyColorThemeToLoadMoreEventView() {
+		loadMorePreviousEventView.setBackgroundResource(colorTheme.getLightBackgroundStateList());
+		loadMoreNextEventView.setBackgroundResource(colorTheme.getLightBackgroundStateList());
 	}
 
 	/** 最上端(読み込み項目除く)位置にスクロールバーを移動する */
@@ -210,7 +218,7 @@ public class EventListActivity extends ListActivity {
         TimeZone timeZone = TimeZone.getDefault();
         
         eventArrayCursorAdapter = new EventArrayCursorAdapter(
-        		this, eventDataBaseRowArray.getAllRows(), timeZone);
+        		this, eventDataBaseRowArray.getAllRows(), timeZone, colorTheme);
         setListAdapter(eventArrayCursorAdapter);
         
 		scrollToHead();
@@ -290,7 +298,10 @@ public class EventListActivity extends ListActivity {
 		} else if(requestCode == REQUEST_CODE_GET_DAYLY_EVENT
 				&& resultCode == EventLoadingActivity.RESULT_AUTH_FAILED) {
 			finish(); // アカウント追加でキャンセルされたので終了			
-		} else if(requestCode == REQUEST_CODE_OPEN_SETTINGS && resultCode == RESULT_OK) {
+		} else if(requestCode == REQUEST_CODE_OPEN_SETTINGS && resultCode == RESULT_OK) { // 設定更新からの戻り
+			colorTheme.updateColor(); // カラーテーマ再読み込み
+			eventArrayCursorAdapter.notifyDataSetChanged(); // 表示中のリスト項目にカラーテーマ変更を反映するために、Viewを再生成
+			applyColorThemeToLoadMoreEventView();
 			setDateToToday();
 			openEventLoadingActivity(); // 設定が更新されたらイベント情報を再読み込み
 		}
@@ -366,7 +377,9 @@ public class EventListActivity extends ListActivity {
 	}
 
 	private void openSearch() {
-		
+		Intent intent = new Intent(EventListActivity.this, SearchableEventActivity.class);
+		intent.putExtra(SearchableEventActivity.KEY_CURRENT_DATE, currentDate);
+		startActivity(intent);		
 	}
 	
 	/**
@@ -524,7 +537,7 @@ public class EventListActivity extends ListActivity {
     	app.setEventDataBaseRowArray(eventDataBaseRowArray);
 
     	eventArrayCursorAdapter = new EventArrayCursorAdapter(
-    			this, app.getEventDataBaseRowArray().getAllRows(), TimeZone.getDefault());
+    			this, app.getEventDataBaseRowArray().getAllRows(), TimeZone.getDefault(), colorTheme);
         setListAdapter(eventArrayCursorAdapter);
                 
 		loadMorePreviousEventView.setLoading(false);

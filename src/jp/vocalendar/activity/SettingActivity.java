@@ -5,6 +5,7 @@ import com.google.api.client.googleapis.extensions.android2.auth.GoogleAccountMa
 import jp.vocalendar.Constants;
 import jp.vocalendar.R;
 import jp.vocalendar.animation.vocalendar.LoadingAnimationUtil;
+import jp.vocalendar.model.ColorTheme;
 
 import android.accounts.Account;
 import android.app.ListActivity;
@@ -37,7 +38,9 @@ implements OnPreferenceChangeListener, OnPreferenceClickListener	{
     	initNumberOfDatePreference();
     	initNumberOfDateToLoadMoreEventsPreference();
     	initLoadMoreWithoutTapPreference();
+    	initNumberOfEventsToSearchMorePreference();
     	initLoadingPagePreference();
+    	initColorThemePreference();
     	initAccountPreference();
     	
     	Preference back = getPreferenceScreen().findPreference(BACK_KEY);
@@ -64,12 +67,26 @@ implements OnPreferenceChangeListener, OnPreferenceClickListener	{
 		pref.setOnPreferenceChangeListener(this);
 	}
 
+	private void initNumberOfEventsToSearchMorePreference() {
+		ListPreference numberOfEventToSeachMorePref = (ListPreference)getPreferenceScreen()
+    			.findPreference(Constants.NUMBER_OF_EVENTS_TO_SEARCH_MORE_PREFERENCE_NAME);
+		numberOfEventToSeachMorePref.setSummary(numberOfEventToSeachMorePref.getEntry());
+		numberOfEventToSeachMorePref.setOnPreferenceChangeListener(this);
+	}
+
 	
 	private void initLoadingPagePreference() {
 		ListPreference loadingPagePref = (ListPreference)getPreferenceScreen()
 				.findPreference(Constants.LOADING_PAGE_PREFERENCE_NAME);
 		loadingPagePref.setSummary(loadingPagePref.getEntry().toString());		
 		loadingPagePref.setOnPreferenceChangeListener(this);
+	}
+
+	private void initColorThemePreference() {
+		ListPreference colorThemePref = (ListPreference)getPreferenceScreen()
+				.findPreference(Constants.COLOR_THEME_PREFERENCE_NAME);
+		colorThemePref.setSummary(colorThemePref.getEntry().toString());		
+		colorThemePref.setOnPreferenceChangeListener(this);
 	}
 
 	private void initAccountPreference() {
@@ -93,9 +110,13 @@ implements OnPreferenceChangeListener, OnPreferenceClickListener	{
 			preference.setSummary(newValue.toString());
 		} else if(preference.getKey().equals(Constants.NUMBER_OF_DATE_TO_LOAD_MORE_EVENTS_PREFRENCE_NAME)) {
 			preference.setSummary(newValue.toString());
+		} else if(preference.getKey().equals(Constants.NUMBER_OF_EVENTS_TO_SEARCH_MORE_PREFERENCE_NAME)) {
+			preference.setSummary(newValue.toString());
 		} else if(preference.getKey().equals(Constants.LOADING_PAGE_PREFERENCE_NAME)) {
 			preference.setSummary(
 					LoadingAnimationUtil.getAnimationName(newValue.toString(), this));
+		} else if(preference.getKey().equals(Constants.COLOR_THEME_PREFERENCE_NAME)) {
+			preference.setSummary(ColorTheme.getColorThemeName(newValue.toString(), this));
 		} else if(preference.getKey().equals(Constants.SELECTED_ACCOUNT_PREFERENECE_NAME)) {
 			preference.setSummary(newValue.toString());
 		} else if(preference.getKey().equals(Constants.LOAD_MORE_EVENT_WITHOUT_TAP)) {

@@ -100,4 +100,13 @@ VOCALENDAR編集メンバーの皆さんにも感謝いたします。
 	<string name="search_events">イベントを検索</string>
 	<string name="searching">検索中...</string>
 	<string name="tap_to_search_more">タップしてもっと検索する</string>
+	<string name="number_of_events_to_search_more">もっと検索する時の取得件数</string>
+	<string name="number_of_events_to_search_more_dialog">イベント数の選択</string>			
+	<string name="color_theme">カラー・テーマ</string>
+	<string-array name="color_theme_entries">
+	    <item>デフォルト</item>
+	    <item>初音ミク</item>
+	    <item>鏡音リン・レン</item>
+	    <item>SF-A2 開発コード miki</item>
+	</string-array>	
 </resources>

@@ -26,7 +26,7 @@ import com.google.api.services.calendar.CalendarRequest;
 import com.google.api.services.calendar.model.Events;
 
 public class GoogleCalendarLoadEventTask extends LoadEventTask {
-	private static String TAG = "GoogleCalendarLoadEventTask";  
+	private static final String TAG = "GoogleCalendarLoadEventTask";  
 	/**
 	 * イベント情報を読み込む開始日(この日時自体は含む)
 	 */
@@ -43,12 +43,12 @@ public class GoogleCalendarLoadEventTask extends LoadEventTask {
 	/**
 	 * イベント情報を読み込む開始日や終了日の指定に使うタイムゾーン
 	 */
-	private TimeZone timeZone;
+	protected TimeZone timeZone;
 	
 	/**
 	 * 認証失敗時の残り試行回数。
 	 */
-	private int tryNumber = 5;
+	protected int tryNumber = 5;
 	
 	/** 残り試行回数のデフォルト値 */
 	private static final int DEFAULT_TRY_NUMBER = 5;
@@ -181,7 +181,7 @@ public class GoogleCalendarLoadEventTask extends LoadEventTask {
 		return eventList;
 	}
 
-	private void handleEvents(
+	protected void handleEvents(
 			String calendarId, Calendar calendar, Events events,
 			List<Event> eventList) throws IOException {
 		if(events.getItems() == null) {
@@ -241,7 +241,7 @@ public class GoogleCalendarLoadEventTask extends LoadEventTask {
 		}
 		return filtered; 
 	}
-	
+
 	protected Calendar buildCalendar() {
 		HttpTransport transport = AndroidHttp.newCompatibleTransport();
 	    JacksonFactory jsonFactory = new JacksonFactory();
@@ -249,10 +249,10 @@ public class GoogleCalendarLoadEventTask extends LoadEventTask {
 	    String accountName = OAuthManager.getInstance().getAccount().name;
 	    
 		Log.i(TAG, "accountName=" + accountName + ", authToken=" + authToken);
-
+	
 	    GoogleAccessProtectedResource accessProtectedResource =
 	            new GoogleAccessProtectedResource(authToken);
-
+	
 	    return Calendar.builder(transport, jsonFactory)
 	    			.setApplicationName("Vocalendar-for-Android/0.5")
 	                .setJsonHttpRequestInitializer(new JsonHttpRequestInitializer() {
@@ -262,5 +262,15 @@ public class GoogleCalendarLoadEventTask extends LoadEventTask {
 	                		calendarRequest.setKey(ClientCredentials.API_KEY);
 	                	}
 	                }).setHttpRequestInitializer(accessProtectedResource).build();
+	}
+
+	protected void initAccount() {
+		OAuthManager.getInstance().doLogin(false, activity, new OAuthManager.AuthHandler() {			
+			@Override
+			public void handleAuth(Account account, String authToken, Exception ex) {
+				// TODO エラー処理
+				Log.d(TAG, "Unexpected handleAuth called.");
+			}
+		});
 	}
 }

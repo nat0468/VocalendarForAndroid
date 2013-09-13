@@ -14,16 +14,16 @@ import android.widget.Button;
 public class OneEventDescriptionActivity extends
 		SwipableEventDescriptionActivity {
 
+	/** Intentに表示するEventDataBaseRowのインスタンスを格納するときに使うキー */
+	public static final String KEY_EVENT_INSTANCE = "event_instance";	
+	
 	/**
 	 * 詳細画面の初期化処理を上書き。
 	 * このメソッドだけで全ての初期化を実行する。
 	 */
 	@Override
 	protected void initPagerAdapter() {
-		int eventIndex = getIntent().getIntExtra(KEY_EVENT_INDEX, Integer.MIN_VALUE);
-
-		VocalendarApplication app = (VocalendarApplication)getApplication();
-		EventDataBaseRow row = app.getEventDataBaseRowArray().getNormalRows()[eventIndex];
+		EventDataBaseRow row = (EventDataBaseRow)getIntent().getSerializableExtra(KEY_EVENT_INSTANCE);		
     	pagerAdapter =
     			new EventArrayEventDescriptionPagerAdapter(
     					getSupportFragmentManager(), new EventDataBaseRow[]{ row });

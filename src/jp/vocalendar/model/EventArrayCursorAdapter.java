@@ -25,6 +25,7 @@ public class EventArrayCursorAdapter extends SimpleCursorAdapter {
 	private EventArrayCursor cursor;
 	private LayoutInflater inflater;
 	private TimeZone timeZone;
+	private ColorTheme colorTheme;
 	
 	// ViewType値
 	public static final int VIEW_TYPE_EVENT_WITH_DATE_TEXT= 0;
@@ -41,7 +42,8 @@ public class EventArrayCursorAdapter extends SimpleCursorAdapter {
 	 * @param from
 	 * @param to
 	 */
-	public EventArrayCursorAdapter(Context context, EventDataBaseRow[] events, TimeZone timeZone) {
+	public EventArrayCursorAdapter(
+			Context context, EventDataBaseRow[] events, TimeZone timeZone, ColorTheme colorTheme) {
 		super(context, R.layout.event_list_item_additional_date,
 				new EventArrayCursor(events, timeZone, context),
 				new String[] { "time", "date", "summary" },
@@ -51,6 +53,7 @@ public class EventArrayCursorAdapter extends SimpleCursorAdapter {
 		this.timeZone = timeZone;
 		this.inflater =
 				(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		this.colorTheme = colorTheme;
 	}
 		
 	@Override
@@ -73,6 +76,8 @@ public class EventArrayCursorAdapter extends SimpleCursorAdapter {
 			EventDataBaseRow row = cursor.getEventDataBaseRow(position);
 			TextView tv = (TextView)convertView.findViewById(R.id.dateText);
 			tv.setText(DateUtil.formatDate(row.getDisplayDate()));
+			tv.setBackgroundColor(colorTheme.getDarkBackgroundColor());
+			tv.setTextColor(colorTheme.getDarkTextColor());
 			break;
 		case VIEW_TYPE_NO_EVENT:
 			if(convertView == null) {
@@ -86,11 +91,13 @@ public class EventArrayCursorAdapter extends SimpleCursorAdapter {
 						R.layout.event_list_item, parent, false);
 			}
 			setViewValue(position, convertView);
-			setColorToTimeTextView(position, convertView);			
+			setColorToTimeTextView(position, convertView);
+			applyThemeToListItem(convertView);
 			break;
 		case VIEW_TYPE_EVENT_WITH_DATE_TEXT:
 			convertView = super.getView(position, convertView, parent); // セパレータでなければ通常処理
-			setColorToTimeTextView(position, convertView);						
+			setColorToTimeTextView(position, convertView);
+			applyThemeToListItem(convertView);
 			break;
 		}				
 		return convertView;		
@@ -111,6 +118,18 @@ public class EventArrayCursorAdapter extends SimpleCursorAdapter {
 		TextView st = (TextView)view.findViewById(R.id.summaryText);
 		st.setText(row.getEvent().getSummary()); 
 	}		
+	
+	private void applyThemeToListItem(View view) {
+		TextView dt = (TextView)view.findViewById(R.id.dateText);
+		if(dt != null) {
+			dt.setBackgroundResource(colorTheme.getLightBackgroundStateList());
+			dt.setTextColor(colorTheme.getLightTextColor());			
+		}
+		
+		TextView st = (TextView)view.findViewById(R.id.summaryText);
+		st.setBackgroundResource(colorTheme.getLightBackgroundStateList());
+		st.setTextColor(colorTheme.getLightTextColor());					
+	}
 	
 	@Override
 	public int getItemViewType(int position) {
