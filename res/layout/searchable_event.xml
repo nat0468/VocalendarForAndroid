@@ -7,13 +7,14 @@
     android:orientation="vertical" >
 
  	<LinearLayout
-        style="@style/VocalendarContent"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="left"
-        android:layout_weight="0.0"
-        android:orientation="horizontal"
-        android:padding="0dp" >
+ 	    style="@style/VocalendarContent"
+ 	    android:layout_width="fill_parent"
+ 	    android:layout_height="wrap_content"
+ 	    android:layout_gravity="left"
+ 	    android:layout_weight="0.0"
+ 	    android:baselineAligned="false"
+ 	    android:orientation="horizontal"
+ 	    android:padding="0dp" >
 
         <EditText
             android:id="@+id/searchText"
@@ -26,6 +27,14 @@
 
             <requestFocus />
         </EditText>
+
+        <Button
+            android:id="@+id/tagButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:ellipsize="none"
+            android:singleLine="true"
+            android:text="@string/tag" />
 
         <ImageButton
             android:id="@+id/searchButton"

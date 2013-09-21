@@ -20,25 +20,28 @@
         			android:entries="@array/number_of_events_to_search_more_entries"
         			android:entryValues="@array/number_of_events_to_search_more_entryvalues"
         			android:dialogTitle="@string/number_of_events_to_search_more_dialog"
-        			android:defaultValue="20" />    
+        			android:defaultValue="20" />            			
     <ListPreference android:title="@string/loading_page"
         			android:key="loading_page_preference"
         			android:entries="@array/loading_page_entries"
         			android:entryValues="@array/loading_page_entry_values"
         			android:dialogTitle="@string/loading_page"
-        			android:defaultValue="LOADING_PAGE_RANDOM" />
+        			android:defaultValue="LOADING_PAGE_RANDOM" />    
     <Preference android:title="@string/preview_loading_page"
         		android:key="preview_loading_page">
         <intent android:action="android.intent.action.VIEW"
             android:targetClass="jp.vocalendar.activity.PreviewLoadingPageActivity"
             android:targetPackage="jp.vocalendar" />
-    </Preference>
+    </Preference>    
     <ListPreference android:title="@string/color_theme"
         			android:key="color_theme_preference"
         			android:entries="@array/color_theme_entries"
         			android:entryValues="@array/color_theme_entry_values"
         			android:dialogTitle="@string/color_theme"
-        			android:defaultValue="DEFAULT_THEME" />
+        			android:defaultValue="THEME_DEFAULT" />
+    <Preference android:title="@string/edit_custom_color_theme"
+        		android:key="custom_color_theme">
+    </Preference>
     <ListPreference android:title="@string/google_account"
         			android:key="selected_account_preference" />
     <Preference android:title="@string/about_vocalendar_app">

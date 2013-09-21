@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >   
+    <ListPreference android:title="@string/import_color_theme"
+        			android:key="import_color_theme"
+        			android:entries="@array/import_color_theme_entries"
+        			android:entryValues="@array/import_color_theme_entry_values"
+        			android:dialogTitle="@string/color_theme"
+        			android:defaultValue="THEME_DEFAULT" />
+	<net.margaritov.preference.colorpicker.ColorPickerPreference
+        android:key="custom_color_theme_dark_background_pref"
+        android:title="@string/separator_color"
+        android:defaultValue="0x666666"
+        enabledByDefault="true"
+        hexValue="true" />	    
+	<net.margaritov.preference.colorpicker.ColorPickerPreference
+        android:key="custom_color_theme_dark_text_color_pref"
+        android:title="@string/separator_text_color"
+        android:defaultValue="0xffffff"
+        enabledByDefault="true"
+        hexValue="true" />	    
+	<net.margaritov.preference.colorpicker.ColorPickerPreference
+        android:key="custom_color_theme_light_background_pref"
+        android:title="@string/background_color"
+        android:defaultValue="0xffffff"
+        enabledByDefault="true"
+        hexValue="true" />	    
+	<net.margaritov.preference.colorpicker.ColorPickerPreference
+        android:key="custom_color_theme_light_background_pressed_pref"
+        android:title="@string/tapped_background_color"
+        android:defaultValue="0xcccccc"
+        enabledByDefault="true"
+        hexValue="true" />	    
+	<net.margaritov.preference.colorpicker.ColorPickerPreference
+        android:key="custom_color_theme_light_text_color_pref"
+        android:title="@string/text_color"
+        android:defaultValue="0x000000"
+        enabledByDefault="true"
+        hexValue="true" />	    
+	<net.margaritov.preference.colorpicker.ColorPickerPreference
+        android:key="custom_color_theme_divider_color_pref"
+        android:title="@string/list_divider_color"
+        android:defaultValue="0xcccccc"
+        enabledByDefault="true"
+        hexValue="true" />	    
+	<Preference android:title="@string/back"
+        		android:key="back">
+    </Preference>
+</PreferenceScreen>

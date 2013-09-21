@@ -24,6 +24,7 @@ import android.widget.ListView;
 public class SettingActivity extends PreferenceActivity
 implements OnPreferenceChangeListener, OnPreferenceClickListener	{
 	private static final String BACK_KEY = "back";
+	private static final String CUSTOM_COLOR_THEME = "custom_color_theme";
 	private static final String PREVIEW_LOADING_PAGE_KEY = "preview_loading_page";
 	
 	/** 選択可能なGoogleアカウント */
@@ -43,8 +44,10 @@ implements OnPreferenceChangeListener, OnPreferenceClickListener	{
     	initColorThemePreference();
     	initAccountPreference();
     	
+    	Preference custom = getPreferenceScreen().findPreference(CUSTOM_COLOR_THEME);
+    	custom.setOnPreferenceClickListener(this);
     	Preference back = getPreferenceScreen().findPreference(BACK_KEY);
-    	back.setOnPreferenceClickListener(this);    	
+    	back.setOnPreferenceClickListener(this);
 	}
 	
 	private void initNumberOfDatePreference() {
@@ -78,14 +81,14 @@ implements OnPreferenceChangeListener, OnPreferenceClickListener	{
 	private void initLoadingPagePreference() {
 		ListPreference loadingPagePref = (ListPreference)getPreferenceScreen()
 				.findPreference(Constants.LOADING_PAGE_PREFERENCE_NAME);
-		loadingPagePref.setSummary(loadingPagePref.getEntry().toString());		
+		loadingPagePref.setSummary(loadingPagePref.getEntry());		
 		loadingPagePref.setOnPreferenceChangeListener(this);
 	}
 
-	private void initColorThemePreference() {
+	private void initColorThemePreference() {		
 		ListPreference colorThemePref = (ListPreference)getPreferenceScreen()
 				.findPreference(Constants.COLOR_THEME_PREFERENCE_NAME);
-		colorThemePref.setSummary(colorThemePref.getEntry().toString());		
+		colorThemePref.setSummary(colorThemePref.getEntry());
 		colorThemePref.setOnPreferenceChangeListener(this);
 	}
 
@@ -132,6 +135,11 @@ implements OnPreferenceChangeListener, OnPreferenceClickListener	{
 	public boolean onPreferenceClick(Preference preference) {
 		if(preference.getKey().equals(BACK_KEY)) {
 			finish(); // 戻る
+			return true;
+		} else if(preference.getKey().equals(CUSTOM_COLOR_THEME)) {
+			Intent i = new Intent(this, CustomColorThemeActivity.class);
+			startActivity(i);
+			setResult(RESULT_OK);
 			return true;
 		}
 		return false;

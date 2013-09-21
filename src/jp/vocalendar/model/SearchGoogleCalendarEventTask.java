@@ -63,7 +63,7 @@ public class SearchGoogleCalendarEventTask extends GoogleCalendarLoadEventTask {
 		for(int i = 0; i < calendarIds.length; i++) {
 			try {
 				List<Event> events = search(calendarIds[i], query[0]);				
-				addEventsTo(events, allEvents);
+				addEventsTo(events, query[0], allEvents);
 			} catch(IOException e) {
 				Log.e(TAG, "loadEvents(" + calendarIds[i] + ") fails.", e);
 				this.exception = e; 
@@ -78,22 +78,47 @@ public class SearchGoogleCalendarEventTask extends GoogleCalendarLoadEventTask {
 	/**
 	 * 最大イベント数までイベントを追加する。
 	 * @param events 追加するイベント
+	 * @param query 検索キーワード(Google Calendarの検索が【】★を無視するので、このメソッドで異なるものを除外)
 	 * @param allEvents イベント追加先となる全イベントリスト
 	 */
-	private void addEventsTo(List<Event> events, LinkedList<EventDataBaseRow> allEvents) {
+	private void addEventsTo(List<Event> events, String query, LinkedList<EventDataBaseRow> allEvents) {
 		ListIterator<EventDataBaseRow> targetItr = allEvents.listIterator();
 		EventDataBaseRow current = (targetItr.hasNext() ? targetItr.next() : null);
 		Iterator<Event> itr = events.iterator();
 		
-		while(itr.hasNext()) {			
+		while(itr.hasNext()) {
 			Event e = itr.next();
-			moveToNext(current, targetItr, e); 
+			if(!includeKeyword(e, query)) {
+				continue; // 検索キーワードが含まれない場合は無視
+			}
+			moveToNext(current, targetItr, e);
+			
 			Date date = (e.getStartDateTime() != null ? e.getStartDateTime() : e.getStartDate());
-			int dayKind = EventDataBaseRow.calcDayKind(date, timeZone);			
+			Date startDate = new Date(startDateTime.getValue());
+			if(e.equalByDate(startDate, timeZone)) {
+				date = startDate; // イベントがstartDateTimeを含む場合は、その日付でdayKindを計算。
+			}			
+			int dayKind = EventDataBaseRow.calcDayKind(date, timeZone);
 			EventDataBaseRow row = new EventDataBaseRow(
 					e, 0 /* 意味のない値 */, 0/* 意味のない値 */, null, dayKind);
 			targetItr.add(row);
 		}
+	}
+	
+	/**
+	 * イベント名や説明にkeywordが含まれる場合にtrueを返す
+	 * @param e
+	 * @param keyword
+	 * @return
+	 */
+	private boolean includeKeyword(Event e, String keyword) {
+		if(e.getSummary() != null && e.getSummary().indexOf(keyword) != -1) {
+			return true;
+		}
+		if(e.getDescription() != null && e.getDescription().indexOf(keyword) != -1) {
+			return true;
+		}
+		return false;
 	}
 	
 	private void cutAfterMaxEvents(LinkedList<EventDataBaseRow> events) {
@@ -103,11 +128,10 @@ public class SearchGoogleCalendarEventTask extends GoogleCalendarLoadEventTask {
 		
 		ListIterator<EventDataBaseRow> itr = events.listIterator();
 		int num = 0;
-		while(itr.hasNext() && num <= maxEvents) {
+		while(itr.hasNext() && num < maxEvents) {
 			itr.next();
 			num++;
 		}
-		itr.remove();
 		while(itr.hasNext()) {
 			itr.next();
 			itr.remove();

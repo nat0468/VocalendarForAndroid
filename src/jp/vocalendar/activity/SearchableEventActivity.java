@@ -20,6 +20,7 @@ import jp.vocalendar.model.EventDataBaseRow;
 import jp.vocalendar.model.EventDataBaseRowArray;
 import jp.vocalendar.model.GoogleCalendarLoadEventTask;
 import jp.vocalendar.model.LoadEventTask;
+import jp.vocalendar.model.SearchMoreGoogleCalendarEventTask;
 import jp.vocalendar.model.SearchGoogleCalendarEventTask;
 import jp.vocalendar.model.SearchLocalEventTask;
 import jp.vocalendar.util.DialogUtil;
@@ -28,12 +29,19 @@ import android.app.SearchManager;
 import android.app.TabActivity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.KeyEvent;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -82,7 +90,7 @@ public class SearchableEventActivity extends ListActivity {
 			failed();						
 		}
 
-		private void failed() {
+		protected void failed() {
 			Log.d(TAG, "GoogleCalendarLoadEventTask failed...");
 			Toast.makeText(SearchableEventActivity.this,
 					R.string.loading_events_failed, Toast.LENGTH_SHORT).show();
@@ -105,6 +113,19 @@ public class SearchableEventActivity extends ListActivity {
 		}
 	}
 	
+	private class SearchMoreGoogleCalendarEventTaskCallback
+	extends SearchGoogleCalendarEventTaskCallback
+	implements LoadEventTask.TaskCallback {				
+		@Override
+		public void onPostExecute(List<EventDataBaseRow> events) {
+			Log.d(TAG, "onPostExecute()");
+			if(events == null) {
+				failed();
+				return; // 読み込み失敗なので何もしない。
+			}
+			searchMoreGoogleCalendarEventFinished(events);
+		}
+	}
 	
 	
 	@Override
@@ -149,6 +170,14 @@ public class SearchableEventActivity extends ListActivity {
 			}			
 		});
 		
+		Button tag = (Button)findViewById(R.id.tagButton);
+		registerForContextMenu(tag);
+		tag.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				openContextMenu(v);
+			}			
+		});		
 	}
 	
 	/**
@@ -196,6 +225,13 @@ public class SearchableEventActivity extends ListActivity {
 		searchLocalEventFinished(events);
 	}
 	
+	private void searchMoreGoogleCalendarEventFinished(List<EventDataBaseRow> events) {
+		googleCalendarEvents = events;
+		searchingView.setLoading(false);
+        EventDataBaseRow[] eventRows = events.toArray(new EventDataBaseRow[events.size()]);        
+        eventArrayCursorAdapter.getEventArrayCursor().updateEventDataBaseRows(eventRows);
+	}
+	
 	private void searchLocalEventFinished(List<EventDataBaseRow> events) {
 		searchingView.setLoading(false);
         TimeZone timeZone = TimeZone.getDefault();
@@ -228,8 +264,7 @@ public class SearchableEventActivity extends ListActivity {
 				return;
 			} else {
 				if(googleCalendarEvents != null) {
-					// Googleカレンダーのもっと検索2回目
-					DialogUtil.openNotImplementedDialog(this);
+					searchMoreGoogleCalendarEvents();
 					return;
 				}
 				searchGoogleCalendarEvents();
@@ -251,8 +286,10 @@ public class SearchableEventActivity extends ListActivity {
 		if(searchingView == null) {
 			searchingView =
 					(LoadMoreEventView)getLayoutInflater().inflate(R.layout.seaching_progress, null);
-			searchingView.setBackgroundResource(colorTheme.getLightBackgroundStateList());
+			searchingView.setBackgroundDrawable(colorTheme.makeLightBackgroundStateListDrawable());
 			getListView().addFooterView(searchingView);
+			getListView().setDivider(new ColorDrawable(colorTheme.getDividerColor()));
+			getListView().setDividerHeight((int)(getResources().getDisplayMetrics().density * 1.0));
 		}
 		searchingView.setLoading(true);
 	}
@@ -276,5 +313,35 @@ public class SearchableEventActivity extends ListActivity {
 				Constants.CALENDER_IDS, startDateTime, tz, maxEvents);
 		task.execute(query);
 		searchingView.setLoading(true);
+	}
+
+	private void searchMoreGoogleCalendarEvents() {
+		Log.d(TAG, "searchMoreGoogleCalendarEvents");
+		EditText searchText = (EditText)findViewById(R.id.searchText);
+		String query = searchText.getText().toString();
+		SearchMoreGoogleCalendarEventTask task = new SearchMoreGoogleCalendarEventTask(
+				this, new SearchMoreGoogleCalendarEventTaskCallback(), googleCalendarEvents);
+		TimeZone tz = TimeZone.getDefault();
+		int maxEvents = VocalendarApplication.getNumberOfEventToSearchMore(this);
+		task.setCalendarId(Constants.CALENDER_IDS, tz, maxEvents);
+		task.execute(query);
+		searchingView.setLoading(true);
+	}
+
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		EditText searchText = (EditText)findViewById(R.id.searchText);
+		searchText.setText(item.getTitle());
+		searchText.setSelection(item.getTitle().length());
+		searchLocalEvents();
+		return true;
+	}
+
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v,
+			ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, v, menuInfo);		
+		MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.tag_menu, menu);		
 	}
 }

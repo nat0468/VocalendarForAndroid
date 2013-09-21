@@ -122,12 +122,12 @@ public class EventArrayCursorAdapter extends SimpleCursorAdapter {
 	private void applyThemeToListItem(View view) {
 		TextView dt = (TextView)view.findViewById(R.id.dateText);
 		if(dt != null) {
-			dt.setBackgroundResource(colorTheme.getLightBackgroundStateList());
+			dt.setBackgroundDrawable(colorTheme.makeLightBackgroundStateListDrawable());
 			dt.setTextColor(colorTheme.getLightTextColor());			
 		}
 		
 		TextView st = (TextView)view.findViewById(R.id.summaryText);
-		st.setBackgroundResource(colorTheme.getLightBackgroundStateList());
+		st.setBackgroundDrawable(colorTheme.makeLightBackgroundStateListDrawable());
 		st.setTextColor(colorTheme.getLightTextColor());					
 	}
 	

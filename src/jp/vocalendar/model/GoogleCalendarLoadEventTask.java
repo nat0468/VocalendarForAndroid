@@ -273,4 +273,8 @@ public class GoogleCalendarLoadEventTask extends LoadEventTask {
 			}
 		});
 	}
+
+	public DateTime getStart() {
+		return start;
+	}
 }

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:id="@+id/tag_live" android:title="@string/tag_live"></item>
+    <item android:id="@+id/tag_club" android:title="@string/tag_club"></item>
+    <item android:id="@+id/tag_event" android:title="@string/tag_event"></item>
+	<item android:id="@+id/tag_off_meeting" android:title="@string/tag_off_meeting"></item>
+    <item android:id="@+id/tag_cd" android:title="@string/tag_cd"></item>
+    <item android:id="@+id/tag_dvd" android:title="@string/tag_dvd"></item>
+    <item android:id="@+id/tag_book" android:title="@string/tag_book"></item>
+    <item android:id="@+id/tag_goods" android:title="@string/tag_goods"></item>
+    <item android:id="@+id/tag_campaign" android:title="@string/tag_campaign"></item>
+    <item android:id="@+id/tag_nico_live" android:title="@string/tag_nico_live"></item>
+    <item android:id="@+id/tag_tv" android:title="@string/tag_tv"></item>
+    <item android:id="@+id/tag_radio" android:title="@string/tag_radio"></item>
+    <item android:id="@+id/tag_close_to_end" android:title="@string/tag_close_to_end"></item>
+    <item android:id="@+id/tag_star" android:title="@string/tag_star"></item>
+</menu>

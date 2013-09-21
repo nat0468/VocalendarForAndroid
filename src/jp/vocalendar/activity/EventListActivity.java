@@ -31,6 +31,8 @@ import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -62,6 +64,8 @@ public class EventListActivity extends ListActivity {
 	 * もっと読み込む時には変更しない。
 	 **/
 	private Calendar currentDate = Calendar.getInstance();
+	
+	private Calendar topDate = currentDate;
 	
 	/** イベント一覧の配列 */
 	private EventDataBaseRowArray eventDataBaseRowArray;
@@ -176,7 +180,7 @@ public class EventListActivity extends ListActivity {
 		lv.addHeaderView(loadMorePreviousEventView, null, true);
 		loadMoreNextEventView = loadMoreEventView();
 		lv.addFooterView(loadMoreNextEventView, null, true);
-		applyColorThemeToLoadMoreEventView();
+		applyColorThemeToListView();
 		
 		lv.setOnScrollListener(new AbsListView.OnScrollListener() {			
 			@Override
@@ -192,9 +196,11 @@ public class EventListActivity extends ListActivity {
 		});
 	}
 	
-	private void applyColorThemeToLoadMoreEventView() {
-		loadMorePreviousEventView.setBackgroundResource(colorTheme.getLightBackgroundStateList());
-		loadMoreNextEventView.setBackgroundResource(colorTheme.getLightBackgroundStateList());
+	private void applyColorThemeToListView() {
+		loadMorePreviousEventView.setBackgroundDrawable(colorTheme.makeLightBackgroundStateListDrawable());
+		loadMoreNextEventView.setBackgroundDrawable(colorTheme.makeLightBackgroundStateListDrawable());
+		getListView().setDivider(new ColorDrawable(colorTheme.getDividerColor()));
+		getListView().setDividerHeight((int)(getResources().getDisplayMetrics().density * 1.0));
 	}
 
 	/** 最上端(読み込み項目除く)位置にスクロールバーを移動する */
@@ -301,7 +307,7 @@ public class EventListActivity extends ListActivity {
 		} else if(requestCode == REQUEST_CODE_OPEN_SETTINGS && resultCode == RESULT_OK) { // 設定更新からの戻り
 			colorTheme.updateColor(); // カラーテーマ再読み込み
 			eventArrayCursorAdapter.notifyDataSetChanged(); // 表示中のリスト項目にカラーテーマ変更を反映するために、Viewを再生成
-			applyColorThemeToLoadMoreEventView();
+			applyColorThemeToListView();
 			setDateToToday();
 			openEventLoadingActivity(); // 設定が更新されたらイベント情報を再読み込み
 		}
@@ -378,7 +384,7 @@ public class EventListActivity extends ListActivity {
 
 	private void openSearch() {
 		Intent intent = new Intent(EventListActivity.this, SearchableEventActivity.class);
-		intent.putExtra(SearchableEventActivity.KEY_CURRENT_DATE, currentDate);
+		intent.putExtra(SearchableEventActivity.KEY_CURRENT_DATE, topDate);
 		startActivity(intent);		
 	}
 	
@@ -542,6 +548,9 @@ public class EventListActivity extends ListActivity {
                 
 		loadMorePreviousEventView.setLoading(false);
 		setSelection(loadedEvents.size());
+		
+		topDate = Calendar.getInstance();
+		topDate.setTimeInMillis(loadMorePreviousEventTask.getStart().getValue());
 		
 		loadMorePreviousEventTask = null;
 	}

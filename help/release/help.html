@@ -30,6 +30,7 @@
 	<li>今日を含めた3日間（設定で変更可能）のイベントの一覧を確認</li>
 	<li>イベントの詳細を確認</li>
 	<li>指定した日付のイベントの確認</li>
+	<li>イベントをキーワードで検索</li>
 	<li>イベントの共有（メールやTwitterなどで送る）</li>
 	<li>イベントの取り込み（自分のカレンダーに登録）</li>
       </ul>
@@ -43,6 +44,7 @@
     <ul data-role="listview" data-inset="true">
       <li><a href="#event_list">イベント一覧</a></li>
       <li><a href="#event_detail">イベント詳細</a></li>
+      <li><a href="#event_search">イベント検索</a></li>
       <li><a href="#loading">イベント読み込み</a></li>
       <li><a href="#setting">設定</a></li>
     </ul>
@@ -108,7 +110,6 @@
   <div data-role="content">
     <p>イベントの一覧を表示します。</p>
     <img src="img/list.png" />
-    <img src="img/list_load_more_ss.png" />
     <h3>画面の説明</h3>
     <ol>
       <li>イベント：タップすると<a href="#event_detail">イベント詳細</a>を
@@ -118,6 +119,7 @@
       <li>「ヘルプ」ボタン：ヘルプを開きます</li>
       <li>「更新」ボタン：イベントを最新の情報に更新します</li>
       <li>「タップしてもっと読み込む」：タップすると、この先の日付のイベントを読み込みます</li>
+      <li>検索ボタン：タップすると、イベント検索画面を開きます。</li>
     </ol>
   </div>
 </div>
@@ -146,6 +148,25 @@
     </ol>
     <img src="img/detail2.png" />
     <p>5. リンク：そのURLを開きます。場所の情報がURLの場合に表示されます。
+  </div>
+</div>
+
+<div data-role="page" id="event_search">
+  <div data-role="header">
+    <a href="#main" data-rel="back">戻る</a>
+    <h3>イベント検索</h3>
+  </div>
+  <div data-role="content">
+    <p>イベントをキーワードで検索できます</p>
+    <img src="img/search.png" />
+    <h3>画面の説明</h3>
+    <ol>
+      <li>テキストフィールド：ここに検索キーワードを入力します。</li>
+      <li>「【】」ボタン：イベント名のタグ(【CD】など)をテキストフィールドに素早く入力できます。表示される一覧から入力するタグを選ぶことができます。</li>
+      <li>検索ボタン：テキストフィールドに入力されたキーワードでイベントを検索します。</li>
+      <li>イベント：タップするとイベントの詳細を表示できます。</li>
+      <li>「タップしてもっと検索する」：タップすると、さらにイベントを検索できます。</li>
+    </ol>
   </div>
 </div>
 
@@ -180,9 +201,7 @@
     <p>
       VOCALENDAR for Androidの設定を変更できます。
     </p>
-    <img src="img/setting.png" />
-    <img src="img/setting2.png" />
-    <h3>画面の説明</h3>
+    <h3>設定項目の説明</h3>
     <ol>
       <li>取得イベント日数：
 	イベント一覧に表示するイベントの日数を変更できます</li>
@@ -194,6 +213,8 @@
 	イベント読み込み画面に表示する内容を変更できます</li>
       <li>読み込み画面のプレビュー：
 	「読み込み画面の表示」に設定した内容をプレビュー表示で確認できます</li>
+      <li>カラー・テーマ：
+	画面の<a href="#color_theme">カラー・テーマ</a>を変更できます</li>
       <li>Googleアカウント：
 	イベント取得に使うGoogleアカウントを変更できます</li>
       <li>このアプリについて：
@@ -214,6 +235,12 @@
   <div data-role="content">
     <h3>VOCALENDAR for Androidの変更履歴</h3>
     <ul>
+      <li>2013/9/18 Version 0.98.0
+	<ul>
+	  <li>イベント検索機能の追加</li>
+	  <li>カラー・テーマ機能の追加</li>
+	</ul>
+      </li>
       <li>2013/8/24 Version 0.97.0
 	<ul>
 	  <li>イベント詳細画面から地図を開く機能の追加</li>
@@ -245,6 +272,68 @@
 	</ul>
       </li>
     </ul>
+  </div>
+</div>
+
+<div data-role="page" id="color_theme">
+  <div data-role="header">
+    <a href="#main" data-rel="back">戻る</a>
+    <h3>VOCALENDAR for Android</h3>
+  </div>
+  <div data-role="content">
+    <h3>カラー・テーマ</h3>
+    <p>
+      カラー・テーマは、あるテーマに合わせて画面の色を変更できる機能です。
+      ボーカロイドのキャラクターなどをイメージしたテーマを
+      いくつか用意しており、その中から好きなテーマを選んで
+      適用することができます。
+    </p>
+    <h3>カラー・テーマの一覧</h3>
+    <p>
+      デフォルト<br/>
+      <img src="img/theme_default.png" />
+    </p>
+    <p>
+      初音ミク<br/>
+      <img src="img/theme_miku.png" />    
+    </p>
+    <p>
+      鏡音リン・レン<br/>
+      <img src="img/theme_rinlen.png" />    
+    </p>
+    <p>
+      巡音ルカ<br/>
+      <img src="img/theme_luka.png" />    
+    </p>
+    <p>
+      KAITO<br/>
+      <img src="img/theme_kaito.png" />
+    </p>
+    <p>
+      MEIKO<br/>
+      <img src="img/theme_meiko.png" />
+    </p>
+    <p>
+      神威がくぽ<br/>
+      <img src="img/theme_gakupo.png" />    
+    </p>
+    <p>
+      GUMI<br/>
+      <img src="img/theme_gumi.png" />
+    </p>
+    <p>
+      SF-A2 開発コード miki<br/>
+      <img src="img/theme_miki.png" />    
+    </p>
+    <p>
+      結月ゆかり<br/>
+      <img src="img/theme_yukari.png" />    
+    </p>
+    <p>
+      重音テト<br/>
+      <img src="img/theme_teto.png" />    
+    </p>
+
   </div>
 </div>
 

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="jp.vocalendar"
-    android:versionCode="9801"
-    android:versionName="0.98.0-20130824" >
+    android:versionCode="9803"
+    android:versionName="0.98.0-RC20130921-3" >
 
     <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="14" />
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -37,6 +37,7 @@
         	<meta-data android:name="android.app.searchable"
             	       android:resource="@xml/searchable"/>            
         </activity>
+        <activity android:name=".activity.CustomColorThemeActivity"></activity>
         
         <meta-data android:name="android.app.default_searchable"
                    android:value=".activity.SearchableEventActivity" />

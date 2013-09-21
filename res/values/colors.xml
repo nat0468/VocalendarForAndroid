@@ -17,6 +17,7 @@
     <color name="light_background_default">#fff</color>
     <color name="light_background_pressed_default">#ccc</color>
     <color name="light_text_color_default">#000000</color>
+    <color name="divider_color_default">#cccccc</color>
     
     <!-- 初音ミクテーマ -->
     <color name="dark_background_miku">#009c91</color>
@@ -32,10 +33,60 @@
     <color name="light_background_pressed_rinlen">#ffe978</color>
     <color name="light_text_color_rinlen">#000000</color>
 
-    <!-- SF-A2 開発コード miki -->
-    <color name="dark_background_miki">#f07b72</color>
+    <!-- 巡音ルカテーマ -->
+    <color name="dark_background_luka">#ec6ca5</color> <!-- #ab526a, [dot_anim]#dd6a7f -->
+    <color name="dark_text_color_luka">#ffffff</color>
+    <color name="light_background_luka">#ffe3e8</color> <!-- ffc5e0, 255, 197, 224 -> 255,211,239,ffd3ef -->
+    <color name="light_background_pressed_luka">#f9aebc</color> <!-- ff5ec0 -->
+    <color name="light_text_color_luka">#000000</color>
+    
+    <!-- KAITOテーマ -->
+    <color name="dark_background_kaito">#4970b3</color>
+    <color name="dark_text_color_kaito">#ffffff</color>
+    <color name="light_background_kaito">#d9f2ff</color> <!-- #96d2ff, 150, 210, 255 -> 217, 242, 255, d9f2ff -->
+    <color name="light_background_pressed_kaito">#96d2ff</color>
+    <color name="light_text_color_kaito">#000000</color>
+    
+    <!-- MEIKOテーマ -->
+    <color name="dark_background_meiko">#cd2e44</color>
+    <color name="dark_text_color_meiko">#ffffff</color>
+    <color name="light_background_meiko">#ffdde4</color> <!-- #ff98a7, 255, 152, 167 -> 255, 221, 228, ffdde4 -->
+    <color name="light_background_pressed_meiko">#ff98a7</color>
+    <color name="light_text_color_meiko">#000000</color>
+    
+    <!-- GUMIテーマ -->
+    <color name="dark_background_gumi">#2cac09</color> <!-- dot green 74d91a,116,217,26 -> #00f500--> <!-- orange #ff7d11, 255, 125, 17 -> 255,221,192, ffddc0 -> 255, 238, 224, ffeee0 -->
+    <color name="dark_text_color_gumi">#ffffff</color>
+    <color name="light_background_gumi">#e4f7d4</color> <!-- green #bef549, 190,245,73 -> 228,247,212, #e4f7d4 --> <!-- orange #ff7d11,255,125,17 -> 255,222,193,#ffdec1 -->
+    <color name="light_background_pressed_gumi">#74d91a</color>
+    <color name="light_text_color_gumi">#000000</color>
+
+    <!-- 神威がくぽテーマ -->
+    <color name="dark_background_gakupo">#5f4098</color> 
+    <color name="dark_text_color_gakupo">#ffffff</color>
+    <color name="light_background_gakupo">#f1dbff</color> <!-- #977fc1, 151,127,193 -> 241,219,255,#f1dbff -->
+    <color name="light_background_pressed_gakupo">#ceb7f7</color>
+    <color name="light_text_color_gakupo">#000000</color>
+    
+    <!-- SF-A2 開発コード miki テーマ-->
+    <color name="dark_background_miki">#3f7196</color> <!-- #f07b72 -->
     <color name="dark_text_color_miki">#ffffff</color>
     <color name="light_background_miki">#ffdfdf</color> <!-- 255, 223, 223 -->
     <color name="light_background_pressed_miki">#ffb9b4</color>
     <color name="light_text_color_miki">#000000</color>
+
+    <!-- 結月ゆかりテーマ -->
+    <color name="dark_background_yukari">#996ab0</color> <!-- 996ab0 --><!-- f06ab1,240,106,177 -> 255,43,128,#ff2b80 --> <!-- ff3b72,255,59,114 --> <!-- f52556 -->
+    <color name="dark_text_color_yukari">#ffffff</color>
+    <color name="light_background_yukari">#f1dbff</color> <!-- #e3c1f2, 227,193,255 -> 241,219,255,#f1dbff -->
+    <color name="light_background_pressed_yukari">#bc92d1</color>
+    <color name="light_text_color_yukari">#000000</color>
+    
+    <!-- 重音テトテーマ -->
+    <color name="dark_background_teto">#f95460</color>
+    <color name="dark_text_color_teto">#ffffff</color>
+    <color name="light_background_teto">#ffd860</color> <!-- #f95460, 249, 84, 96 -> 255,216,221,#ffd860 -->
+    <color name="light_background_pressed_teto">#ff8d8d</color>
+    <color name="light_text_color_teto">#000000</color>
+    
 </resources>

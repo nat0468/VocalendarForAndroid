@@ -107,6 +107,38 @@ VOCALENDAR編集メンバーの皆さんにも感謝いたします。
 	    <item>デフォルト</item>
 	    <item>初音ミク</item>
 	    <item>鏡音リン・レン</item>
+	    <item>巡音ルカ</item>
+	    <item>KAITO</item>
+	    <item>MEIKO</item>
+	    <item>神威がくぽ</item>
+	    <item>GUMI</item>
 	    <item>SF-A2 開発コード miki</item>
+	    <item>結月ゆかり</item>
+	    <item>重音テト</item>
+	    <item>カスタム・カラー・テーマ</item>
+	</string-array>	
+    <string name="press_on_color_to_apply">色を押して適用</string>	
+    <string name="select_color">色の選択</string>
+	<string name="custom_color_theme">カスタム・カラー・テーマ</string>
+	<string name="edit_custom_color_theme">カスタム・カラー・テーマ編集</string>
+	<string name="separator_color">日付区切りの色</string>
+	<string name="separator_text_color">日付区切りの文字色</string>
+	<string name="background_color">背景色</string>
+	<string name="tapped_background_color">タップ時の背景色</string>
+	<string name="text_color">文字色</string>
+	<string name="list_divider_color">リスト分割線の色</string>
+	<string name="import_color_theme">カラー・テーマを取り込む</string>
+	<string-array name="import_color_theme_entries">
+	    <item>デフォルト</item>
+	    <item>初音ミク</item>
+	    <item>鏡音リン・レン</item>
+	    <item>巡音ルカ</item>
+	    <item>KAITO</item>
+	    <item>MEIKO</item>
+	    <item>神威がくぽ</item>
+	    <item>GUMI</item>
+	    <item>SF-A2 開発コード miki</item>
+	    <item>結月ゆかり</item>
+	    <item>重音テト</item>
 	</string-array>	
 </resources>

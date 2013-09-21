@@ -79,6 +79,15 @@ public class Constants {
 	   */
 	  public static final String COLOR_THEME_PREFERENCE_NAME = "color_theme_preference";
 
+	  // カスタムカラーのプリファレンス名
+	  public static final String CUSTOM_COLOR_THEME_NAME_PREF_NAME = "custom_color_theme_name_pref";
+	  public static final String CUSTOM_COLOR_THEME_DARK_BACKGROUND_PREF_NAME = "custom_color_theme_dark_background_pref";
+	  public static final String CUSTOM_COLOR_THEME_DARK_TEXT_COLOR_PREF_NAME = "custom_color_theme_dark_text_color_pref";
+	  public static final String CUSTOM_COLOR_THEME_LIGHT_BACKGROUND_PREF_NAME = "custom_color_theme_light_background_pref";
+	  public static final String CUSTOM_COLOR_THEME_LIGHT_BACKGROUND_PRESSED_PREF_NAME = "custom_color_theme_light_background_pressed_pref";
+	  public static final String CUSTOM_COLOR_THEME_LIGHT_TEXT_COLOR_PREF_NAME = "custom_color_theme_light_text_color_pref";
+	  public static final String CUSTOM_COLOR_THEME_DIVIDER_COLOR_PREF_NAME = "custom_color_theme_divider_color_pref";
+	  
 	  /**
 	   * onActivityResult request codes:
 	   */

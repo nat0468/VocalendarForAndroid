@@ -162,13 +162,82 @@ gave advices and supported me.\
 	    <item>Default</item>
 	    <item>Hatsune Miku</item>
 	    <item>Kagamine Rin/Len</item>
+	    <item>Megurine Luka</item>
+	    <item>Kaito</item>
+	    <item>Meiko</item>
+	    <item>Kamui Gakupo</item>
+	    <item>Gumi</item>
 	    <item>SF-A2 Miki</item>
+	    <item>Yuzuki Yukari</item>
+	    <item>Kasane Teto</item>
+	    <item>Custom color theme</item>
 	</string-array>	
 	<string-array name="color_theme_entry_values">
 	    <item>THEME_DEFAULT</item>
 	    <item>THEME_MIKU</item>
 	    <item>THEME_RIN_LEN</item>
+	    <item>THEME_LUKA</item>	    	    
+	    <item>THEME_KAITO</item>	    	    
+	    <item>THEME_MEIKO</item>	    	    
+	    <item>THEME_GAKUPO</item>	    	    
+	    <item>THEME_GUMI</item>	    	    
 	    <item>THEME_MIKI</item>
+	    <item>THEME_YUKARI</item>
+	    <item>THEME_TETO</item>	    
+	    <item>THEME_CUSTOM</item>	    
 	</string-array>	
-		
+	<string name="tag">【】</string>
+	<string name="tag_live">【ライブ</string>
+	<string name="tag_club">【クラブ</string>
+	<string name="tag_event">【イベント</string>
+	<string name="tag_off_meeting">【オフ会</string>
+	<string name="tag_cd">【CD</string>
+	<string name="tag_dvd">【DVD</string>
+	<string name="tag_book">【書籍</string>
+	<string name="tag_figure">【FIG</string>
+	<string name="tag_game">【GAME</string>
+	<string name="tag_goods">【グッズ</string>
+	<string name="tag_campaign">【キャンペーン</string>
+	<string name="tag_nico_live">【ニコ生</string>
+	<string name="tag_tv">【TV</string>
+	<string name="tag_radio">【ラジオ</string>
+	<string name="tag_close_to_end">もうすぐ終了</string>
+	<string name="tag_star">★</string>
+    <string name="press_on_color_to_apply">Press on color to apply</string>
+	<string name="select_color">Select color</string>
+	<string name="custom_color_theme">Custom color theme</string>
+	<string name="edit_custom_color_theme">Edit custom color theme</string>
+	<string name="separator_color">Date separator color</string>
+	<string name="separator_text_color">Date separator text color</string>
+	<string name="background_color">Background color</string>
+	<string name="tapped_background_color">Tapped background color</string>
+	<string name="text_color">Text color</string>
+	<string name="import_color_theme">Import color theme</string>
+	<string name="list_divider_color">List divider color</string>
+		<string-array name="import_color_theme_entries">
+	    <item>Default</item>
+	    <item>Hatsune Miku</item>
+	    <item>Kagamine Rin/Len</item>
+	    <item>Megurine Luka</item>
+	    <item>Kaito</item>
+	    <item>Meiko</item>
+	    <item>Kamui Gakupo</item>
+	    <item>Gumi</item>
+	    <item>SF-A2 Miki</item>
+	    <item>Yuzuki Yukari</item>
+	    <item>Kasane Teto</item>
+	</string-array>	
+	<string-array name="import_color_theme_entry_values">
+	    <item>THEME_DEFAULT</item>
+	    <item>THEME_MIKU</item>
+	    <item>THEME_RIN_LEN</item>
+	    <item>THEME_LUKA</item>	    	    
+	    <item>THEME_KAITO</item>	    	    
+	    <item>THEME_MEIKO</item>	    	    
+	    <item>THEME_GAKUPO</item>	    	    
+	    <item>THEME_GUMI</item>	    	    
+	    <item>THEME_MIKI</item>
+	    <item>THEME_YUKARI</item>
+	    <item>THEME_TETO</item>	    
+	</string-array>	
 </resources>

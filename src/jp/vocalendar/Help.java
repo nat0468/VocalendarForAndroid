@@ -17,7 +17,7 @@ public class Help {
 			"http://vocalendar.jp/apps/android/help/help.html";
 	
 	public static void openHelp(Context context) {
-		Log.d("Heko", "openHelp() " + HELP_URL);		
+		Log.d("Help", "openHelp() " + HELP_URL);		
 		Intent i = new Intent();
 		i.setAction(Intent.ACTION_VIEW);
 		i.setData(Uri.parse(HELP_URL));

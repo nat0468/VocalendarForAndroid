@@ -185,6 +185,11 @@ public class EventDataBaseRow implements Serializable {
 		return false;
 	}
 	
+	/**
+	 * このイベントを表示する日付。
+	 * 日付セパレータの場合は、その日付が入る。
+	 * @return
+	 */
 	public Date getDisplayDate() {
 		return displayDate;
 	}
