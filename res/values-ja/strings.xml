@@ -141,4 +141,7 @@ VOCALENDAR編集メンバーの皆さんにも感謝いたします。
 	    <item>結月ゆかり</item>
 	    <item>重音テト</item>
 	</string-array>	
+	<string name="message">メッセージ</string>	
+	<string name="fail_to_connect_server">サーバーに接続できませんでした。</string>	
+	<string name="loaded_data_will_be_shown">取得済みの情報を表示します。</string>		
 </resources>

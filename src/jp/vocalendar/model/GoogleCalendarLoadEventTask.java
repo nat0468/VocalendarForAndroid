@@ -133,7 +133,7 @@ public class GoogleCalendarLoadEventTask extends LoadEventTask {
 		List<Event> allEventList = new LinkedList<Event>();
 		for(String id : ids) {
 			try {
-				allEventList.addAll(loadEvents(id, start, end));				
+				allEventList.addAll(loadEvents(id, start, end));		
 			} catch(IOException e) {
 				Log.e(TAG, "loadEvents(" + id + ") fails.", e);
 				this.exception = e; 

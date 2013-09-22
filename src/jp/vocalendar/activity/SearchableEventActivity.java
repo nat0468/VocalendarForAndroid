@@ -92,8 +92,8 @@ public class SearchableEventActivity extends ListActivity {
 
 		protected void failed() {
 			Log.d(TAG, "GoogleCalendarLoadEventTask failed...");
-			Toast.makeText(SearchableEventActivity.this,
-					R.string.loading_events_failed, Toast.LENGTH_SHORT).show();
+			String msg = getResources().getString(R.string.fail_to_connect_server);					
+			DialogUtil.openMessageDialog(SearchableEventActivity.this, msg, false);
 			searchingView.setLoading(false);
 		}
 		

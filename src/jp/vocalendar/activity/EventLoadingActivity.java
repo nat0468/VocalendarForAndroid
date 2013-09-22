@@ -56,7 +56,7 @@ public class EventLoadingActivity extends Activity implements LoadEventTask.Task
 	
 	/** イベント取込に認証で失敗して読み込めなかった場合の結果コード */
 	public static int RESULT_AUTH_FAILED = RESULT_FIRST_USER + 1;
-		
+	
 	/**
 	 * 認証系の処理(アカウント追加やアカウント利用許可など)をする時のリクエストコード。
 	 */
@@ -207,17 +207,19 @@ public class EventLoadingActivity extends Activity implements LoadEventTask.Task
 	 * イベント読み込みタスクで読み込み失敗時の処理。
 	 */
 	private void doLoadingError() {
-		if(task.getStatus() == Status.FINISHED) {
+		if(task.getException() != null) { //例外発生時にダイアログ表示
 			String msg = null;
 			if(task.getException() instanceof IOException) { // 通信エラー
-				msg = getResources().getString(R.string.communication_error);
+				msg = getResources().getString(R.string.fail_to_connect_server) + "\n"
+						+ getResources().getString(R.string.loaded_data_will_be_shown);					
+				DialogUtil.openMessageDialog(this, msg, true);
 			} else { // 予期しないエラー
 				msg = getResources().getString(R.string.unexpected_error);
+				if(task.getException().getMessage() != null) {
+					msg = msg + ": " + task.getException().getMessage();
+				}
+				DialogUtil.openErrorDialog(this, msg);
 			}
-			if(task.getException().getMessage() != null) {
-				msg = msg + ": " + task.getException().getMessage();
-			}
-			DialogUtil.openErrorDialog(this, msg);
 		}
 	}
 	

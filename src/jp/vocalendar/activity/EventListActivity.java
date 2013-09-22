@@ -23,6 +23,7 @@ import jp.vocalendar.model.EventDataBaseRowArray;
 import jp.vocalendar.model.EventListActivityLoadEventTask;
 import jp.vocalendar.model.LoadEventTask;
 import jp.vocalendar.util.DateUtil;
+import jp.vocalendar.util.DialogUtil;
 import jp.vocalendar.util.UncaughtExceptionSavingHandler;
 import jp.vocalendar.util.UncaughtExceptionSavingToFileHandler;
 import android.app.AlertDialog;
@@ -503,8 +504,8 @@ public class EventListActivity extends ListActivity {
 
 		private void failed() {
 			Log.d(TAG, "GoogleCalendarLoadEventTask failed...");
-			Toast.makeText(EventListActivity.this,
-					R.string.loading_events_failed, Toast.LENGTH_SHORT).show();
+			String msg = getResources().getString(R.string.fail_to_connect_server);					
+			DialogUtil.openMessageDialog(EventListActivity.this, msg, false);
 			if(loadMorePreviousEvent) {
 				loadMorePreviousEventView.setLoading(false);
 			} else {

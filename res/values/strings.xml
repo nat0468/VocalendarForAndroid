@@ -240,4 +240,7 @@ gave advices and supported me.\
 	    <item>THEME_YUKARI</item>
 	    <item>THEME_TETO</item>	    
 	</string-array>	
+	<string name="message">Message</string>
+	<string name="fail_to_connect_server">Failed to connect the server.</string>
+	<string name="loaded_data_will_be_shown">Loaded data will be shown.</string>		
 </resources>

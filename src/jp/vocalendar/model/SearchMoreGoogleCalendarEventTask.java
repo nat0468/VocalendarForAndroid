@@ -40,6 +40,9 @@ public class SearchMoreGoogleCalendarEventTask extends	SearchGoogleCalendarEvent
 	@Override
 	protected List<EventDataBaseRow> doInBackground(String... query) {
 		List<EventDataBaseRow> eventsToAppend = super.doInBackground(query);
+		if(eventsToAppend == null) { // 例外発生時
+			return null;
+		}
 		ListIterator<EventDataBaseRow> itr = eventsToAppend.listIterator();
 		EventDataBaseRow r = itr.next();
 		if(r.getRowType() == EventDataBaseRow.TYPE_SEPARATOR) {
