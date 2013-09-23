@@ -45,7 +45,9 @@ implements OnPreferenceChangeListener, OnPreferenceClickListener	{
     	initAccountPreference();
     	
     	Preference custom = getPreferenceScreen().findPreference(CUSTOM_COLOR_THEME);
-    	custom.setOnPreferenceClickListener(this);
+    	if(custom != null) { // TODO
+    		custom.setOnPreferenceClickListener(this);
+    	}
     	Preference back = getPreferenceScreen().findPreference(BACK_KEY);
     	back.setOnPreferenceClickListener(this);
 	}
@@ -88,8 +90,10 @@ implements OnPreferenceChangeListener, OnPreferenceClickListener	{
 	private void initColorThemePreference() {		
 		ListPreference colorThemePref = (ListPreference)getPreferenceScreen()
 				.findPreference(Constants.COLOR_THEME_PREFERENCE_NAME);
-		colorThemePref.setSummary(colorThemePref.getEntry());
-		colorThemePref.setOnPreferenceChangeListener(this);
+		if(colorThemePref != null) { // TODO 
+			colorThemePref.setSummary(colorThemePref.getEntry());
+			colorThemePref.setOnPreferenceChangeListener(this);
+		}
 	}
 
 	private void initAccountPreference() {

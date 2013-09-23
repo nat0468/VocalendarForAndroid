@@ -18,5 +18,13 @@
     <style name="VocalendarContentWithBackground" parent="@style/VocalendarContent">
         <!--  <item name="android:background">@color/event_list_item</item> -->
         <item name="android:background">@color/background_white</item>
-	</style>	
+	</style>
+    <style name="VocalendarActionBar" parent="@style/Theme.AppCompat.Light">
+        <item name="actionBarStyle">@style/VocalendarActionBarStyle</item>
+    </style>    		
+    <style name="VocalendarActionBarStyle"
+           parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="background">@color/action_bar</item>
+        <item name="titleTextStyle">@color/action_bar</item>
+	</style>        
 </resources>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="#ffffff"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+	    <TextView
+	        android:id="@+id/messageText"
+	        style="@style/VocalendarContentWithBackground"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:background="@color/event_list_item"
+	        android:gravity="center"
+	        android:paddingBottom="3dp"
+	        android:paddingTop="3dp"
+	        android:text="message"
+	        android:textColor="@android:color/black"
+	        android:textSize="18sp"
+	        android:textStyle="normal" />
+
+</LinearLayout>

@@ -8,17 +8,20 @@ import jp.vocalendar.util.CalendarAppUtilICS;
 import jp.vocalendar.util.UncaughtExceptionSavingHandler;
 import jp.vocalendar.util.UncaughtExceptionSavingToFileHandler;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
-public class SwipableEventDescriptionActivity extends FragmentActivity {
+public class SwipableEventDescriptionActivity extends ActionBarActivity {
 	private static final String TAG = "SwipableEventDescriptionActivity";
 	
 	/** Intentに表示するEventDataBaseRowの
@@ -56,7 +59,8 @@ public class SwipableEventDescriptionActivity extends FragmentActivity {
         
 		setTitle(R.string.vocalendar);
 		setupButtons();
-        initPagerAdapter();        
+		setupActionBar();
+        initPagerAdapter();
 		updateEventDescription(getIntent());
     }
 
@@ -98,6 +102,16 @@ public class SwipableEventDescriptionActivity extends FragmentActivity {
 			}
 		});
 	}
+	
+	private void setupActionBar() {
+		ActionBar ab = getSupportActionBar();
+        ab.setCustomView(R.layout.vocalendar_title_image_view);
+        ab.setDisplayShowCustomEnabled(true);
+        ab.setDisplayShowTitleEnabled(false);
+        ab.setHomeButtonEnabled(true);
+        ab.setDisplayHomeAsUpEnabled(true);
+	}
+	
 	
 	protected void initPagerAdapter() {
 		VocalendarApplication app = (VocalendarApplication)getApplication();
@@ -199,6 +213,10 @@ public class SwipableEventDescriptionActivity extends FragmentActivity {
 			pageIndexUpdated(pageIndex);
 		}		
 	}
-	
-	
+
+	@Override
+	public boolean onSupportNavigateUp() {
+		finish();
+		return true;
+	}
 }

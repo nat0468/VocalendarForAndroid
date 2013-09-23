@@ -9,18 +9,20 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.app.ActionBarActivity;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class PreviewLoadingPageActivity extends Activity {
+public class PreviewLoadingPageActivity extends ActionBarActivity {
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
         setContentView(R.layout.loading);
+        getSupportActionBar().hide();
         
         Button cancel = (Button)findViewById(R.id.cancelButton);
         cancel.setText(getResources().getString(R.string.back));

@@ -27,10 +27,12 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.support.v7.app.ActionBarActivity;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
@@ -46,7 +48,7 @@ import com.google.api.client.util.DateTime;
  * イベント読み込み中の画面のActivity。
  * バックグランド処理でイベントを読み込む。
  */
-public class EventLoadingActivity extends Activity implements LoadEventTask.TaskCallback {
+public class EventLoadingActivity extends ActionBarActivity implements LoadEventTask.TaskCallback {
 	private static String TAG = "SplashScreenActivity";
 	
 	// イベントを取り込む開始日を指定する 年月日 をIntentに格納するキー
@@ -74,7 +76,7 @@ public class EventLoadingActivity extends Activity implements LoadEventTask.Task
 		UncaughtExceptionSavingHandler.init(this);
 		
         setContentView(R.layout.loading);
-        setTitle(R.string.vocalendar);
+        getSupportActionBar().hide();
         
         Button cancel = (Button)findViewById(R.id.cancelButton);
         cancel.setOnClickListener(new View.OnClickListener() {
@@ -109,7 +111,13 @@ public class EventLoadingActivity extends Activity implements LoadEventTask.Task
 	private LoadingAnimation makeLoadingAnimation() {
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
 		String value = pref.getString(
-				Constants.LOADING_PAGE_PREFERENCE_NAME, Constants.LOADING_PAGE_RANDOM);
+				Constants.LOADING_PAGE_PREFERENCE_NAME, null);
+		if(value == null) { // 初回起動時(未設定時)はドット絵を表示して、その後はランダム。
+			value = Constants.LOADING_PAGE_DOT_ANIMATION;
+			Editor e = pref.edit();
+			e.putString(Constants.LOADING_PAGE_PREFERENCE_NAME, Constants.LOADING_PAGE_RANDOM);
+			e.commit();			
+		}
 		return LoadingAnimationUtil.makeLoadingAnimation(value);
 	}
 

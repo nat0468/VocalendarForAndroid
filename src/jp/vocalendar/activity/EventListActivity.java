@@ -16,22 +16,30 @@ import jp.vocalendar.model.EventDataBaseRowArray;
 import jp.vocalendar.model.LoadMoreEventController;
 import jp.vocalendar.util.DateUtil;
 import jp.vocalendar.util.UncaughtExceptionSavingHandler;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 
-public class EventListActivity extends ListActivity {
+public class EventListActivity extends ActionBarActivity {
 	private static final String TAG = "EventListActivity";
 	
 	public static final String EXTRA_EVENT_LIST = 
@@ -60,11 +68,15 @@ public class EventListActivity extends ListActivity {
 	
 	private ColorTheme colorTheme;
 	
+	private ListView listView;
+	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         UncaughtExceptionSavingHandler.init(this);
+        
+        setupActionBar();
         
         colorTheme = new ColorTheme(this);
         setContentView(R.layout.event_list);
@@ -72,6 +84,7 @@ public class EventListActivity extends ListActivity {
         loadMoreEventController = new LoadMoreEventController(this);
         
         setupButtons();
+        setupListView();
         loadMoreEventController.setupListView(getListView(), colorTheme);
         
         setDateToToday();
@@ -81,6 +94,15 @@ public class EventListActivity extends ListActivity {
         	updateList();
         }
     }
+
+	private void setupActionBar() {
+		ActionBar ab = getSupportActionBar();
+        ab.setCustomView(R.layout.vocalendar_title_image_view);
+        ab.setDisplayShowCustomEnabled(true);
+        ab.setHomeButtonEnabled(true);
+        ab.setDisplayShowTitleEnabled(false);
+        ab.show();
+	}
 
 	private void setupButtons() {
 		Button settingButton = (Button)findViewById(R.id.setting_button);
@@ -120,13 +142,15 @@ public class EventListActivity extends ListActivity {
 				*/
 				openHelp();
 			}
-		});
-        
-        ImageButton searchButton = (ImageButton)findViewById(R.id.searchButton);
-        searchButton.setOnClickListener(new View.OnClickListener() {			
+		});        
+	}
+	
+	private void setupListView() {
+		getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
-			public void onClick(View v) {
-				openSearch();
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				ListView l = (ListView)parent;
+				onListItemClick(l, view, position, id);
 			}
 		});
 	}
@@ -134,6 +158,10 @@ public class EventListActivity extends ListActivity {
 	/** 最上端(読み込み項目除く)位置にスクロールバーを移動する */
 	private void scrollToHead() {
 		setSelection(1);
+	}
+	
+	public void setSelection(int position) {
+		getListView().setSelection(position);
 	}
 	
 	private void updateList() {
@@ -154,7 +182,6 @@ public class EventListActivity extends ListActivity {
 		scrollToHead();
 	}
 	
-	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		if(position == 0) {
 			loadMoreEventController.loadPreviousEventsTapped();
@@ -355,5 +382,34 @@ public class EventListActivity extends ListActivity {
 		this.eventDataBaseRowArray = eventDataBaseRowArray;
     	eventArrayCursorAdapter.getEventArrayCursor().updateEventDataBaseRows(eventDataBaseRowArray.getAllRows());
 		
+	}
+	
+	public ListView getListView() {
+		if(listView == null) {
+			listView = (ListView)findViewById(R.id.eventList);
+		}
+		return listView;
+	}
+	
+	public void setListAdapter(ListAdapter adapter) {
+		getListView().setAdapter(adapter);
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.event_list_action_menu, menu);
+	    return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch(item.getItemId()) {
+		case R.id.action_search:
+			openSearch();
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);			
+		}
 	}
 }

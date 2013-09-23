@@ -10,6 +10,7 @@
     <color name="background_mint">#00a3af</color>
     <color name="background_white">#ffffff</color>
     <color name="no_information_text_color">#cccccc</color>
+    <color name="action_bar">#dddddd</color>
     
     <!-- デフォルトテーマ -->
     <color name="dark_background_default">#666666</color>

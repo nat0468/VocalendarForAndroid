@@ -1,13 +1,11 @@
 package jp.vocalendar.activity;
 
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
 import com.google.api.client.util.DateTime;
-import com.google.api.services.calendar.Calendar;
 
 import jp.vocalendar.Constants;
 import jp.vocalendar.R;
@@ -18,45 +16,52 @@ import jp.vocalendar.model.Event;
 import jp.vocalendar.model.EventArrayCursorAdapter;
 import jp.vocalendar.model.EventDataBaseRow;
 import jp.vocalendar.model.EventDataBaseRowArray;
-import jp.vocalendar.model.GoogleCalendarLoadEventTask;
 import jp.vocalendar.model.LoadEventTask;
 import jp.vocalendar.model.SearchMoreGoogleCalendarEventTask;
 import jp.vocalendar.model.SearchGoogleCalendarEventTask;
 import jp.vocalendar.model.SearchLocalEventTask;
 import jp.vocalendar.util.DialogUtil;
-import android.app.ListActivity;
 import android.app.SearchManager;
-import android.app.TabActivity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v4.widget.SimpleCursorAdapter;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.TextView.OnEditorActionListener;
 
 /**
  * イベント検索のActivity
  */
-public class SearchableEventActivity extends ListActivity {
+public class SearchableEventActivity extends ActionBarActivity {
 	private static final String TAG = "SearchableEventActivity";
 	
 	public static final String KEY_CURRENT_DATE = "current_date"; // Intentに検索の開始日を格納するためのキー
 	
+	/**
+	 * 検索結果表示用のリスト
+	 */
+	private ListView listView;
+		
 	/**
 	 * 検索結果表示用のアダプタ
 	 */
@@ -135,6 +140,7 @@ public class SearchableEventActivity extends ListActivity {
 		setContentView(R.layout.searchable_event);
 		
 		setupUI();
+		setupListView();
 		
 	    Intent intent = getIntent();
 	    if(intent.hasExtra(KEY_CURRENT_DATE)) {
@@ -149,15 +155,9 @@ public class SearchableEventActivity extends ListActivity {
 	}
 	
 	private void setupUI() {
-		ImageButton search = (ImageButton)findViewById(R.id.searchButton);
-		search.setOnClickListener(new View.OnClickListener() {			
-			@Override
-			public void onClick(View v) {
-				searchLocalEvents();
-			}
-		});
+		setupActionBar();        
 		
-		EditText searchText = (EditText)findViewById(R.id.searchText);
+		EditText searchText = (EditText)findViewById(R.id.searchEditText);
 		searchText.setOnEditorActionListener(new OnEditorActionListener() {
 			@Override
 			public boolean onEditorAction(TextView v, int actionId,	KeyEvent event) {
@@ -167,24 +167,54 @@ public class SearchableEventActivity extends ListActivity {
 					handled = true;
 				}
 				return handled;
-			}			
+			}
 		});
 		
-		Button tag = (Button)findViewById(R.id.tagButton);
-		registerForContextMenu(tag);
-		tag.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				openContextMenu(v);
-			}			
-		});		
+		View dummy = findViewById(R.id.dummyView);
+		registerForContextMenu(dummy);
+	}
+
+	private void setupActionBar() {
+		ActionBar ab = getSupportActionBar();
+        ab.setCustomView(R.layout.search_edit_text);
+        ab.setDisplayShowCustomEnabled(true);
+        ab.setDisplayShowTitleEnabled(false);
+        ab.setHomeButtonEnabled(true);
+        ab.setDisplayHomeAsUpEnabled(true);
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.seachable_event_action_menu, menu);
+	    
+	    return super.onCreateOptionsMenu(menu);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch(item.getItemId()) {
+		case R.id.action_search:			
+			searchLocalEvents();
+			return true;
+		case R.id.action_input_tag:
+			openInputTagMenu();
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);			
+		}
+	}
+	
+	private void openInputTagMenu() {
+		View dummy = findViewById(R.id.dummyView);		
+		openContextMenu(dummy);		
 	}
 	
 	/**
 	 * 検索フィールドに入力された文字列で検索
 	 */
 	private void searchLocalEvents() {
-		EditText searchText = (EditText)findViewById(R.id.searchText);
+		EditText searchText = (EditText)findViewById(R.id.searchEditText);
 		searchLocalEvent(searchText.getText().toString());		
         setupSearchingView();
         setListAdapter(null);
@@ -215,7 +245,7 @@ public class SearchableEventActivity extends ListActivity {
 	}
 	
 	private void hideSoftwareKeyboard() {
-		EditText searchText = (EditText)findViewById(R.id.searchText);
+		EditText searchText = (EditText)findViewById(R.id.searchEditText);
 		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow(searchText.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 	}
@@ -255,7 +285,6 @@ public class SearchableEventActivity extends ListActivity {
         return found.toArray(new EventDataBaseRow[found.size()]);
 	}
 	
-	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		if(v == searchingView) {
 			if(searchingView.isLoading()) {
@@ -272,6 +301,9 @@ public class SearchableEventActivity extends ListActivity {
 			}
 		}
 		
+		if(eventArrayCursorAdapter == null) {
+			return; //まだ検索する前の場合は無視
+		}
 		EventDataBaseRow event =
 				eventArrayCursorAdapter.getEventArrayCursor().getEventDataBaseRow(position);
 		Intent i = new Intent(this, OneEventDescriptionActivity.class);
@@ -302,7 +334,7 @@ public class SearchableEventActivity extends ListActivity {
 	
 	private void searchGoogleCalendarEvents() {
 		Log.d(TAG, "searchGoogleCalendarEvents");
-		EditText searchText = (EditText)findViewById(R.id.searchText);
+		EditText searchText = (EditText)findViewById(R.id.searchEditText);
 		String query = searchText.getText().toString();
 		SearchGoogleCalendarEventTask task = new SearchGoogleCalendarEventTask(
 				this, new SearchGoogleCalendarEventTaskCallback());
@@ -317,7 +349,7 @@ public class SearchableEventActivity extends ListActivity {
 
 	private void searchMoreGoogleCalendarEvents() {
 		Log.d(TAG, "searchMoreGoogleCalendarEvents");
-		EditText searchText = (EditText)findViewById(R.id.searchText);
+		EditText searchText = (EditText)findViewById(R.id.searchEditText);
 		String query = searchText.getText().toString();
 		SearchMoreGoogleCalendarEventTask task = new SearchMoreGoogleCalendarEventTask(
 				this, new SearchMoreGoogleCalendarEventTaskCallback(), googleCalendarEvents);
@@ -330,11 +362,20 @@ public class SearchableEventActivity extends ListActivity {
 
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
-		EditText searchText = (EditText)findViewById(R.id.searchText);
-		searchText.setText(item.getTitle());
-		searchText.setSelection(item.getTitle().length());
+		EditText searchText = (EditText)findViewById(R.id.searchEditText);
+		String keyword = makeKeywordToSearch(item);
+		searchText.setText(keyword);
+		searchText.setSelection(keyword.length());
 		searchLocalEvents();
 		return true;
+	}
+	
+	private String makeKeywordToSearch(MenuItem item) {
+		String keyword = item.getTitle().toString();
+		if(keyword.endsWith("】")) { // 閉じタグを外す
+			keyword = keyword.substring(0, keyword.lastIndexOf("】"));
+		}
+		return keyword;
 	}
 
 	@Override
@@ -344,4 +385,34 @@ public class SearchableEventActivity extends ListActivity {
 		MenuInflater inflater = getMenuInflater();
 	    inflater.inflate(R.menu.tag_menu, menu);		
 	}
+
+	private void setupListView() {
+		getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				ListView l = (ListView)parent;
+				onListItemClick(l, view, position, id);
+			}
+		});
+		String msg = getResources().getString(R.string.seach_screen_instruction);
+		setListAdapter(
+				new ArrayAdapter<String>(this, R.layout.message_list_item, R.id.messageText, new String[]{msg}));
+	}	
+	
+	public ListView getListView() {
+		if(listView == null) {
+			listView = (ListView)findViewById(R.id.eventList);
+		}
+		return listView;
+	}
+		
+	public void setListAdapter(ListAdapter adapter) {
+		getListView().setAdapter(adapter);
+	}	
+	
+	@Override
+	public boolean onSupportNavigateUp() {
+		finish();
+		return true;
+	}	
 }

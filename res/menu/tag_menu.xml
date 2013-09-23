@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-    <item android:id="@+id/tag_live" android:title="@string/tag_live"></item>
+    <item android:id="@+id/tag_live" android:title="@string/tag_live" ></item>
     <item android:id="@+id/tag_club" android:title="@string/tag_club"></item>
     <item android:id="@+id/tag_event" android:title="@string/tag_event"></item>
 	<item android:id="@+id/tag_off_meeting" android:title="@string/tag_off_meeting"></item>

@@ -187,20 +187,20 @@ gave advices and supported me.\
 	    <item>THEME_CUSTOM</item>	    
 	</string-array>	
 	<string name="tag">【】</string>
-	<string name="tag_live">【ライブ</string>
-	<string name="tag_club">【クラブ</string>
-	<string name="tag_event">【イベント</string>
-	<string name="tag_off_meeting">【オフ会</string>
-	<string name="tag_cd">【CD</string>
-	<string name="tag_dvd">【DVD</string>
-	<string name="tag_book">【書籍</string>
-	<string name="tag_figure">【FIG</string>
-	<string name="tag_game">【GAME</string>
-	<string name="tag_goods">【グッズ</string>
-	<string name="tag_campaign">【キャンペーン</string>
-	<string name="tag_nico_live">【ニコ生</string>
-	<string name="tag_tv">【TV</string>
-	<string name="tag_radio">【ラジオ</string>
+	<string name="tag_live">【ライブ】</string>
+	<string name="tag_club">【クラブ】</string>
+	<string name="tag_event">【イベント】</string>
+	<string name="tag_off_meeting">【オフ会】</string>
+	<string name="tag_cd">【CD】</string>
+	<string name="tag_dvd">【DVD】</string>
+	<string name="tag_book">【書籍】</string>
+	<string name="tag_figure">【FIG】</string>
+	<string name="tag_game">【GAME】</string>
+	<string name="tag_goods">【グッズ】</string>
+	<string name="tag_campaign">【キャンペーン】</string>
+	<string name="tag_nico_live">【ニコ生】</string>
+	<string name="tag_tv">【TV】</string>
+	<string name="tag_radio">【ラジオ】</string>
 	<string name="tag_close_to_end">もうすぐ終了</string>
 	<string name="tag_star">★</string>
     <string name="press_on_color_to_apply">Press on color to apply</string>
@@ -243,4 +243,6 @@ gave advices and supported me.\
 	<string name="message">Message</string>
 	<string name="fail_to_connect_server">Failed to connect the server.</string>
 	<string name="loaded_data_will_be_shown">Loaded data will be shown.</string>		
+	<string name="seach_screen_instruction">Input a keyword to search input the textfield.\nOr, input 【】 button to input a tag to search.</string>
+	
 </resources>

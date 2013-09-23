@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/titleImageView"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="10dp"
+    android:adjustViewBounds="true"
+    android:contentDescription="@string/vocalendar"
+    android:scaleType="fitCenter"
+    android:src="@drawable/vocalendar_title" >
+
+</ImageView>
