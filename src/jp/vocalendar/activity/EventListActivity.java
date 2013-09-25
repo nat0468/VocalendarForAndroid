@@ -58,6 +58,12 @@ public class EventListActivity extends ActionBarActivity {
 	 **/
 	private Calendar currentDate = Calendar.getInstance();
 	
+	/**
+	 * イベントを読み込んだ先頭日付。
+	 * イベントを読み込んだ後に更新される。もっと読み込む時にも更新する。
+	 */
+	private Calendar topDate = Calendar.getInstance();
+	
 	/** イベント一覧の配列 */
 	private EventDataBaseRowArray eventDataBaseRowArray;
 	
@@ -243,6 +249,7 @@ public class EventListActivity extends ActionBarActivity {
 			int m = data.getExtras().getInt(EventLoadingActivity.KEY_MONTH);
 			int d = data.getExtras().getInt(EventLoadingActivity.KEY_DATE);
 			currentDate = DateUtil.getStartTimeOfDay(y, m, d, TimeZone.getDefault());
+			topDate = currentDate;
 
 		    SharedPreferences.Editor editor =
 		            PreferenceManager.getDefaultSharedPreferences(this).edit();
@@ -335,7 +342,7 @@ public class EventListActivity extends ActionBarActivity {
 
 	private void openSearch() {
 		Intent intent = new Intent(EventListActivity.this, SearchableEventActivity.class);
-		intent.putExtra(SearchableEventActivity.KEY_CURRENT_DATE, loadMoreEventController.getTopDate());
+		intent.putExtra(SearchableEventActivity.KEY_CURRENT_DATE, topDate);
 		startActivity(intent);		
 	}
 	
@@ -411,5 +418,13 @@ public class EventListActivity extends ActionBarActivity {
 		default:
 			return super.onOptionsItemSelected(item);			
 		}
+	}
+
+	public Calendar getTopDate() {
+		return topDate;
+	}
+
+	public void setTopDate(Calendar topDate) {
+		this.topDate = topDate;
 	}
 }

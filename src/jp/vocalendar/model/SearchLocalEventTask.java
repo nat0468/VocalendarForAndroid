@@ -1,5 +1,6 @@
 package jp.vocalendar.model;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -23,9 +24,12 @@ import jp.vocalendar.googleapi.OAuthManager;
  * メモリ(VocalendarApplication)に読み込んだイベントから検索するLoadEventTask.
  */
 public class SearchLocalEventTask extends LoadEventTask {
+	/** 検索開始日 */
+	private Date startDate;	
 	
-	public SearchLocalEventTask(Activity activity, TaskCallback taskCallback) {
+	public SearchLocalEventTask(Activity activity, TaskCallback taskCallback, Date startDate) {
 		super(activity, taskCallback);
+		this.startDate = startDate;
 	}
 	
 	@Override
@@ -38,19 +42,19 @@ public class SearchLocalEventTask extends LoadEventTask {
         EventDataBaseRowArray eventDataBaseRowArray = app.getEventDataBaseRowArray();
         EventDataBaseRow[] rows = eventDataBaseRowArray.getAllRows();
         EventDataBaseRow separator = null; //追加候補の日付セパレータ
-        boolean separatorNotAdded = true;
         
         List<EventDataBaseRow> found = new LinkedList<EventDataBaseRow>();
+        
+		// 検索開始日を先頭に追加。
+		EventDataBaseRow searchStartDate =
+				EventDataBaseRow.makeSearchStartDateRow(0 /* 意味の無い値 */, startDate);
+		found.add(searchStartDate);
+        
         String q = query.toLowerCase(Locale.US);
         for (int i = 0; i < rows.length; i++) {
         	EventDataBaseRow r = rows[i];
         	if(r.getRowType() == EventDataBaseRow.TYPE_SEPARATOR) {
-        		if(separatorNotAdded) {
-        			found.add(rows[i]); // 最初の日付セパレータは検索開始日の印として入れる
-        			separatorNotAdded = false;
-        		} else {
         			separator = rows[i]; // いったん追加候補に入れる
-        		}
         	} else if(r.getRowType() == EventDataBaseRow.TYPE_NORMAL_EVENT) {
         		if(contains(r.getEvent().getSummary(), q) 
         				|| contains(r.getEvent().getDescription(), q)) { // タイトルまたは説明にqueryを含む

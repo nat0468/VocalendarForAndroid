@@ -244,5 +244,6 @@ gave advices and supported me.\
 	<string name="fail_to_connect_server">Failed to connect the server.</string>
 	<string name="loaded_data_will_be_shown">Loaded data will be shown.</string>		
 	<string name="seach_screen_instruction">Input a keyword to search input the textfield.\nOr, input 【】 button to input a tag to search.</string>
-	
+	<string name="search_start_date">Search starts</string>		
+	<string name="column"> : </string>		
 </resources>

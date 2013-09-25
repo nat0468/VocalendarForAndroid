@@ -152,25 +152,37 @@ public class SearchGoogleCalendarEventTask extends GoogleCalendarLoadEventTask {
 	
 	private void addDateSeparator(LinkedList<EventDataBaseRow> events) {
 		ListIterator<EventDataBaseRow> itr = events.listIterator();
-		EventDataBaseRow lastSeparator = 
-				EventDataBaseRow.makeSeparatorRow(0 /* 意味の無い値 */, new Date(startDateTime.getValue()));
-		itr.add(lastSeparator);
+		
+		EventDataBaseRow lastSeparator = null;
+		if(!events.isEmpty()) {
+			EventDataBaseRow r = events.getFirst();
+			lastSeparator = EventDataBaseRow.makeSeparatorRow(0 /* 意味の無い値 */, getDisplayDate(r)); 
+			itr.add(lastSeparator);
+		}				
 		
 		while(itr.hasNext()) {
 			EventDataBaseRow r = itr.next();
 			if(r.getRowType() != EventDataBaseRow.TYPE_NORMAL_EVENT) {
 				continue;
 			}
-			Event e = r.getEvent();
-			Date date = (e.getStartDateTime() != null ? e.getStartDateTime() : e.getStartDate());
+			Date date = getDisplayDate(r);
 			if(DateUtil.greaterYMD(lastSeparator.getDisplayDate(), date, timeZone)) {
 				lastSeparator = EventDataBaseRow.makeSeparatorRow(0 /* 意味の無い値 */, date);
 				itr.previous(); // 現在のイベントの前にセパレータ挿入
 				itr.add(lastSeparator);
-			}
+			}			
 		}
 		
-		
+		// 検索開始日を先頭に追加。
+		EventDataBaseRow searchStartDate =
+				EventDataBaseRow.makeSearchStartDateRow(0 /* 意味の無い値 */, new Date(startDateTime.getValue()));
+		events.addFirst(searchStartDate);				
+	}
+	
+	private Date getDisplayDate(EventDataBaseRow row) {
+		Event e = row.getEvent();
+		Date date = (e.getStartDateTime() != null ? e.getStartDateTime() : e.getStartDate());
+		return date;
 	}
 
 	/**

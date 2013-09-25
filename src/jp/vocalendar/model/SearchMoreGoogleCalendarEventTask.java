@@ -45,8 +45,14 @@ public class SearchMoreGoogleCalendarEventTask extends	SearchGoogleCalendarEvent
 		}
 		ListIterator<EventDataBaseRow> itr = eventsToAppend.listIterator();
 		EventDataBaseRow r = itr.next();
-		if(r.getRowType() == EventDataBaseRow.TYPE_SEPARATOR) {
-			itr.remove(); // 先頭の日付セパレータは削除
+		if(r.getRowType() == EventDataBaseRow.TYPE_SEARCH_START_DATE) {
+			itr.remove(); // 先頭の検索開始日は削除
+		}
+		if(itr.hasNext()) {
+			r = itr.next();
+			if(r.getRowType() == EventDataBaseRow.TYPE_SEPARATOR) {
+				itr.remove(); // 先頭のセパレータは削除
+			}			
 		}
 		removeOverlappedEvents(eventsToBeAppended, eventsToAppend);
 		eventsToBeAppended.addAll(eventsToAppend);

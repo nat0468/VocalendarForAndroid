@@ -211,8 +211,8 @@ public class LoadMoreEventController {
 		loadMorePreviousEventView.setLoading(false);
 		context.setSelection(loadedEvents.size());
 		
-		topDate = Calendar.getInstance();
 		topDate.setTimeInMillis(loadMorePreviousEventTask.getStart().getValue());
+		context.setTopDate(topDate);
 		
 		loadMorePreviousEventTask = null;
 	}

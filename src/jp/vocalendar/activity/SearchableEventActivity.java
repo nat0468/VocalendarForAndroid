@@ -240,7 +240,7 @@ public class SearchableEventActivity extends ActionBarActivity {
 					public void onPostExecute(List<EventDataBaseRow> events) {
 						searchLocalEventFinished(events);
 					}
-				});
+				}, currentDate.getTime());
         searchingTask.execute(query);
 	}
 	

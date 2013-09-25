@@ -19,6 +19,7 @@ public class EventDataBaseRow implements Serializable {
 	public static final int TYPE_NORMAL_EVENT = 0; // Event
 	public static final int TYPE_SEPARATOR = 1; // 日付セパレータ
 	public static final int TYPE_NO_EVENT = 2; // 「予定なし」に対応する行
+	public static final int TYPE_SEARCH_START_DATE = 3; // 「検索開始日：」に対応する行
 	
 	/** 行の種別 */
 	private int rowType = TYPE_NORMAL_EVENT;
@@ -57,6 +58,18 @@ public class EventDataBaseRow implements Serializable {
 		return row;
 	}
 	
+	/**
+	 * 「検索開始日」行を生成する
+	 * @param index
+	 * @param date
+	 * @return
+	 */
+	public static EventDataBaseRow makeSearchStartDateRow(int index, Date date) {
+		EventDataBaseRow row = new EventDataBaseRow(null, index, date);
+		row.setRowType(TYPE_SEARCH_START_DATE);
+		return row;
+	}
+
 	/**
 	 * 「予定なし」行を生成する
 	 * @return

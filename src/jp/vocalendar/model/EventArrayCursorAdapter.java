@@ -32,7 +32,8 @@ public class EventArrayCursorAdapter extends SimpleCursorAdapter {
 	public static final int VIEW_TYPE_EVENT_WITHOUT_DATE_TEXT = 1;
 	public static final int VIEW_TYPE_SEPARATOR = 2;
 	public static final int VIEW_TYPE_NO_EVENT = 3;
-	private static final int VIEW_TYPE_COUNT = 4;
+	public static final int VIEW_TYPE_SEARCH_START_DATE = 4;
+	private static final int VIEW_TYPE_COUNT = 5;
 	
 	/**
 	 * コンストラクタ
@@ -76,6 +77,21 @@ public class EventArrayCursorAdapter extends SimpleCursorAdapter {
 			EventDataBaseRow row = cursor.getEventDataBaseRow(position);
 			TextView tv = (TextView)convertView.findViewById(R.id.dateText);
 			tv.setText(DateUtil.formatDate(row.getDisplayDate()));
+			tv.setBackgroundColor(colorTheme.getDarkBackgroundColor());
+			tv.setTextColor(colorTheme.getDarkTextColor());
+			break;
+		case VIEW_TYPE_SEARCH_START_DATE:
+			if(convertView == null) {
+				convertView = inflater.inflate(
+						R.layout.event_list_separator_item, parent, false);			
+			}
+			row = cursor.getEventDataBaseRow(position);
+			tv = (TextView)convertView.findViewById(R.id.dateText);
+			StringBuilder sb = new StringBuilder();
+			sb.append(context.getResources().getString(R.string.search_start_date));
+			sb.append(context.getResources().getString(R.string.column));
+			sb.append(DateUtil.formatDate(row.getDisplayDate()));
+			tv.setText(sb.toString());
 			tv.setBackgroundColor(colorTheme.getDarkBackgroundColor());
 			tv.setTextColor(colorTheme.getDarkTextColor());
 			break;
@@ -139,6 +155,8 @@ public class EventArrayCursorAdapter extends SimpleCursorAdapter {
 			return VIEW_TYPE_NO_EVENT;
 		case EventDataBaseRow.TYPE_SEPARATOR:
 			return VIEW_TYPE_SEPARATOR;
+		case EventDataBaseRow.TYPE_SEARCH_START_DATE:
+			return VIEW_TYPE_SEARCH_START_DATE;
 		}
 		
 		// EventDataBaseRow.TYPE_NORMAL_EVENT の場合

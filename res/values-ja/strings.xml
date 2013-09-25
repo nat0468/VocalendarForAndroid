@@ -145,4 +145,6 @@ VOCALENDAR編集メンバーの皆さんにも感謝いたします。
 	<string name="fail_to_connect_server">サーバーに接続できませんでした。</string>	
 	<string name="loaded_data_will_be_shown">取得済みの情報を表示します。</string>		
 	<string name="seach_screen_instruction">テキストボックスに検索したい文字を入力して下さい。\nまたは【】ボタンを押して検索したいタグを指定して下さい。</string>
+	<string name="search_start_date">検索開始日</string>		
+	<string name="column">：</string>			
 </resources>
