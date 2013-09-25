@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import jp.vocalendar.googleapi.OAuthManager;
@@ -82,8 +83,12 @@ public class SearchGoogleCalendarEventTask extends GoogleCalendarLoadEventTask {
 	 * @param allEvents イベント追加先となる全イベントリスト
 	 */
 	private void addEventsTo(List<Event> events, String query, LinkedList<EventDataBaseRow> allEvents) {
-		ListIterator<EventDataBaseRow> targetItr = allEvents.listIterator();
-		EventDataBaseRow current = (targetItr.hasNext() ? targetItr.next() : null);
+		ListIterator<EventDataBaseRow> targetItr = allEvents.listIterator();		
+		EventDataBaseRow next = null;
+		if(targetItr.hasNext()) {
+			next = targetItr.next();
+			targetItr.previous();
+		}		
 		Iterator<Event> itr = events.iterator();
 		
 		while(itr.hasNext()) {
@@ -91,7 +96,7 @@ public class SearchGoogleCalendarEventTask extends GoogleCalendarLoadEventTask {
 			if(!includeKeyword(e, query)) {
 				continue; // 検索キーワードが含まれない場合は無視
 			}
-			moveToNext(current, targetItr, e);
+			moveToNext(next, targetItr, e);
 			
 			Date date = (e.getStartDateTime() != null ? e.getStartDateTime() : e.getStartDate());
 			Date startDate = new Date(startDateTime.getValue());
@@ -102,6 +107,12 @@ public class SearchGoogleCalendarEventTask extends GoogleCalendarLoadEventTask {
 			EventDataBaseRow row = new EventDataBaseRow(
 					e, 0 /* 意味のない値 */, 0/* 意味のない値 */, null, dayKind);
 			targetItr.add(row);
+			if(targetItr.hasNext()) {
+				next = targetItr.next();
+				targetItr.previous();
+			} else {
+				next = null;
+			}
 		}
 	}
 	
@@ -112,10 +123,11 @@ public class SearchGoogleCalendarEventTask extends GoogleCalendarLoadEventTask {
 	 * @return
 	 */
 	private boolean includeKeyword(Event e, String keyword) {
-		if(e.getSummary() != null && e.getSummary().indexOf(keyword) != -1) {
+		keyword = keyword.toLowerCase(Locale.US);
+		if(e.getSummary() != null && e.getSummary().toLowerCase(Locale.US).indexOf(keyword) != -1) {
 			return true;
 		}
-		if(e.getDescription() != null && e.getDescription().indexOf(keyword) != -1) {
+		if(e.getDescription() != null && e.getDescription().toLowerCase(Locale.US).indexOf(keyword) != -1) {
 			return true;
 		}
 		return false;
@@ -163,18 +175,24 @@ public class SearchGoogleCalendarEventTask extends GoogleCalendarLoadEventTask {
 
 	/**
 	 * targetItrの指すリストで、eの入る場所(startDateTimeまたはstartDateの昇順)までtargetItrを進ませる。
-	 * @param current targetItrの指すイベント
+	 * @param next targetItrの指すnextイベント
 	 * @param targetItr 挿入先を示すイテレータ
 	 * @param e 挿入するイベント
 	 */
-	private void moveToNext(EventDataBaseRow current, ListIterator<EventDataBaseRow> targetItr, Event e) {
-		if(current == null) { // targetItrが指すイベントが空の場合
+	private void moveToNext(EventDataBaseRow next, ListIterator<EventDataBaseRow> targetItr, Event e) {
+		if(next == null) { // targetItrが指すイベントが空の場合
 			return;
 		}
-		while(current.getEvent().getStartDateIndex() < e.getStartDateIndex() && targetItr.hasNext()) {
-			current = targetItr.next();
+		if(!(next.getEvent().getStartDateIndex() < e.getStartDateIndex())) { //既にtargetItrが挿入位置
+			return;
 		}
-		targetItr.previous(); 
+		do {
+			next = targetItr.next();
+			if(!targetItr.hasNext()) { // 末尾が挿入位置
+				return;
+			}
+		} while(next.getEvent().getStartDateIndex() < e.getStartDateIndex());
+		targetItr.previous();
 	}
 
 	private List<Event> search(String calendarId, String query) throws IOException {
