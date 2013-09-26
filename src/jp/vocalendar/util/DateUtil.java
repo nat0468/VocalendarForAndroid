@@ -117,6 +117,20 @@ public class DateUtil {
 		return cal1.before(cal2) && !equalYMD(cal1, cal2);		
 	}
 
+	/**
+	 * cal1とcal2の年月日が一致もしくは cal1 < cal2 であれば true を返す
+	 * @param cal1
+	 * @param cal2
+	 * @return
+	 */
+	public static boolean equalOrGreaterYMD(Calendar cal1, Calendar cal2) {
+		if(equalYMD(cal1, cal2)) {
+			return true;
+		}
+		return cal1.before(cal2);
+	}
+	
+	
 	public static Date formatDateTime(Date date, Date dateTime, StringBuilder sb) {
 		if(dateTime != null) {
 			sb.append(formatDateTime(dateTime));
@@ -258,11 +272,19 @@ public class DateUtil {
 		cal.set(Calendar.YEAR, year);
 		cal.set(Calendar.MONTH, month);
 		cal.set(Calendar.DAY_OF_MONTH, date);		
+		makeStartTimeOfDay(cal);
+		return cal;
+	}
+	
+	/**
+	 * 日付を変えずに、その日の始まりの時間に変更する。
+	 * @param cal
+	 */
+	public static void makeStartTimeOfDay(Calendar cal) {
 		cal.set(Calendar.HOUR_OF_DAY, 0);
 		cal.set(Calendar.MINUTE, 0);
 		cal.set(Calendar.SECOND, 0);
-		cal.set(Calendar.MILLISECOND, 0);
-		return cal;
+		cal.set(Calendar.MILLISECOND, 0);		
 	}
 	
 	/**

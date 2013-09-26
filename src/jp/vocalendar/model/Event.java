@@ -294,8 +294,8 @@ public class Event implements Serializable {
 			return matchWithRecursiveBy(dateCal);	
 		}
 		return false;
-	}
-
+	}	
+	
 	/**
 	 * recursiveByで指定された曜日と、calの曜日が一致するか判定する。
 	 * @param date
@@ -321,6 +321,39 @@ public class Event implements Serializable {
 		return false;
 	}
 	
+	/**
+	 * ある日にちと一致、または日にちより過去のイベントならtrueを返す。
+	 * ただし繰り返し日付は考慮しない。検索結果の日付比較に使う。
+	 * @param date
+	 * @return
+	 */
+	public boolean equalOrAfterByDateWithoutRecursive(Calendar dateCal, TimeZone timeZone) {
+		Date date = dateCal.getTime();
+		
+		Date start = (startDate != null) ? startDate : startDateTime;
+		Date end = (endDate != null) ? endDate : endDateTime;
+		if(start.before(date) && date.before(end)) {
+			return true;
+		}
+		
+		Calendar startDateCal = Calendar.getInstance(timeZone); // 開始日
+		startDateCal.setTime(start);
+		if(DateUtil.equalYMD(startDateCal, dateCal)) {
+			// 開始日と年月日が一致すれば true
+			return true;
+		}
+		
+		Calendar endDateCal = Calendar.getInstance(); // 終了日
+		//１日の予定の場合、開始日の次の日が終了日になるため、終了日と同じ日を一致と見なさないため、時間を1つ減らす
+		//終了時間が次の日の午前0時の場合、その日を一致と見なさないため、時間を1つ減らす
+		endDateCal.setTimeInMillis(end.getTime() - 1);
+		if(DateUtil.equalYMD(dateCal, endDateCal)) {
+			// 終了日と年月日が一致すれば true
+			return true;
+		}		
+		return startDateCal.after(dateCal); // 一致しない場合は、指定日より開始日が後ならtrue
+	}
+
 	/**
 	 * 繰り返し種別を指定する。 
 	 * @return RECURSIVE_* 定数を指定する。

@@ -71,6 +71,7 @@ public class SearchGoogleCalendarEventTask extends GoogleCalendarLoadEventTask {
 				return null;				
 			}
 		}
+		cutPastEvents(allEvents);
 		cutAfterMaxEvents(allEvents);
 		addDateSeparator(allEvents);
 		return allEvents; 
@@ -89,14 +90,15 @@ public class SearchGoogleCalendarEventTask extends GoogleCalendarLoadEventTask {
 			next = targetItr.next();
 			targetItr.previous();
 		}		
-		Iterator<Event> itr = events.iterator();
 		
+		EventComparatorInDate c = new EventComparatorInDate(new Date(startDateTime.getValue()), timeZone);
+		Iterator<Event> itr = events.iterator();		
 		while(itr.hasNext()) {
 			Event e = itr.next();
 			if(!includeKeyword(e, query)) {
 				continue; // 検索キーワードが含まれない場合は無視
 			}
-			moveToNext(next, targetItr, e);
+			moveToNext(next, targetItr, e, c);
 			
 			Date date = (e.getStartDateTime() != null ? e.getStartDateTime() : e.getStartDate());
 			Date startDate = new Date(startDateTime.getValue());
@@ -132,7 +134,30 @@ public class SearchGoogleCalendarEventTask extends GoogleCalendarLoadEventTask {
 		}
 		return false;
 	}
-	
+
+	/**
+	 * startDateの前日までのイベントを削除。
+	 * @param events
+	 */
+	private void cutPastEvents(LinkedList<EventDataBaseRow> events) {
+		java.util.Calendar startDate = java.util.Calendar.getInstance();
+		startDate.setTimeInMillis(startDateTime.getValue());
+		DateUtil.makeStartTimeOfDay(startDate);
+		
+		ListIterator<EventDataBaseRow> itr = events.listIterator();
+		while(itr.hasNext()) {
+			Event e = itr.next().getEvent();
+			if(e.equalOrAfterByDateWithoutRecursive(startDate, timeZone)) { // 検索開始日と同じまたは大きい日のイベントまでは、全て削除
+				break;
+			}
+			itr.remove();
+		}
+	}
+
+	/**
+	 * 最大個数以上のイベントを削除
+	 * @param events
+	 */
 	private void cutAfterMaxEvents(LinkedList<EventDataBaseRow> events) {
 		if(events.isEmpty()) {
 			return;
@@ -155,8 +180,16 @@ public class SearchGoogleCalendarEventTask extends GoogleCalendarLoadEventTask {
 		
 		EventDataBaseRow lastSeparator = null;
 		if(!events.isEmpty()) {
+			java.util.Calendar startDateTimeCal = java.util.Calendar.getInstance();
+			startDateTimeCal.setTimeInMillis(startDateTime.getValue());
+			
 			EventDataBaseRow r = events.getFirst();
-			lastSeparator = EventDataBaseRow.makeSeparatorRow(0 /* 意味の無い値 */, getDisplayDate(r)); 
+			Date date = getDisplayDate(r);
+			if(date.after(new Date(startDateTime.getValue()))) { // 検索開始日と同じまたは後の期間イベントの場合				
+				lastSeparator = EventDataBaseRow.makeSeparatorRow(0 /* 意味の無い値 */, getDisplayDate(r)); 				
+			} else { // 検索開始日より前の場合
+				lastSeparator = EventDataBaseRow.makeSeparatorRow(0 /* 意味の無い値 */, new Date(startDateTime.getValue()));  // 検索開始日を入れる
+			}
 			itr.add(lastSeparator);
 		}				
 		
@@ -191,7 +224,8 @@ public class SearchGoogleCalendarEventTask extends GoogleCalendarLoadEventTask {
 	 * @param targetItr 挿入先を示すイテレータ
 	 * @param e 挿入するイベント
 	 */
-	private void moveToNext(EventDataBaseRow next, ListIterator<EventDataBaseRow> targetItr, Event e) {
+	private void moveToNext(
+			EventDataBaseRow next, ListIterator<EventDataBaseRow> targetItr, Event e, EventComparatorInDate c) {
 		if(next == null) { // targetItrが指すイベントが空の場合
 			return;
 		}
