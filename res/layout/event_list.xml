@@ -22,13 +22,13 @@
         android:layout_height="wrap_content"
         android:layout_weight="0"
         android:gravity="fill_horizontal"
-        android:weightSum="4.2" >
+        android:weightSum="4.3" >
 
         <Button
             android:id="@+id/change_date_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1.1"
+            android:layout_weight="1.2"
             android:ellipsize="none"
             android:gravity="center"
             android:singleLine="true"
