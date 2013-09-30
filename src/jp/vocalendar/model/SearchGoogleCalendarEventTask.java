@@ -147,10 +147,10 @@ public class SearchGoogleCalendarEventTask extends GoogleCalendarLoadEventTask {
 		ListIterator<EventDataBaseRow> itr = events.listIterator();
 		while(itr.hasNext()) {
 			Event e = itr.next().getEvent();
-			if(e.equalOrAfterByDateWithoutRecursive(startDate, timeZone)) { // 検索開始日と同じまたは大きい日のイベントまでは、全て削除
-				break;
+			if(!e.equalOrAfterByDateWithoutRecursive(startDate, timeZone)) {
+				// 検索開始日と同じまたは大きい日のイベントでない(検索開始日より小さい日)のイベントは削除
+				itr.remove();
 			}
-			itr.remove();
 		}
 	}
 
