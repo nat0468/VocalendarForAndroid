@@ -2,15 +2,17 @@
 <resources>
     <color name="separator">#666666</color>
     <color name="separatorText">#ffffff</color>
-    <color name="sunday">#f88</color>
-    <color name="saturday">#88f</color>
-    <color name="normalday">#aaa</color>
+    <color name="sunday">#ff8888</color>
+    <color name="saturday">#8888ff</color>
+    <color name="normalday">#aaaaaa</color>
+    <color name="dayText">#ffffff</color>
     <color name="item_pressed">#ccc</color>
     <color name="link_text_color">#41A587</color>
     <color name="background_mint">#00a3af</color>
     <color name="background_white">#ffffff</color>
     <color name="no_information_text_color">#cccccc</color>
     <color name="action_bar">#dddddd</color>
+    <color name="export_import_dialog_background">#f5f5f5</color>
     
     <!-- デフォルトテーマ -->
     <color name="dark_background_default">#666666</color>

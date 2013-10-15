@@ -212,6 +212,12 @@ gave advices and supported me.\
 	<string name="background_color">Background color</string>
 	<string name="tapped_background_color">Tapped background color</string>
 	<string name="text_color">Text color</string>
+	<string name="weekday_background_color">Weekday background color</string>
+	<string name="weekday_text_color">Weekday text color</string>
+	<string name="saturday_background_color">Saturday background color</string>
+	<string name="saturday_text_color">Saturday text color</string>
+	<string name="sunday_background_color">Sunday background color</string>
+	<string name="sunday_text_color">Sunday text color</string>
 	<string name="import_color_theme">Import color theme</string>
 	<string name="list_divider_color">List divider color</string>
 		<string-array name="import_color_theme_entries">
@@ -245,5 +251,15 @@ gave advices and supported me.\
 	<string name="loaded_data_will_be_shown">Loaded data will be shown.</string>		
 	<string name="seach_screen_instruction">Input a keyword to search input the textfield.\nOr, input 【】 button to input a tag to search.</string>
 	<string name="search_start_date">Search starts</string>		
-	<string name="column"> : </string>		
+	<string name="column"> : </string>
+	<string name="custom_color_theme_import_export_dialog_instruction">
+To export the settings of custom color theme to the other devices,
+copy the following code, and send it by email and so on.\n
+To import the settings to a device, input(copy &amp; paste) the code, and press "import" button.
+	</string>
+	<string name="export_import">Export/Import</string>
+	<string name="close">Close</string>
+	<string name="invalid_color_theme_code">Invalid code.</string>
+	<string name="preview">Preview</string>
+	<string name="preview_custom_color_theme">Showing preview.\nPress [Back] button to back.</string>
 </resources>

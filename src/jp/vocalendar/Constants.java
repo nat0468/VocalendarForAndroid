@@ -88,6 +88,15 @@ public class Constants {
 	  public static final String CUSTOM_COLOR_THEME_LIGHT_TEXT_COLOR_PREF_NAME = "custom_color_theme_light_text_color_pref";
 	  public static final String CUSTOM_COLOR_THEME_DIVIDER_COLOR_PREF_NAME = "custom_color_theme_divider_color_pref";
 	  
+	  public static final String CUSTOM_COLOR_THEME_NORMALDAY_BACKGROUND_COLOR_PREF_NAME = "custom_color_theme_normalday_background_color_pref";
+	  public static final String CUSTOM_COLOR_THEME_NORMALDAY_TEXT_COLOR_PREF_NAME = "custom_color_theme_normalday_text_color_pref";
+	  public static final String CUSTOM_COLOR_THEME_SATURDAY_BACKGROUND_COLOR_PREF_NAME = "custom_color_theme_saturday_background_color_pref";
+	  public static final String CUSTOM_COLOR_THEME_SATURDAY_TEXT_COLOR_PREF_NAME = "custom_color_theme_saturday_text_color_pref";
+	  public static final String CUSTOM_COLOR_THEME_SUNDAY_BACKGROUND_COLOR_PREF_NAME = "custom_color_theme_sunday_background_color_pref";
+	  public static final String CUSTOM_COLOR_THEME_SUNDAY_TEXT_COLOR_PREF_NAME = "custom_color_theme_sunday_text_color_pref";
+	  
+	  public static final String DEFAULT_THEME_NAME = "THEME_DEFAULT";
+	  
 	  /**
 	   * onActivityResult request codes:
 	   */

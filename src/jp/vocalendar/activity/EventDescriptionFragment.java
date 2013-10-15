@@ -159,6 +159,13 @@ public class EventDescriptionFragment extends Fragment {
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		this.context = activity;
-		this.themeColor = new ColorTheme(activity);
+		if(activity.getIntent().hasExtra(PreviewEventListActivity.EXTRA_PREVIEW_COLOR_THEME_CODE)) {
+			int code = activity.getIntent().getIntExtra(
+					PreviewEventListActivity.EXTRA_PREVIEW_COLOR_THEME_CODE,
+					ColorTheme.THEME_DEFAULT);
+			this.themeColor = new ColorTheme(activity, code);
+		} else {
+			this.themeColor = new ColorTheme(activity);
+		}
 	}
 }

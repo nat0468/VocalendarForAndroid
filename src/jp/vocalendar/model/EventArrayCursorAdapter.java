@@ -120,9 +120,12 @@ public class EventArrayCursorAdapter extends SimpleCursorAdapter {
 	}
 	
 	private void setColorToTimeTextView(int position, View convertView) {
-		int color = chooseColor(cursor.getEventDataBaseRow(position));
+		EventDataBaseRow r = cursor.getEventDataBaseRow(position);
 		TextView ttv = (TextView)convertView.findViewById(R.id.timeText);			
-		ttv.setBackgroundColor(color);
+		int bg = chooseBackgroundColor(r);;
+		ttv.setBackgroundColor(bg);
+		int tc = chooseTextColor(r);
+		ttv.setTextColor(tc);
 	}
 
 	private void setViewValue(int position, View view) {
@@ -172,20 +175,36 @@ public class EventArrayCursorAdapter extends SimpleCursorAdapter {
 	}
 	
 	/**
-	 * 指定されたEventDataBaseRowの日の種類に応じた色を選ぶ
+	 * 指定されたEventDataBaseRowの日の種類に応じた背景色を選ぶ
 	 * @param row
 	 * @return
 	 */
-	private int chooseColor(EventDataBaseRow row) {
+	private int chooseBackgroundColor(EventDataBaseRow row) {
 		switch(row.getDayKind()) {
 		case EventDataBaseRow.DAY_KIND_HOLIDAY:
-			return context.getResources().getColor(R.color.sunday);
+			return colorTheme.getSundayBackgroundColor();
 		case EventDataBaseRow.DAY_KIND_SATURDAY:
-			return context.getResources().getColor(R.color.saturday);
+			return colorTheme.getSaturdayBackgroundColor();
 		}
-		return context.getResources().getColor(R.color.normalday);
+		return colorTheme.getNormalDayBackgroundColor();
 	}
 
+	/**
+	 * 指定されたEventDataBaseRowの日の種類に応じた背景色を選ぶ
+	 * @param row
+	 * @return
+	 */
+	private int chooseTextColor(EventDataBaseRow row) {
+		switch(row.getDayKind()) {
+		case EventDataBaseRow.DAY_KIND_HOLIDAY:
+			return colorTheme.getSundayTextColor();
+		case EventDataBaseRow.DAY_KIND_SATURDAY:
+			return colorTheme.getSaturdayTextColor();
+		}
+		return colorTheme.getNormalDayTextColor();
+	}
+
+	
 	public EventArrayCursor getEventArrayCursor() {
 		return cursor;
 	}

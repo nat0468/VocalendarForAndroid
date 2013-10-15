@@ -33,7 +33,6 @@
             android:targetClass="jp.vocalendar.activity.PreviewLoadingPageActivity"
             android:targetPackage="jp.vocalendar" />
     </Preference>
-    <!-- 
     <ListPreference android:title="@string/color_theme"
         			android:key="color_theme_preference"
         			android:entries="@array/color_theme_entries"
@@ -43,7 +42,6 @@
     <Preference android:title="@string/edit_custom_color_theme"
         		android:key="custom_color_theme">
     </Preference>
-     -->
     <ListPreference android:title="@string/google_account"
         			android:key="selected_account_preference" />
     <Preference android:title="@string/about_vocalendar_app">

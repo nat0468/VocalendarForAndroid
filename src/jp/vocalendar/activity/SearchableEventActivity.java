@@ -137,7 +137,14 @@ public class SearchableEventActivity extends ActionBarActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		colorTheme = new ColorTheme(this);
+		if(getIntent().hasExtra(PreviewEventListActivity.EXTRA_PREVIEW_COLOR_THEME_CODE)) {
+			int code = getIntent().getIntExtra(
+					PreviewEventListActivity.EXTRA_PREVIEW_COLOR_THEME_CODE,
+					ColorTheme.THEME_DEFAULT);
+			colorTheme = new ColorTheme(this, code);
+		} else {
+			colorTheme = new ColorTheme(this);
+		}
 		setContentView(R.layout.searchable_event);
 		
 		setupUI();

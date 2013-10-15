@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >   
-    <ListPreference android:title="@string/import_color_theme"
-        			android:key="import_color_theme"
-        			android:entries="@array/import_color_theme_entries"
-        			android:entryValues="@array/import_color_theme_entry_values"
-        			android:dialogTitle="@string/color_theme"
-        			android:defaultValue="THEME_DEFAULT" />
+	<Preference android:title="@string/preview"
+        		android:key="preview" />
 	<net.margaritov.preference.colorpicker.ColorPickerPreference
         android:key="custom_color_theme_dark_background_pref"
         android:title="@string/separator_color"
@@ -41,8 +37,51 @@
         android:title="@string/list_divider_color"
         android:defaultValue="0xcccccc"
         enabledByDefault="true"
-        hexValue="true" />	    
+        hexValue="true" />
+	<net.margaritov.preference.colorpicker.ColorPickerPreference
+        android:key="custom_color_theme_normalday_background_color_pref"
+        android:title="@string/weekday_background_color"
+        android:defaultValue="0xaaaaaa"
+        enabledByDefault="true"
+        hexValue="true" />
+	<net.margaritov.preference.colorpicker.ColorPickerPreference
+        android:key="custom_color_theme_normalday_text_color_pref"
+        android:title="@string/weekday_text_color"
+        android:defaultValue="0xffffff"
+        enabledByDefault="true"
+        hexValue="true" />
+	<net.margaritov.preference.colorpicker.ColorPickerPreference
+        android:key="custom_color_theme_saturday_background_color_pref"
+        android:title="@string/saturday_background_color"
+        android:defaultValue="0x8888ff"
+        enabledByDefault="true"
+        hexValue="true" />
+	<net.margaritov.preference.colorpicker.ColorPickerPreference
+        android:key="custom_color_theme_saturday_text_color_pref"
+        android:title="@string/saturday_text_color"
+        android:defaultValue="0xffffff"
+        enabledByDefault="true"
+        hexValue="true" />
+	<net.margaritov.preference.colorpicker.ColorPickerPreference
+        android:key="custom_color_theme_sunday_background_color_pref"
+        android:title="@string/sunday_background_color"
+        android:defaultValue="0xff8888"
+        enabledByDefault="true"
+        hexValue="true" />
+	<net.margaritov.preference.colorpicker.ColorPickerPreference
+        android:key="custom_color_theme_sunday_text_color_pref"
+        android:title="@string/sunday_text_color"
+        android:defaultValue="0xffffff"
+        enabledByDefault="true"
+        hexValue="true" />
+    <ListPreference android:title="@string/import_color_theme"
+        			android:key="import_color_theme"
+        			android:entries="@array/import_color_theme_entries"
+        			android:entryValues="@array/import_color_theme_entry_values"
+        			android:dialogTitle="@string/color_theme"
+        			android:defaultValue="THEME_DEFAULT" />
+	<Preference android:title="@string/export_import"
+        		android:key="export_import_settings" />
 	<Preference android:title="@string/back"
-        		android:key="back">
-    </Preference>
+        		android:key="back" />
 </PreferenceScreen>

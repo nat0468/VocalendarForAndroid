@@ -127,6 +127,12 @@ VOCALENDAR編集メンバーの皆さんにも感謝いたします。
 	<string name="tapped_background_color">タップ時の背景色</string>
 	<string name="text_color">文字色</string>
 	<string name="list_divider_color">リスト分割線の色</string>
+	<string name="weekday_background_color">平日の背景色</string>
+	<string name="weekday_text_color">平日の文字色</string>
+	<string name="saturday_background_color">土曜日の背景色</string>
+	<string name="saturday_text_color">土曜日の文字色</string>
+	<string name="sunday_background_color">日曜日の背景色</string>
+	<string name="sunday_text_color">日曜日の文字色</string>
 	<string name="import_color_theme">カラー・テーマを取り込む</string>
 	<string-array name="import_color_theme_entries">
 	    <item>デフォルト</item>
@@ -146,5 +152,14 @@ VOCALENDAR編集メンバーの皆さんにも感謝いたします。
 	<string name="loaded_data_will_be_shown">取得済みの情報を表示します。</string>		
 	<string name="seach_screen_instruction">テキストボックスに検索したい文字を入力して下さい。\nまたは【】ボタンを押して検索したいタグを指定して下さい。</string>
 	<string name="search_start_date">検索開始日</string>		
-	<string name="column">：</string>			
+	<string name="column">：</string>		
+	<string name="custom_color_theme_import_export_dialog_instruction">
+カスタム・カラー・テーマの設定を他の端末に移動(出力)するには、下記のコードをコピーして、メールなどで送ります。\n
+移動先の端末で設定を取り込むには、下記にコードを入力(コピー＆ペースト)して「取込」ボタンを押します。
+	</string>
+	<string name="export_import">外部出力／取込</string>
+	<string name="close">閉じる</string>
+	<string name="invalid_color_theme_code">コードに誤りがあります。</string>
+	<string name="preview">プレビュー</string>
+	<string name="preview_custom_color_theme">プレビュー表示です。\n[戻る]ボタンで戻ります。</string>
 </resources>

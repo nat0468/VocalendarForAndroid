@@ -84,7 +84,7 @@ public class EventListActivity extends ActionBarActivity {
         
         setupActionBar();
         
-        colorTheme = new ColorTheme(this);
+        colorTheme = initColorTheme();
         setContentView(R.layout.event_list);
         
         loadMoreEventController = new LoadMoreEventController(this);
@@ -100,6 +100,10 @@ public class EventListActivity extends ActionBarActivity {
         	updateList();
         }
     }
+
+	protected ColorTheme initColorTheme() {
+		return new ColorTheme(this);
+	}
 
 	private void setupActionBar() {
 		ActionBar ab = getSupportActionBar();
@@ -206,14 +210,24 @@ public class EventListActivity extends ActionBarActivity {
 				eventArrayCursorAdapter.getEventArrayCursor().getEventDataBaseRow(cursorPosition);
 		Intent i = new Intent(this, SwipableEventDescriptionActivity.class);
 		i.putExtra(SwipableEventDescriptionActivity.KEY_EVENT_INDEX, event.getEventIndex());
+		beforeOpenEventDescriptionActivity(i);
 		startActivity(i);
+	}
+	
+	/**
+	 * イベント詳細画面を開く前に呼ばれるメソッド。
+	 * サブクラスで前処理を追加するときに使う。
+	 * @param i
+	 */
+	protected void beforeOpenEventDescriptionActivity(Intent i) {
+		return; // do nothing.
 	}
 	
 	/**
 	 * イベント情報の取得が必要かどうか判定する。
 	 * @return
 	 */
-	private boolean isUpdateRequired() {
+	protected boolean isUpdateRequired() {
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
 		long lastUpdated = pref.getLong(Constants.LAST_UPDATED_PREFERENCE_NAME, 0);
 		Calendar cal = Calendar.getInstance();
@@ -343,7 +357,17 @@ public class EventListActivity extends ActionBarActivity {
 	private void openSearch() {
 		Intent intent = new Intent(EventListActivity.this, SearchableEventActivity.class);
 		intent.putExtra(SearchableEventActivity.KEY_CURRENT_DATE, topDate);
+		beforeOpenSeatch(intent);
 		startActivity(intent);		
+	}
+	
+	/**
+	 * 検索画面を開く前に呼ばれるメソッド。
+	 * サブクラスで前処理を追加する時に、このメソッドを上書きする。
+	 * @param i
+	 */
+	protected void beforeOpenSeatch(Intent i){
+		return; //何もしない
 	}
 	
 	public EventArrayCursor getEventArrayCursor() {

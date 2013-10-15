@@ -33,6 +33,13 @@ public class ColorTheme {
 	private int lightTextColor;
 	private int dividerColor;
 	
+	private int normalDayBackgroundColor;
+	private int normalDayTextColor;
+	private int saturdayBackgroundColor;
+	private int saturdayTextColor;
+	private int sundayBackgroundColor;
+	private int sundayTextColor;
+	
 	// テーマを表す定数
 	public static final int THEME_DEFAULT = 0;
 	public static final int THEME_MIKU = 1;
@@ -102,6 +109,10 @@ public class ColorTheme {
 			initLightBackgroundStateListColor(R.color.light_background_state_list_miku);
 			lightTextColor = context.getResources().getColor(R.color.light_text_color_miku);
 			dividerColor = context.getResources().getColor(R.color.divider_color_default);
+			normalDayTextColor = saturdayTextColor = sundayTextColor = context.getResources().getColor(R.color.dayText);
+			normalDayBackgroundColor = context.getResources().getColor(R.color.normalday);			
+			saturdayBackgroundColor = context.getResources().getColor(R.color.saturday);
+			sundayBackgroundColor = context.getResources().getColor(R.color.sunday);
 			break;
 		case THEME_RIN_LEN:
 			darkBackgroundColor = context.getResources().getColor(R.color.dark_background_rinlen);
@@ -109,6 +120,10 @@ public class ColorTheme {
 			initLightBackgroundStateListColor(R.color.light_background_state_list_rinlen);
 			lightTextColor = context.getResources().getColor(R.color.light_text_color_rinlen);			
 			dividerColor = context.getResources().getColor(R.color.divider_color_default);
+			normalDayTextColor = saturdayTextColor = sundayTextColor = context.getResources().getColor(R.color.dayText);
+			normalDayBackgroundColor = context.getResources().getColor(R.color.normalday);			
+			saturdayBackgroundColor = context.getResources().getColor(R.color.saturday);
+			sundayBackgroundColor = context.getResources().getColor(R.color.sunday);
 			break;
 		case THEME_LUKA:
 			darkBackgroundColor = context.getResources().getColor(R.color.dark_background_luka);
@@ -116,6 +131,10 @@ public class ColorTheme {
 			initLightBackgroundStateListColor(R.color.light_background_state_list_luka);
 			lightTextColor = context.getResources().getColor(R.color.light_text_color_luka);			
 			dividerColor = context.getResources().getColor(R.color.divider_color_default);
+			normalDayTextColor = saturdayTextColor = sundayTextColor = context.getResources().getColor(R.color.dayText);
+			normalDayBackgroundColor = context.getResources().getColor(R.color.normalday);			
+			saturdayBackgroundColor = context.getResources().getColor(R.color.saturday);
+			sundayBackgroundColor = context.getResources().getColor(R.color.sunday);
 			break;
 		case THEME_KAITO:
 			darkBackgroundColor = context.getResources().getColor(R.color.dark_background_kaito);
@@ -123,6 +142,10 @@ public class ColorTheme {
 			initLightBackgroundStateListColor(R.color.light_background_state_list_kaito);
 			lightTextColor = context.getResources().getColor(R.color.light_text_color_kaito);			
 			dividerColor = context.getResources().getColor(R.color.divider_color_default);
+			normalDayTextColor = saturdayTextColor = sundayTextColor = context.getResources().getColor(R.color.dayText);
+			normalDayBackgroundColor = context.getResources().getColor(R.color.normalday);			
+			saturdayBackgroundColor = context.getResources().getColor(R.color.saturday);
+			sundayBackgroundColor = context.getResources().getColor(R.color.sunday);
 			break;
 		case THEME_MEIKO:
 			darkBackgroundColor = context.getResources().getColor(R.color.dark_background_meiko);
@@ -130,6 +153,10 @@ public class ColorTheme {
 			initLightBackgroundStateListColor(R.color.light_background_state_list_meiko);
 			lightTextColor = context.getResources().getColor(R.color.light_text_color_meiko);			
 			dividerColor = context.getResources().getColor(R.color.divider_color_default);
+			normalDayTextColor = saturdayTextColor = sundayTextColor = context.getResources().getColor(R.color.dayText);
+			normalDayBackgroundColor = context.getResources().getColor(R.color.normalday);			
+			saturdayBackgroundColor = context.getResources().getColor(R.color.saturday);
+			sundayBackgroundColor = context.getResources().getColor(R.color.sunday);
 			break;
 		case THEME_GAKUPO:
 			darkBackgroundColor = context.getResources().getColor(R.color.dark_background_gakupo);
@@ -137,6 +164,10 @@ public class ColorTheme {
 			initLightBackgroundStateListColor(R.color.light_background_state_list_gakupo);
 			lightTextColor = context.getResources().getColor(R.color.light_text_color_gakupo);			
 			dividerColor = context.getResources().getColor(R.color.divider_color_default);
+			normalDayTextColor = saturdayTextColor = sundayTextColor = context.getResources().getColor(R.color.dayText);
+			normalDayBackgroundColor = context.getResources().getColor(R.color.normalday);			
+			saturdayBackgroundColor = context.getResources().getColor(R.color.saturday);
+			sundayBackgroundColor = context.getResources().getColor(R.color.sunday);
 			break;
 		case THEME_GUMI:
 			darkBackgroundColor = context.getResources().getColor(R.color.dark_background_gumi);
@@ -144,6 +175,10 @@ public class ColorTheme {
 			initLightBackgroundStateListColor(R.color.light_background_state_list_gumi);
 			lightTextColor = context.getResources().getColor(R.color.light_text_color_gumi);			
 			dividerColor = context.getResources().getColor(R.color.divider_color_default);
+			normalDayTextColor = saturdayTextColor = sundayTextColor = context.getResources().getColor(R.color.dayText);
+			normalDayBackgroundColor = context.getResources().getColor(R.color.normalday);			
+			saturdayBackgroundColor = context.getResources().getColor(R.color.saturday);
+			sundayBackgroundColor = context.getResources().getColor(R.color.sunday);
 			break;
 		case THEME_MIKI:
 			darkBackgroundColor = context.getResources().getColor(R.color.dark_background_miki);
@@ -151,6 +186,10 @@ public class ColorTheme {
 			initLightBackgroundStateListColor(R.color.light_background_state_list_miki);
 			lightTextColor = context.getResources().getColor(R.color.light_text_color_miki);			
 			dividerColor = context.getResources().getColor(R.color.divider_color_default);
+			normalDayTextColor = saturdayTextColor = sundayTextColor = context.getResources().getColor(R.color.dayText);
+			normalDayBackgroundColor = context.getResources().getColor(R.color.normalday);			
+			saturdayBackgroundColor = context.getResources().getColor(R.color.saturday);
+			sundayBackgroundColor = context.getResources().getColor(R.color.sunday);
 			break;
 		case THEME_YUKARI:
 			darkBackgroundColor = context.getResources().getColor(R.color.dark_background_yukari);
@@ -158,6 +197,10 @@ public class ColorTheme {
 			initLightBackgroundStateListColor(R.color.light_background_state_list_yukari);
 			lightTextColor = context.getResources().getColor(R.color.light_text_color_yukari);			
 			dividerColor = context.getResources().getColor(R.color.divider_color_default);
+			normalDayTextColor = saturdayTextColor = sundayTextColor = context.getResources().getColor(R.color.dayText);
+			normalDayBackgroundColor = context.getResources().getColor(R.color.normalday);			
+			saturdayBackgroundColor = context.getResources().getColor(R.color.saturday);
+			sundayBackgroundColor = context.getResources().getColor(R.color.sunday);
 			break;
 		case THEME_TETO:
 			darkBackgroundColor = context.getResources().getColor(R.color.dark_background_teto);
@@ -165,6 +208,10 @@ public class ColorTheme {
 			initLightBackgroundStateListColor(R.color.light_background_state_list_teto);
 			lightTextColor = context.getResources().getColor(R.color.light_text_color_teto);			
 			dividerColor = context.getResources().getColor(R.color.divider_color_default);
+			normalDayTextColor = saturdayTextColor = sundayTextColor = context.getResources().getColor(R.color.dayText);
+			normalDayBackgroundColor = context.getResources().getColor(R.color.normalday);			
+			saturdayBackgroundColor = context.getResources().getColor(R.color.saturday);
+			sundayBackgroundColor = context.getResources().getColor(R.color.sunday);
 			break;
 		case THEME_CUSTOM:
 			loadCustomColorTheme();
@@ -175,6 +222,10 @@ public class ColorTheme {
 			initLightBackgroundStateListColor(R.color.light_background_state_list_default);
 			lightTextColor = context.getResources().getColor(R.color.light_text_color_default);			
 			dividerColor = context.getResources().getColor(R.color.divider_color_default);
+			normalDayTextColor = saturdayTextColor = sundayTextColor = context.getResources().getColor(R.color.dayText);
+			normalDayBackgroundColor = context.getResources().getColor(R.color.normalday);			
+			saturdayBackgroundColor = context.getResources().getColor(R.color.saturday);
+			sundayBackgroundColor = context.getResources().getColor(R.color.sunday);
 		}
 		
 		
@@ -187,7 +238,13 @@ public class ColorTheme {
 		lightBackgroundColor = pref.getInt(Constants.CUSTOM_COLOR_THEME_LIGHT_BACKGROUND_PREF_NAME, 0xffffff);
 		lightBackgroundPressedColor = pref.getInt(Constants.CUSTOM_COLOR_THEME_LIGHT_BACKGROUND_PRESSED_PREF_NAME, 0xc0c0c0);		
 		lightTextColor = pref.getInt(Constants.CUSTOM_COLOR_THEME_LIGHT_TEXT_COLOR_PREF_NAME, 0x000000);
-		dividerColor = pref.getInt(Constants.CUSTOM_COLOR_THEME_DIVIDER_COLOR_PREF_NAME, 0xcccccc);		
+		dividerColor = pref.getInt(Constants.CUSTOM_COLOR_THEME_DIVIDER_COLOR_PREF_NAME, 0xcccccc);	
+		normalDayTextColor = pref.getInt(Constants.CUSTOM_COLOR_THEME_NORMALDAY_TEXT_COLOR_PREF_NAME, R.color.dayText);
+		normalDayBackgroundColor = pref.getInt(Constants.CUSTOM_COLOR_THEME_NORMALDAY_BACKGROUND_COLOR_PREF_NAME, R.color.normalday);
+		saturdayTextColor = pref.getInt(Constants.CUSTOM_COLOR_THEME_SATURDAY_TEXT_COLOR_PREF_NAME, R.color.dayText);
+		saturdayBackgroundColor = pref.getInt(Constants.CUSTOM_COLOR_THEME_SATURDAY_BACKGROUND_COLOR_PREF_NAME, R.color.saturday);
+		sundayBackgroundColor = pref.getInt(Constants.CUSTOM_COLOR_THEME_SUNDAY_BACKGROUND_COLOR_PREF_NAME, R.color.sunday);
+		sundayTextColor = pref.getInt(Constants.CUSTOM_COLOR_THEME_SUNDAY_TEXT_COLOR_PREF_NAME, R.color.dayText);
 	}
 
 	public int getDarkBackgroundColor() {
@@ -203,7 +260,7 @@ public class ColorTheme {
 	}
 	
 	public static int getColorThemeCode(String key, Context context) {
-		if("THEME_DEFAULT".equals(key)) {
+		if(Constants.DEFAULT_THEME_NAME.equals(key)) {
 			return THEME_DEFAULT;
 		} else if("THEME_MIKU".equals(key)) {
 			return THEME_MIKU;
@@ -265,5 +322,28 @@ public class ColorTheme {
 	public int getDividerColor() {
 		return dividerColor;
 	}
-	
+
+	public int getNormalDayBackgroundColor() {
+		return normalDayBackgroundColor;
+	}
+
+	public int getNormalDayTextColor() {
+		return normalDayTextColor;
+	}
+
+	public int getSaturdayBackgroundColor() {
+		return saturdayBackgroundColor;
+	}
+
+	public int getSaturdayTextColor() {
+		return saturdayTextColor;
+	}
+
+	public int getSundayBackgroundColor() {
+		return sundayBackgroundColor;
+	}
+
+	public int getSundayTextColor() {
+		return sundayTextColor;
+	}
 }

@@ -6,10 +6,12 @@ import jp.vocalendar.Constants;
 import jp.vocalendar.R;
 import jp.vocalendar.animation.vocalendar.LoadingAnimationUtil;
 import jp.vocalendar.model.ColorTheme;
-
 import android.accounts.Account;
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.ListActivity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
@@ -32,6 +34,9 @@ implements OnPreferenceChangeListener, OnPreferenceClickListener	{
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+		    hideActionBar();
+		}
     	super.onCreate(savedInstanceState);
     	setTitle(R.string.setting);
     	addPreferencesFromResource(R.xml.pref);
@@ -50,6 +55,11 @@ implements OnPreferenceChangeListener, OnPreferenceClickListener	{
     	}
     	Preference back = getPreferenceScreen().findPreference(BACK_KEY);
     	back.setOnPreferenceClickListener(this);
+	}
+	
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	protected void hideActionBar() {
+		getActionBar().hide();
 	}
 	
 	private void initNumberOfDatePreference() {

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="jp.vocalendar"
-    android:versionCode="9819"
-    android:versionName="0.98.1" >
+    android:versionCode="9821"
+    android:versionName="0.98.2-beta20131015" >
 
     <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="14" />
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -34,7 +34,10 @@
             android:name=".activity.OneEventDescriptionActivity"
             android:theme="@style/VocalendarActionBar" >
         </activity>        
-        <activity android:name=".activity.SettingActivity"></activity>
+        <activity
+            android:name=".activity.SettingActivity"
+            android:theme="@style/VocalendarActionBar" >
+        </activity>
         <activity android:name=".activity.AboutActivity"></activity>
         <activity
             android:name=".activity.PreviewLoadingPageActivity"
@@ -51,7 +54,15 @@
         	<meta-data android:name="android.app.searchable"
             	       android:resource="@xml/searchable"/>
         </activity>
-        <activity android:name=".activity.CustomColorThemeActivity"></activity>
+        <activity
+            android:name=".activity.CustomColorThemeActivity"
+            android:theme="@style/VocalendarActionBar" >            
+        </activity>
+        
+        <activity
+            android:name=".activity.PreviewEventListActivity"
+            android:theme="@style/VocalendarActionBar" >            
+        </activity>
         
         <meta-data android:name="android.app.default_searchable"
                    android:value=".activity.SearchableEventActivity" />
