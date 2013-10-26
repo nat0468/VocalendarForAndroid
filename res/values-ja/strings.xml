@@ -53,12 +53,18 @@ VOCALENDARについては、&lt;a href="http://vocalendar.jp/about/"&gt;こち�
 &lt;h4&gt;このソフトウェアは、以下を使っています&lt;/h4&gt;\
 &lt;a href="http://code.google.com/p/google-api-java-client/"&gt;Google APIs Client Library for Java&lt;/a&gt;&lt;br&gt;\
 Licensed under the Apache License Version 2.0 \
-&lt;a href="http://www.apache.org/licenses/"&gt;http://www.apache.org/licenses/&lt;/a&gt;&lt;br&gt;
+&lt;a href="http://www.apache.org/licenses/LICENSE-2.0"&gt;http://www.apache.org/licenses/LICENSE-2.0&lt;/a&gt;&lt;br&gt;
 &lt;br&gt;
 &lt;a href="https://code.google.com/p/google-meeting-scheduler/"&gt;google-meeting-scheduler&lt;/a&gt;に含まれる\
 OAuthManager.java&lt;br&gt;
 Copyright (c) 2010 Google Inc. Licensed under the Apache License Version 2.0 \
 &lt;a href="http://www.apache.org/licenses/"&gt;http://www.apache.org/licenses/&lt;/a&gt;&lt;br&gt;\
+&lt;br&gt;
+&lt;a href="http://hascha.blogspot.jp/2013/08/android.html"&gt;android-ColorPickerPreferences&lt;/a&gt;&lt;br&gt;\
+Copyright (C) 2011 Sergey Margaritov, rovo89, Daniel Nilsson, hascha.&lt;br&gt;\
+Licensed under the Apache License, Version 2.0 \
+&lt;a href="http://www.apache.org/licenses/LICENSE-2.0"&gt;http://www.apache.org/licenses/LICENSE-2.0&lt;/a&gt;
+&lt;br&gt;
 &lt;h4&gt;イラストや商標について&lt;/h4&gt;\
 このアプリで使用しているイラストはピアプロ・キャラクター・ライセンスに基いてクリプトン・フューチャー・メディア株式会社のキャラクター『MEIKO』『KAITO』『初音ミク』『鏡音リン』『鏡音レン』『巡音ルカ』を描いたものです。&lt;br&gt;\
 イラストはイラストレーターさんの大切な作品です。無断使用・転載などはおやめください。&lt;br&gt;\

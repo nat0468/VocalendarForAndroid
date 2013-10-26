@@ -54,14 +54,20 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, \
 including, without limitation, any warranties or conditions of FITNESS FOR A PARTICULAR PURPOSE, \
 NON-INFRINGEMENT or MERCHANTABILITY. &lt;br/&gt;\
 &lt;h4&gt;This software uses the followings:&lt;/h4&gt;
-&lt;a href="http://code.google.com/p/google-api-java-client/"&gt;Google APIs Client Library for Java&lt;/a&gt;&lt;br&gt;
+&lt;a href="http://code.google.com/p/google-api-java-client/"&gt;Google APIs Client Library for Java&lt;/a&gt;&lt;br&gt;\
 Licensed under the Apache License Version 2.0 \
-&lt;a href="http://www.apache.org/licenses/"&gt;http://www.apache.org/licenses/&lt;/a&gt;&lt;br&gt;
+&lt;a href="http://www.apache.org/licenses/LICENSE-2.0"&gt;http://www.apache.org/licenses/LICENSE-2.0&lt;/a&gt;&lt;br&gt;
 &lt;br&gt;
-&lt;a href="https://code.google.com/p/google-meeting-scheduler/"&gt;google-meeting-scheduler&lt;/a&gt;\
+&lt;a href="https://code.google.com/p/google-meeting-scheduler/"&gt;google-meeting-scheduler&lt;/a&gt;に含まれる\
 OAuthManager.java&lt;br&gt;
 Copyright (c) 2010 Google Inc. Licensed under the Apache License Version 2.0 \
-&lt;a href="http://www.apache.org/licenses/"&gt;http://www.apache.org/licenses/&lt;/a&gt;&lt;br&gt;
+&lt;a href="http://www.apache.org/licenses/"&gt;http://www.apache.org/licenses/&lt;/a&gt;&lt;br&gt;\
+&lt;br&gt;
+&lt;a href="http://hascha.blogspot.jp/2013/08/android.html"&gt;android-ColorPickerPreferences&lt;/a&gt;&lt;br&gt;\
+Copyright (C) 2011 Sergey Margaritov, rovo89, Daniel Nilsson, hascha.&lt;br&gt;\
+Licensed under the Apache License, Version 2.0 \
+&lt;a href="http://www.apache.org/licenses/LICENSE-2.0"&gt;http://www.apache.org/licenses/LICENSE-2.0&lt;/a&gt;
+&lt;br&gt;
 &lt;h4&gt;About illustration and trademark&lt;/h4&gt;\
 Meiko, Kaito, Hatsune Miku, Kagamine Rin, Kagamine Len, and Megurine Luka that are a Crypton Future Media\'s character, are drawn to illustrations of this application \
 are licensed under PIAPRO Characeter License.&lt;br&gt;\
