@@ -93,7 +93,7 @@ implements OnPreferenceChangeListener, OnPreferenceClickListener{
 	 */
 	private boolean checkNotImported() {
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-		return pref.contains(Constants.CUSTOM_COLOR_THEME_DARK_BACKGROUND_PREF_NAME); // 背景色の設定有無を、カスタムテーマの色設定とする		
+		return !pref.contains(Constants.CUSTOM_COLOR_THEME_DARK_BACKGROUND_PREF_NAME); // 背景色の設定有無を、カスタムテーマの色設定とする		
 	}
 	
 	@Override
