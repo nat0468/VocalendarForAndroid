@@ -1,6 +1,7 @@
 package jp.vocalendar.activity;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.TimeZone;
 
 import jp.vocalendar.Constants;
@@ -465,7 +466,46 @@ public class EventListActivity extends ActionBarActivity {
 	}
 	
 	private void goToToday() {
-		setSelection(1); // TODO 今日の日付を探して移動
+		Date today = new Date();
+		TimeZone timeZone = TimeZone.getDefault();
+		if(eventDataBaseRowArray.getTopDate().compareTo(today) <= 0 &&
+				today.compareTo(eventDataBaseRowArray.getLastDate()) <= 0) {
+			// 読み込んでいる日付の範囲に今日が含まれる場合
+			scrollToDate(today, timeZone);
+			return;
+		}
+		if(DateUtil.equalYMD(today, eventDataBaseRowArray.getTopDate(), timeZone) ||
+				DateUtil.equalYMD(today, eventDataBaseRowArray.getLastDate(), timeZone)) {
+			// 読み込んでいる日付の先頭または末尾と一致する場合
+			scrollToDate(today, timeZone);
+			return;
+		}		
+		// 読み込んでいる日付の範囲に今日が含まれない場合
+		currentDate = Calendar.getInstance(); // 今日の日付で再読み込み
+		openEventLoadingActivity();
+	}
+	
+	private void scrollToDate(Date date, TimeZone timeZone) {
+		int pos = findPositionByDate(date, timeZone);
+		setSelection(pos);
+		return;		
+	}
+	
+	private int findPositionByDate(Date date, TimeZone tz) {
+		Calendar calDate = Calendar.getInstance(tz);
+		calDate.setTime(date);
+		Calendar calTarget = Calendar.getInstance(tz);
+		
+		EventDataBaseRow[] rows = eventArrayCursorAdapter.getEventArrayCursor().getEventDataBaseRows();
+		for(int pos = 0; pos < rows.length; pos++) {
+			if(rows[pos].getRowType() == EventDataBaseRow.TYPE_SEPARATOR) {
+				calTarget.setTime(rows[pos].getDisplayDate());
+				if(DateUtil.equalYMD(calDate, calTarget)) {
+					return pos + 1; //もっと読み込むの項目分を足す
+				}
+			}
+		}
+		return 0; // ここに来る事はありえないが、 0 を返す。		
 	}
 	
 	private void openFavoriteList() {
