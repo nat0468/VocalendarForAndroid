@@ -268,4 +268,5 @@ To import the settings to a device, input(copy &amp; paste) the code, and press 
 	<string name="invalid_color_theme_code">Invalid code.</string>
 	<string name="preview">Preview</string>
 	<string name="preview_custom_color_theme">Showing preview.\nPress [Back] button to back.</string>
+	<string name="favorite">Favorite</string>
 </resources>

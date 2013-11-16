@@ -22,42 +22,49 @@
         android:layout_height="wrap_content"
         android:layout_weight="0"
         android:gravity="fill_horizontal"
-        android:weightSum="4.3" >
+        android:weightSum="4" >
 
-        <Button
-            android:id="@+id/change_date_button"
+        <TextView
+            android:id="@+id/today_text_view_action"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1.2"
-            android:ellipsize="none"
-            android:gravity="center"
-            android:singleLine="true"
-            android:text="@string/change_date" />
-
-        <Button
-            android:id="@+id/setting_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1.1"
-            android:ellipsize="none"
-            android:gravity="center"
-            android:singleLine="true"
-            android:text="@string/setting" />
-
-        <Button
-            android:id="@+id/help_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="@string/help" />
+            android:background="@color/action_button"
+            android:clickable="true"
+            android:contentDescription="@string/today"
+            android:gravity="center"
+            android:text="@string/today" />
+
+        <ImageView
+            android:id="@+id/change_date_image_view_action"
+            style="@style/ActionButtonStyle"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:contentDescription="@string/change_date"
+            android:clickable="true"
+            android:background="@color/action_button"
+            android:src="@drawable/ic_action_go_to_today" />
+
+        <ImageView
+            android:id="@+id/go_to_favorite_list_image_view_action"
+            style="@style/ActionButtonStyle"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:contentDescription="@string/favorite"
+            android:clickable="true"
+            android:background="@color/action_button"
+            android:src="@drawable/ic_action_important" />
+
+        <ImageView
+            android:id="@+id/update_image_view_action"
+            style="@style/ActionButtonStyle"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:contentDescription="@string/update"
+            android:clickable="true"
+            android:background="@color/action_button"
+            android:src="@drawable/ic_action_refresh" />
         
-        <Button
-            android:id="@+id/update_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/update" />
-
     </LinearLayout>
 
 </LinearLayout>

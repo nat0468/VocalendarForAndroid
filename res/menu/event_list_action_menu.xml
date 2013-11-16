@@ -3,4 +3,12 @@
       xmlns:appcompat="http://schemas.android.com/apk/res-auto"  >
     <item android:id="@+id/action_search" android:title="@string/search_events"
           android:icon="@drawable/search" appcompat:showAsAction="always" />
+    <item android:id="@+id/action_setting" android:title="@string/setting"
+          appcompat:showAsAction="never" />
+    <item android:id="@+id/action_help" android:title="@string/help"
+          appcompat:showAsAction="never" />
+    <item android:id="@+id/action_about" android:title="@string/about_vocalendar_app"
+          appcompat:showAsAction="never" />
+    <item android:id="@+id/action_web_site" android:title="@string/open_vocalendar"
+          appcompat:showAsAction="never" />
 </menu>

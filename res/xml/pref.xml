@@ -44,15 +44,6 @@
     </Preference>
     <ListPreference android:title="@string/google_account"
         			android:key="selected_account_preference" />
-    <Preference android:title="@string/about_vocalendar_app">
-        <intent android:action="android.intent.action.VIEW"
-            android:targetClass="jp.vocalendar.activity.AboutActivity"
-            android:targetPackage="jp.vocalendar" />
-    </Preference>
-    <Preference android:title="@string/open_vocalendar">
-        <intent android:action="android.intent.action.VIEW"
-				android:data="http://vocalendar.jp/" />
-    </Preference>
     <Preference android:title="@string/back"
         		android:key="back">
     </Preference>

@@ -168,4 +168,5 @@ VOCALENDAR編集メンバーの皆さんにも感謝いたします。
 	<string name="invalid_color_theme_code">コードに誤りがあります。</string>
 	<string name="preview">プレビュー</string>
 	<string name="preview_custom_color_theme">プレビュー表示です。\n[戻る]ボタンで戻ります。</string>
+	<string name="favorite">お気に入り</string>
 </resources>

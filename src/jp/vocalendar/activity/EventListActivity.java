@@ -15,6 +15,7 @@ import jp.vocalendar.model.EventDataBaseRow;
 import jp.vocalendar.model.EventDataBaseRowArray;
 import jp.vocalendar.model.LoadMoreEventController;
 import jp.vocalendar.util.DateUtil;
+import jp.vocalendar.util.DialogUtil;
 import jp.vocalendar.util.UncaughtExceptionSavingHandler;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -22,22 +23,28 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.OpenableColumns;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 public class EventListActivity extends ActionBarActivity {
 	private static final String TAG = "EventListActivity";
@@ -115,42 +122,35 @@ public class EventListActivity extends ActionBarActivity {
 	}
 
 	private void setupButtons() {
-		Button settingButton = (Button)findViewById(R.id.setting_button);
-        settingButton.setOnClickListener(new View.OnClickListener() {			
+		TextView today = (TextView)findViewById(R.id.today_text_view_action);
+		today.setOnClickListener(new View.OnClickListener() {			
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(EventListActivity.this, SettingActivity.class);
-				startActivityForResult(intent, REQUEST_CODE_OPEN_SETTINGS);				
+				goToToday();
 			}
 		});
-        
-        Button changeDateButton = (Button)findViewById(R.id.change_date_button);
-        changeDateButton.setOnClickListener(new View.OnClickListener() {			
+		
+		ImageView changeDate = (ImageView)findViewById(R.id.change_date_image_view_action);
+        changeDate.setOnClickListener(new View.OnClickListener() {			
 			@Override
 			public void onClick(View v) {
 				openDatePicker();
 			}
 		});
-        
-        Button updateButton = (Button)findViewById(R.id.update_button);
-        updateButton.setOnClickListener(new View.OnClickListener() {			
+
+        ImageView favorite = (ImageView)findViewById(R.id.go_to_favorite_list_image_view_action);
+        favorite.setOnClickListener(new View.OnClickListener() {			
 			@Override
 			public void onClick(View v) {
-				openEventLoadingActivity();
+				openFavoriteList();
 			}
 		});
         
-        Button helpButton = (Button)findViewById(R.id.help_button);
-        helpButton.setOnClickListener(new View.OnClickListener() {			
+        ImageView update = (ImageView)findViewById(R.id.update_image_view_action);
+        update.setOnClickListener(new View.OnClickListener() {			
 			@Override
 			public void onClick(View v) {
-				/* TODO
-		        boolean test = true;
-		        if(test) {
-		        	throw new RuntimeException("test!!");
-		        }
-				*/
-				openHelp();
+				openEventLoadingActivity();
 			}
 		});        
 	}
@@ -167,7 +167,7 @@ public class EventListActivity extends ActionBarActivity {
 	
 	/** 最上端(読み込み項目除く)位置にスクロールバーを移動する */
 	private void scrollToHead() {
-		setSelection(1);
+		setSelection(1);		
 	}
 	
 	public void setSelection(int position) {
@@ -439,6 +439,18 @@ public class EventListActivity extends ActionBarActivity {
 		case R.id.action_search:
 			openSearch();
 			return true;
+		case R.id.action_help:
+			openHelp();
+			return true;
+		case R.id.action_about:
+			openAbout();
+			return true;
+		case R.id.action_setting:
+			openSetting();
+			return true;
+		case R.id.action_web_site:
+			openWebSite();
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);			
 		}
@@ -450,5 +462,28 @@ public class EventListActivity extends ActionBarActivity {
 
 	public void setTopDate(Calendar topDate) {
 		this.topDate = topDate;
+	}
+	
+	private void goToToday() {
+		setSelection(1); // TODO 今日の日付を探して移動
+	}
+	
+	private void openFavoriteList() {
+		DialogUtil.openNotImplementedDialog(this); // TODO 実装
+	}
+	
+	private void openSetting() {
+		Intent intent = new Intent(this, SettingActivity.class);
+		startActivityForResult(intent, REQUEST_CODE_OPEN_SETTINGS);		
+	}
+	
+	private void openAbout() {
+		Intent intent = new Intent(this, AboutActivity.class);
+		startActivity(intent);
+	}
+	
+	private void openWebSite() {
+		Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://vocalendar.jp/"));
+		startActivity(intent);
 	}
 }
