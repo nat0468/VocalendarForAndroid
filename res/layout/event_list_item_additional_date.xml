@@ -18,12 +18,13 @@
         android:paddingRight="0dp"
         android:layout_width="75sp"
         android:layout_height="fill_parent"/>
-    <LinearLayout
-     android:layout_width="fill_parent"
-     android:layout_height="wrap_content"
-     android:orientation="vertical">        
+	<LinearLayout
+    	android:layout_width="0dip"
+    	android:layout_height="wrap_content"
+		android:layout_weight="1"     
+    	android:orientation="vertical">        
 
-		<TextView
+        <TextView
 		    android:id="@+id/dateText"
 		    style="@style/VocalendarContentWithBackground"
 		    android:layout_width="fill_parent"
@@ -35,19 +36,24 @@
 		    android:textSize="16sp"
 		    android:textStyle="normal" />
 
-	    <TextView
-	        android:id="@+id/summaryText"
-	        style="@style/VocalendarContentWithBackground"
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_marginTop="-1sp"
-	        android:paddingBottom="3dp"
-	        android:paddingTop="0dp"
-	        android:text="【CD】"
-	        android:textColor="@android:color/black"
-	        android:background="@color/event_list_item"
-	        android:textSize="18sp"
-	        android:textStyle="bold" />
-
+		<TextView
+		    android:id="@+id/summaryText"
+		    style="@style/VocalendarContentWithBackground"
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:layout_marginTop="-1sp"
+		    android:background="@color/event_list_item"
+		    android:paddingBottom="3dp"
+		    android:paddingRight="0dp"
+		    android:paddingTop="0dp"
+		    android:text="【CD】あいうえおかきくけこさしすせそ"
+		    android:textColor="@android:color/black"
+		    android:textSize="18sp"
+		    android:textStyle="bold" />
     </LinearLayout>
+    <ImageView
+        android:id="@+id/favorite_image_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/not_favorite" />    
 </LinearLayout>
