@@ -23,10 +23,12 @@ public class OneEventDescriptionActivity extends
 	 */
 	@Override
 	protected void initPagerAdapter() {
-		EventDataBaseRow row = (EventDataBaseRow)getIntent().getSerializableExtra(KEY_EVENT_INSTANCE);		
+		EventDataBaseRow row = (EventDataBaseRow)getIntent().getSerializableExtra(KEY_EVENT_INSTANCE);
+		VocalendarApplication app = (VocalendarApplication)getApplication();
     	pagerAdapter =
     			new EventArrayEventDescriptionPagerAdapter(
-    					getSupportFragmentManager(), new EventDataBaseRow[]{ row });
+    					this, getSupportFragmentManager(),
+    					new EventDataBaseRow[]{ row }, app.getFavoriteEventManager());
         viewPager = (ViewPager) findViewById(R.id.swipable_event_description_pager);
         viewPager.setAdapter(pagerAdapter);
 

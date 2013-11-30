@@ -14,6 +14,7 @@ import android.util.Log;
  */
 public class EventDataBaseRow implements Serializable {
 	private static final long serialVersionUID = 1L;
+	private static final String TAG = "EventDataBaseRow";
 
 	// 行の種別を表す定数
 	public static final int TYPE_NORMAL_EVENT = 0; // Event
@@ -201,6 +202,7 @@ public class EventDataBaseRow implements Serializable {
 	/**
 	 * このイベントを表示する日付。
 	 * 日付セパレータの場合は、その日付が入る。
+	 * お気に入りイベントとしてローカル保存されるイベントの場合は null が返る。
 	 * @return
 	 */
 	public Date getDisplayDate() {

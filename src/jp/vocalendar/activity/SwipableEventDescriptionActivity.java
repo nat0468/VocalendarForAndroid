@@ -4,6 +4,7 @@ import jp.vocalendar.R;
 import jp.vocalendar.VocalendarApplication;
 import jp.vocalendar.model.Event;
 import jp.vocalendar.model.EventDataBaseRow;
+import jp.vocalendar.model.FavoriteEventManager;
 import jp.vocalendar.util.CalendarAppUtilICS;
 import jp.vocalendar.util.UncaughtExceptionSavingHandler;
 import jp.vocalendar.util.UncaughtExceptionSavingToFileHandler;
@@ -117,7 +118,8 @@ public class SwipableEventDescriptionActivity extends ActionBarActivity {
 		VocalendarApplication app = (VocalendarApplication)getApplication();
     	rows = app.getEventDataBaseRowArray().getNormalRows();
     	pagerAdapter =
-    			new EventArrayEventDescriptionPagerAdapter(getSupportFragmentManager(), rows);
+    			new EventArrayEventDescriptionPagerAdapter(this, getSupportFragmentManager(),
+    					rows, app.getFavoriteEventManager());
         viewPager = (ViewPager) findViewById(R.id.swipable_event_description_pager);
         viewPager.setOnPageChangeListener(new ButtonStateUpdater());
         viewPager.setAdapter(pagerAdapter);

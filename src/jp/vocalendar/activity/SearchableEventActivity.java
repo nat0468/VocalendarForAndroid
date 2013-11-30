@@ -15,8 +15,10 @@ import jp.vocalendar.activity.view.LoadMoreEventView;
 import jp.vocalendar.model.ColorTheme;
 import jp.vocalendar.model.Event;
 import jp.vocalendar.model.EventArrayCursorAdapter;
+import jp.vocalendar.model.EventDataBase;
 import jp.vocalendar.model.EventDataBaseRow;
 import jp.vocalendar.model.EventDataBaseRowArray;
+import jp.vocalendar.model.FavoriteEventManager;
 import jp.vocalendar.model.LoadEventTask;
 import jp.vocalendar.model.SearchMoreGoogleCalendarEventTask;
 import jp.vocalendar.model.SearchGoogleCalendarEventTask;
@@ -53,7 +55,8 @@ import android.widget.TextView.OnEditorActionListener;
 /**
  * イベント検索のActivity
  */
-public class SearchableEventActivity extends ActionBarActivity {
+public class SearchableEventActivity extends AbstractEventListActivity
+implements EventArrayCursorAdapter.FavoriteToggler {
 	private static final String TAG = "SearchableEventActivity";
 	
 	public static final String KEY_CURRENT_DATE = "current_date"; // Intentに検索の開始日を格納するためのキー
@@ -63,11 +66,6 @@ public class SearchableEventActivity extends ActionBarActivity {
 	 */
 	private ListView listView;
 		
-	/**
-	 * 検索結果表示用のアダプタ
-	 */
-	private EventArrayCursorAdapter eventArrayCursorAdapter;
-	
 	/**
 	 * イベント検索の起点となる開始日
 	 */
@@ -149,7 +147,10 @@ public class SearchableEventActivity extends ActionBarActivity {
 		
 		setupUI();
 		setupListView();
-		
+        favoriteEventManager = new FavoriteEventManager();
+        VocalendarApplication app = (VocalendarApplication)getApplication();
+        app.setFavoriteEventManager(favoriteEventManager);
+
 	    Intent intent = getIntent();
 	    if(intent.hasExtra(KEY_CURRENT_DATE)) {
 	    	currentDate = (java.util.Calendar)intent.getSerializableExtra(KEY_CURRENT_DATE);
@@ -274,7 +275,12 @@ public class SearchableEventActivity extends ActionBarActivity {
 		searchingView.setLoading(false);
         TimeZone timeZone = TimeZone.getDefault();
         EventDataBaseRow[] eventRows = events.toArray(new EventDataBaseRow[events.size()]);        
-        eventArrayCursorAdapter = new EventArrayCursorAdapter(this, eventRows, timeZone, colorTheme);
+        EventDataBase db = new EventDataBase(this);
+        db.open();
+        favoriteEventManager.loadFavoriteEventFor(eventRows, db);
+        db.close();
+        eventArrayCursorAdapter = new EventArrayCursorAdapter(
+        		this, eventRows, timeZone, colorTheme, favoriteEventManager, this);
         setListAdapter(eventArrayCursorAdapter);
 	}
 	
@@ -422,5 +428,16 @@ public class SearchableEventActivity extends ActionBarActivity {
 	public boolean onSupportNavigateUp() {
 		finish();
 		return true;
+	}	
+	
+	/**
+	 * 指定された行のイベントのお気に入りを切り替える。
+	 * まだお気に入りでなければ追加。お気に入りならば削除する。
+	 * @param row お気に入りを切り替える行。このメソッドから戻ったら、お気に入りの状態も更新されている。
+	 */
+	@Override
+	public void toggleFavorite(EventDataBaseRow row) {
+		favoriteEventManager.toggleFavorite(row, this);
+		eventArrayCursorAdapter.notifyDataSetChanged();
 	}	
 }

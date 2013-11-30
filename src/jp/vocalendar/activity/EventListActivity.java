@@ -14,6 +14,7 @@ import jp.vocalendar.model.EventArrayCursorAdapter;
 import jp.vocalendar.model.EventDataBase;
 import jp.vocalendar.model.EventDataBaseRow;
 import jp.vocalendar.model.EventDataBaseRowArray;
+import jp.vocalendar.model.FavoriteEventManager;
 import jp.vocalendar.model.LoadMoreEventController;
 import jp.vocalendar.util.DateUtil;
 import jp.vocalendar.util.DialogUtil;
@@ -28,6 +29,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.provider.OpenableColumns;
 import android.support.v7.app.ActionBar;
@@ -43,11 +45,11 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class EventListActivity extends ActionBarActivity {
+public class EventListActivity extends AbstractEventListActivity
+implements EventArrayCursorAdapter.FavoriteToggler {
 	private static final String TAG = "EventListActivity";
 	
 	public static final String EXTRA_EVENT_LIST = 
@@ -75,16 +77,12 @@ public class EventListActivity extends ActionBarActivity {
 	/** イベント一覧の配列 */
 	private EventDataBaseRowArray eventDataBaseRowArray;
 	
-	/** イベント一覧表示用のアダプタ */
-	private EventArrayCursorAdapter eventArrayCursorAdapter;
-	
 	private LoadMoreEventController loadMoreEventController;
 	
 	private ColorTheme colorTheme;
 	
-	private ListView listView;
 	
-    /** Called when the activity is first created. */
+	/** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,6 +94,8 @@ public class EventListActivity extends ActionBarActivity {
         setContentView(R.layout.event_list);
         
         loadMoreEventController = new LoadMoreEventController(this);
+        favoriteEventManager = new FavoriteEventManager();
+        
         
         setupButtons();
         setupListView();
@@ -171,23 +171,22 @@ public class EventListActivity extends ActionBarActivity {
 		setSelection(1);		
 	}
 	
-	public void setSelection(int position) {
-		getListView().setSelection(position);
-	}
-	
 	private void updateList() {
 		EventDataBase db = new EventDataBase(this);
 		db.open();		
         eventDataBaseRowArray = db.getEventDataBaseRowArray();
+        favoriteEventManager.loadFavoriteEventFor(eventDataBaseRowArray.getNormalRows(), db);
         db.close();
 
         VocalendarApplication app = (VocalendarApplication)getApplication();
         app.setEventDataBaseRowArray(eventDataBaseRowArray);
+        app.setFavoriteEventManager(favoriteEventManager);
 
         TimeZone timeZone = TimeZone.getDefault();
         
         eventArrayCursorAdapter = new EventArrayCursorAdapter(
-        		this, eventDataBaseRowArray.getAllRows(), timeZone, colorTheme);
+        		this, eventDataBaseRowArray.getAllRows(), timeZone, colorTheme,
+        		favoriteEventManager, this);
         setListAdapter(eventArrayCursorAdapter);
         
 		scrollToHead();
@@ -201,6 +200,9 @@ public class EventListActivity extends ActionBarActivity {
 		if(position == (eventArrayCursorAdapter.getCount() + 1)) {
 			loadMoreEventController.loadNextEventsTapped();
 			return;
+		}
+		if(v.getId() == R.id.favorite_image_view) {
+			DialogUtil.openMessageDialog(this, "favorite!", false);
 		}
 		openEventDescriptionActivity(l, position);
 	}
@@ -387,10 +389,6 @@ public class EventListActivity extends ActionBarActivity {
 		loadMoreEventController.setAutoLoading(autoLoading);
 	}
 
-	public EventArrayCursorAdapter getEventArrayCursorAdapter() {
-		return eventArrayCursorAdapter;
-	}
-
 	public EventDataBaseRowArray getEventDataBaseRowArray() {
 		return eventDataBaseRowArray;
 	}
@@ -402,7 +400,8 @@ public class EventListActivity extends ActionBarActivity {
 	public void setEventDataBaseRowArray(EventDataBaseRowArray eventDataBaseRowArray) {
 		this.eventDataBaseRowArray = eventDataBaseRowArray;
     	eventArrayCursorAdapter = new EventArrayCursorAdapter(
-    			this, eventDataBaseRowArray.getAllRows(), TimeZone.getDefault(), colorTheme);    	
+    			this, eventDataBaseRowArray.getAllRows(), TimeZone.getDefault(), colorTheme,
+    			favoriteEventManager, this);    	
         setListAdapter(eventArrayCursorAdapter);
 	}
 	
@@ -416,17 +415,6 @@ public class EventListActivity extends ActionBarActivity {
 		
 	}
 	
-	public ListView getListView() {
-		if(listView == null) {
-			listView = (ListView)findViewById(R.id.eventList);
-		}
-		return listView;
-	}
-	
-	public void setListAdapter(ListAdapter adapter) {
-		getListView().setAdapter(adapter);
-	}
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 	    MenuInflater inflater = getMenuInflater();
@@ -472,6 +460,7 @@ public class EventListActivity extends ActionBarActivity {
 				today.compareTo(eventDataBaseRowArray.getLastDate()) <= 0) {
 			// 読み込んでいる日付の範囲に今日が含まれる場合
 			scrollToDate(today, timeZone);
+			
 			return;
 		}
 		if(DateUtil.equalYMD(today, eventDataBaseRowArray.getTopDate(), timeZone) ||
@@ -487,7 +476,16 @@ public class EventListActivity extends ActionBarActivity {
 	
 	private void scrollToDate(Date date, TimeZone timeZone) {
 		int pos = findPositionByDate(date, timeZone);
+		
+		// スクロールを止めるために、タップして止める操作に対応するタップイベントをListViewにディスパッチする
+		// 参考URL: http://stackoverflow.com/questions/11630472/how-to-stop-a-listview-at-a-specific-list-item-while-its-flinging
+		MotionEvent me1 = MotionEvent.obtain(10, SystemClock.uptimeMillis(), MotionEvent.ACTION_DOWN, 0, 0, 0);
+		MotionEvent me2 = MotionEvent.obtain(10, SystemClock.uptimeMillis(), MotionEvent.ACTION_UP, 0, 0, 0);
+		getListView().dispatchTouchEvent(me1);
+		getListView().dispatchTouchEvent(me2);
+		
 		setSelection(pos);
+		
 		return;		
 	}
 	
@@ -509,7 +507,8 @@ public class EventListActivity extends ActionBarActivity {
 	}
 	
 	private void openFavoriteList() {
-		DialogUtil.openNotImplementedDialog(this); // TODO 実装
+		Intent i = new Intent(this, FavoriteEventListActivity.class);
+		startActivity(i);
 	}
 	
 	private void openSetting() {

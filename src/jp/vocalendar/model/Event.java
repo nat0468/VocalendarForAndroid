@@ -10,7 +10,6 @@ import jp.vocalendar.util.DateUtil;
 
 import android.content.Context;
 import android.net.Uri;
-import android.text.format.DateUtils;
 import android.util.Log;
 
 /**
@@ -431,5 +430,61 @@ public class Event implements Serializable {
 	}
 	public void setLocation(String location) {
 		this.location = location;
+	}
+	
+	/**
+	 * 見なし開始日時を返す。
+	 * 繰り返しイベントでないイベントの場合は、開始日付または開始日時を返す。
+	 * 繰り返しイベントの場合は、今日を含む未来の日時で一番早い日付を見なし日付とする。
+	 * @param today
+	 * @return
+	 */
+	public Date getDeemedStartDateTime(Calendar today, TimeZone timeZone) {
+		if(!isRecursive()) {
+			return getNotNullStartDate();						
+		}
+		
+		Calendar startDateCal = Calendar.getInstance(timeZone);
+		startDateCal.setTime(getNotNullStartDate());		
+		switch(recursive) {
+		case DateUtil.RECURSIVE_YEARLY:
+			int year = today.get(Calendar.YEAR);
+			startDateCal.set(Calendar.YEAR, year);
+			if(startDateCal.compareTo(today) < 0) {
+				// 今年の繰り返しイベントは過ぎた場合は、来年に設定
+				startDateCal.add(Calendar.YEAR, 1);
+			}
+			return startDateCal.getTime();
+		case DateUtil.RECURSIVE_MONTHLY:			
+			if(byWeekdayOccurrence == 0) { // 日付指定の場合
+				startDateCal.set(Calendar.YEAR, today.get(Calendar.YEAR));
+				startDateCal.set(Calendar.MONTH, today.get(Calendar.MONTH));
+				if(startDateCal.compareTo(today) < 0) {
+					// 今月の繰り返しイベントは過ぎた場合、来月に設定
+					startDateCal.add(Calendar.MONTH, 1);
+				}
+			} else { // 曜日指定の場合
+				startDateCal.set(Calendar.YEAR, today.get(Calendar.YEAR));
+				startDateCal.set(Calendar.MONTH, today.get(Calendar.MONTH));
+				startDateCal.set(Calendar.WEEK_OF_MONTH, byWeekdayOccurrence);
+				startDateCal.set(Calendar.DAY_OF_WEEK, recursiveBy);
+				if(startDateCal.compareTo(today) < 0) {
+					// 今月の繰り返しイベントは過ぎた場合、来月に設定
+					startDateCal.add(Calendar.MONTH, 1);
+				}				
+			}
+			return startDateCal.getTime();
+		case DateUtil.RECURSIVE_WEEKLY:
+			startDateCal.set(Calendar.YEAR, today.get(Calendar.YEAR));
+			startDateCal.set(Calendar.MONTH, today.get(Calendar.MONTH));
+			startDateCal.set(Calendar.WEEK_OF_MONTH, today.get(Calendar.WEEK_OF_MONTH));
+			startDateCal.set(Calendar.DAY_OF_WEEK, recursiveBy);
+			if(startDateCal.compareTo(today) < 0) {
+				// 今週の繰り返しイベントは過ぎた場合、来週に設定
+				startDateCal.add(Calendar.WEEK_OF_MONTH, 1);
+			}
+			return startDateCal.getTime();
+		}
+		return null; // ここに来る事はない
 	}
 }

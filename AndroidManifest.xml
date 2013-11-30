@@ -63,6 +63,11 @@
             android:name=".activity.PreviewEventListActivity"
             android:theme="@style/VocalendarActionBar" >            
         </activity>
+
+        <activity
+            android:name=".activity.FavoriteEventListActivity"
+            android:theme="@style/Theme.AppCompat.Light">            
+        </activity>
         
         <meta-data android:name="android.app.default_searchable"
                    android:value=".activity.SearchableEventActivity" />

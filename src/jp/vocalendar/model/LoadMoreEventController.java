@@ -208,6 +208,12 @@ public class LoadMoreEventController {
 		context.setEventDataBaseRowArray(loadMorePreviousEventTask.getEventDataBaseRowArray());
     	app.setEventDataBaseRowArray(loadMorePreviousEventTask.getEventDataBaseRowArray());
 
+        EventDataBase db = new EventDataBase(context);
+        db.open();
+        context.getFavoriteEventManager().loadFavoriteEventFor(
+        		loadedEvents.toArray(new EventDataBaseRow[loadedEvents.size()]), db);
+        db.close();        		
+
 		loadMorePreviousEventView.setLoading(false);
 		context.setSelection(loadedEvents.size());
 		
@@ -267,6 +273,10 @@ public class LoadMoreEventController {
 		loadMoreNextEventTask.execute(Constants.MAIN_CALENDAR_ID, Constants.BROADCAST_CALENDAR_ID);		
 	}
 	
+	/**
+	 * 後方への追加イベント読み込み完了時に呼ばれるメソッド
+	 * @param events 追加で読み込まれたイベント
+	 */	
 	private void nextEventsLoaded(List<EventDataBaseRow> events) {
 		VocalendarApplication app = (VocalendarApplication)context.getApplication();
 		context.updateEventDataBaseRowArray(loadMoreNextEventTask.getEventDataBaseRowArray());
@@ -279,6 +289,12 @@ public class LoadMoreEventController {
         //設定する必要がある。(画面内のイベントの数)を知る方法が未調査のため、コメントアウト。
         //今の所、スクロール位置を動かさなくても、スクロールの動きはおかしくないので、この仕様にする。
         //setSelection(eventArrayCursorAdapter.getCount() - events.size() + 1); // 読み込んだイベントの位置に移動
+        
+        EventDataBase db = new EventDataBase(context);
+        db.open();
+        context.getFavoriteEventManager().loadFavoriteEventFor(
+        		events.toArray(new EventDataBaseRow[events.size()]), db);
+        db.close();        
         
 		loadMoreNextEventTask = null;
 	}

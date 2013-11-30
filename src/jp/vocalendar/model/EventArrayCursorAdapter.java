@@ -4,12 +4,17 @@ import java.util.TimeZone;
 
 import jp.vocalendar.R;
 import jp.vocalendar.util.DateUtil;
+import jp.vocalendar.util.DialogUtil;
+import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
@@ -19,13 +24,28 @@ import android.widget.TextView;
  * SeparatorEventに対するセパレータ表示を行う。
  */
 public class EventArrayCursorAdapter extends SimpleCursorAdapter {
+	/**
+	 * お気に入りを切り替える処理を実装したクラスが実装するインターフェイス。
+	 */
+	public interface FavoriteToggler {
+		/**
+		 * 指定された行のイベントのお気に入りを切り替える。
+		 * まだお気に入りでなければ追加。お気に入りならば削除する。
+		 * @param row お気に入りを切り替える行。このメソッドから戻ったら、お気に入りの状態も更新されている。
+		 */
+		public void toggleFavorite(EventDataBaseRow row);
+	}
+	
 	private static final String TAG = "EventArrayCursorAdapter";
 	
-	private Context context;
+	private Activity context;
 	private EventArrayCursor cursor;
 	private LayoutInflater inflater;
 	private TimeZone timeZone;
 	private ColorTheme colorTheme;
+	private Bitmap favoriteBitmap, notFavoriteBitmap;
+	private FavoriteToggler favoriteToggler;
+	private FavoriteEventManager favoriteEventManager;
 	
 	// ViewType値
 	public static final int VIEW_TYPE_EVENT_WITH_DATE_TEXT= 0;
@@ -36,7 +56,7 @@ public class EventArrayCursorAdapter extends SimpleCursorAdapter {
 	private static final int VIEW_TYPE_COUNT = 5;
 	
 	/**
-	 * コンストラクタ
+	 * コンストラクタ。表示するイベント一覧にEventDataBaseRowの配列を指定する。
 	 * @param context
 	 * @param layout
 	 * @param c
@@ -44,9 +64,25 @@ public class EventArrayCursorAdapter extends SimpleCursorAdapter {
 	 * @param to
 	 */
 	public EventArrayCursorAdapter(
-			Context context, EventDataBaseRow[] events, TimeZone timeZone, ColorTheme colorTheme) {
-		super(context, R.layout.event_list_item_additional_date,
-				new EventArrayCursor(events, timeZone, context),
+			Activity context, EventDataBaseRow[] events, TimeZone timeZone, ColorTheme colorTheme,
+			FavoriteEventManager favoriteEventManager,
+			FavoriteToggler favoriteToggler) {
+		this(context, new EventArrayCursor(events, timeZone, context),
+				timeZone, colorTheme, favoriteEventManager, favoriteToggler);
+	}
+
+	/**
+	 * コンストラクタ。表示するイベント一覧にEventArrayCursorを指定する。
+	 * @param context
+	 * @param cursor
+	 * @param timeZone
+	 * @param colorTheme
+	 * @param favoriteToggler
+	 */
+	public EventArrayCursorAdapter(
+			Activity context, EventArrayCursor cursor, TimeZone timeZone, ColorTheme colorTheme,
+			FavoriteEventManager favoriteEventManager, FavoriteToggler favoriteToggler) {
+		super(context, R.layout.event_list_item_additional_date, cursor,
 				new String[] { "time", "date", "summary" },
 				new int[]{ R.id.timeText, R.id.dateText, R.id.summaryText });
 		this.context = context;
@@ -55,8 +91,15 @@ public class EventArrayCursorAdapter extends SimpleCursorAdapter {
 		this.inflater =
 				(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.colorTheme = colorTheme;
+		this.favoriteEventManager = favoriteEventManager;
+		this.favoriteToggler = favoriteToggler;
+		this.favoriteBitmap =
+				BitmapFactory.decodeResource(context.getResources(), R.drawable.favorite);
+		this.notFavoriteBitmap =
+				BitmapFactory.decodeResource(context.getResources(), R.drawable.not_favorite);		
 	}
-		
+	
+	
 	@Override
 	public boolean isEnabled(int position) {
 		if(cursor.getEventDataBaseRow(position).getRowType() 
@@ -109,11 +152,13 @@ public class EventArrayCursorAdapter extends SimpleCursorAdapter {
 			setViewValue(position, convertView);
 			setColorToTimeTextView(position, convertView);
 			applyThemeToListItem(convertView);
+			setFavoriteStar(position, convertView);
 			break;
 		case VIEW_TYPE_EVENT_WITH_DATE_TEXT:
 			convertView = super.getView(position, convertView, parent); // セパレータでなければ通常処理
 			setColorToTimeTextView(position, convertView);
 			applyThemeToListItem(convertView);
+			setFavoriteStar(position, convertView);
 			break;
 		}				
 		return convertView;		
@@ -207,5 +252,36 @@ public class EventArrayCursorAdapter extends SimpleCursorAdapter {
 	
 	public EventArrayCursor getEventArrayCursor() {
 		return cursor;
+	}
+	
+	private void setFavoriteStar(int position, View view) {
+		EventDataBaseRow row = cursor.getEventDataBaseRow(position);
+		ImageView iv = (ImageView)view.findViewById(R.id.favorite_image_view);
+		updateFavoriteStar(row, iv);
+		iv.setTag(Integer.valueOf(position));
+		iv.setOnClickListener(new View.OnClickListener() {			
+			@Override
+			public void onClick(View v) {
+				int position = ((Integer)v.getTag()).intValue();
+				EventDataBaseRow row = cursor.getEventDataBaseRow(position);
+				favoriteToggler.toggleFavorite(row);
+				updateFavoriteStar(row, (ImageView)v);
+			}
+		});
+	}
+
+	protected void updateFavoriteStar(EventDataBaseRow row, ImageView iv) {
+		if(favoriteEventManager.isFavorite(row)) {
+			iv.setImageBitmap(favoriteBitmap);
+		} else {
+			iv.setImageBitmap(notFavoriteBitmap);
+		}
+	}
+	
+	/**
+	 * イベント情報に変更があったときに呼ぶ。イベント一覧を更新したいときに呼ぶ。
+	 */
+	public void notifyContentChange() {
+		onContentChanged();
 	}
 }

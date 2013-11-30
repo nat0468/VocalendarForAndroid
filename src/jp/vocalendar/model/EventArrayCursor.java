@@ -23,12 +23,12 @@ public class EventArrayCursor extends AbstractCursor implements Cursor {
 	/** カーソルの現在位置 */
 	private int currentPosition = 0;
 	/** カーソルの現在位置のEvent */
-	private EventDataBaseRow currentRow;
+	protected EventDataBaseRow currentRow;
 	
 	/** 表示に使うタイムゾーン */
-	private TimeZone timeZone = null;
+	protected TimeZone timeZone = null;
 	
-	private Context context = null;
+	protected Context context = null;
 	
 	public EventArrayCursor(EventDataBaseRow[] events, TimeZone timeZone, Context context) {
 		this.events = events;

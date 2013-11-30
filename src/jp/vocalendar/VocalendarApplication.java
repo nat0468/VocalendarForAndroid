@@ -1,6 +1,7 @@
 package jp.vocalendar;
 
 import jp.vocalendar.model.EventDataBaseRowArray;
+import jp.vocalendar.model.FavoriteEventManager;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -14,7 +15,15 @@ import android.util.Log;
 public class VocalendarApplication extends Application {
 	private static final String TAG = "VocalendarApplication";
 	
+	/**
+	 * イベント一覧画面で読み込んだイベント情報
+	 */
 	private EventDataBaseRowArray eventDataBaseRowArray;
+	
+	/**
+	 * お気に入りイベント情報。一覧画面と詳細画面で共有するために使う。
+	 */
+	private FavoriteEventManager favoriteEventManager;
 
 	public EventDataBaseRowArray getEventDataBaseRowArray() {
 		return eventDataBaseRowArray;
@@ -74,5 +83,13 @@ public class VocalendarApplication extends Application {
 	public static String getColorTheme(Context context) {
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 		return pref.getString(Constants.COLOR_THEME_PREFERENCE_NAME, "THEME_DEFAULT");		
+	}
+
+	public FavoriteEventManager getFavoriteEventManager() {
+		return favoriteEventManager;
+	}
+
+	public void setFavoriteEventManager(FavoriteEventManager favoriteEventManager) {
+		this.favoriteEventManager = favoriteEventManager;
 	}
 }

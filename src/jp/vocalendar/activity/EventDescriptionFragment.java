@@ -7,9 +7,9 @@ import java.util.TimeZone;
 import jp.vocalendar.R;
 import jp.vocalendar.model.EventDataBaseRow;
 import jp.vocalendar.model.ColorTheme;
+import jp.vocalendar.model.FavoriteEventManager;
 import android.app.Activity;
-import android.content.Context;
-import android.net.Uri;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Html;
@@ -22,21 +22,26 @@ import android.view.ViewGroup;
 import android.webkit.ConsoleMessage;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class EventDescriptionFragment extends Fragment {
     public static final String ARG_EVENT_DATABASE_ROW = "EVENT_DATABASE_ROW";
 
-    private Context context;
+    private Activity context;
     private ColorTheme themeColor;
+	private Bitmap favoriteBitmap, notFavoriteBitmap;
+    private EventDataBaseRow currentRow;
+    private FavoriteEventManager favoriteEventManager;
     
     @Override
     public View onCreateView(LayoutInflater inflater,
             ViewGroup container, Bundle savedInstanceState) {
     	Bundle args = getArguments();
     	EventDataBaseRow row =
-    			(EventDataBaseRow)args.getSerializable(ARG_EVENT_DATABASE_ROW);    	
+    			(EventDataBaseRow)args.getSerializable(ARG_EVENT_DATABASE_ROW);
+    	this.currentRow = row;
         View rootView = inflater.inflate(
                 R.layout.event_description_fragment, container, false); // TODO 
         updateView(rootView, row);
@@ -52,6 +57,16 @@ public class EventDescriptionFragment extends Fragment {
 		
 		TextView summary = (TextView)view.findViewById(R.id.detailSummaryText);
 		summary.setText(row.getEvent().getSummary());
+		
+		ImageView iv = (ImageView)view.findViewById(R.id.favorite_image_view);
+		updateFavoriteStar(row, iv);		
+		iv.setOnClickListener(new View.OnClickListener() {			
+			@Override
+			public void onClick(View v) {
+				favoriteEventManager.toggleFavorite(currentRow, context);
+				updateFavoriteStar(currentRow, (ImageView)v);
+			}
+		});
 		
 		String l = row.getEvent().getLocation();
 		TextView location = (TextView)view.findViewById(R.id.locationTextView);
@@ -92,7 +107,26 @@ public class EventDescriptionFragment extends Fragment {
 			wv.loadData(sb.toString(), "text/html; charset=utf-8", "utf-8");
 		}
     }
-    
+
+	private void updateFavoriteStar(EventDataBaseRow row, ImageView iv) {
+		if(favoriteEventManager.isFavorite(row)) {
+			iv.setImageBitmap(favoriteBitmap);
+		} else {
+			iv.setImageBitmap(notFavoriteBitmap);
+		}
+	}
+
+	/**
+	 * お気に入りのビットマップを設定する。
+	 * このFragmentを使う場合、表示前のタイミングで設定する。
+	 * @param favoriteBitmap
+	 * @param notFavoriteBitmap
+	 */
+	public void setFavoriteAndNotFavoriteBitmap(Bitmap favoriteBitmap, Bitmap notFavoriteBitmap) {
+		this.favoriteBitmap = favoriteBitmap;
+		this.notFavoriteBitmap = notFavoriteBitmap;
+	}
+	
     private static String makeDescriptionHtmlHeader() {
     	return "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" /></head><body style=\"background: #f0f0f0\">";
     }
@@ -168,4 +202,13 @@ public class EventDescriptionFragment extends Fragment {
 			this.themeColor = new ColorTheme(activity);
 		}
 	}
+
+	public FavoriteEventManager getFavoriteEventManager() {
+		return favoriteEventManager;
+	}
+
+	public void setFavoriteEventManager(FavoriteEventManager favoriteEventManager) {
+		this.favoriteEventManager = favoriteEventManager;
+	}	
+	
 }

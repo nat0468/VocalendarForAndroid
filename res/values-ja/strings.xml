@@ -169,4 +169,5 @@ VOCALENDAR編集メンバーの皆さんにも感謝いたします。
 	<string name="preview">プレビュー</string>
 	<string name="preview_custom_color_theme">プレビュー表示です。\n[戻る]ボタンで戻ります。</string>
 	<string name="favorite">お気に入り</string>
+	<string name="favorite_list">お気に入り一覧</string>	
 </resources>
