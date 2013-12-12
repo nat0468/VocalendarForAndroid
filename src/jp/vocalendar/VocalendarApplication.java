@@ -23,7 +23,7 @@ public class VocalendarApplication extends Application {
 	/**
 	 * お気に入りイベント情報。一覧画面と詳細画面で共有するために使う。
 	 */
-	private FavoriteEventManager favoriteEventManager;
+	private FavoriteEventManager favoriteEventManager = new FavoriteEventManager();
 
 	public EventDataBaseRowArray getEventDataBaseRowArray() {
 		return eventDataBaseRowArray;

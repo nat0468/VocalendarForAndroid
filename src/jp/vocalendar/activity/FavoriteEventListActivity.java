@@ -134,9 +134,9 @@ implements EventArrayCursorAdapter.FavoriteToggler {
         db.close();
         
         EventDataBaseRow[] rows = rowList.toArray(new EventDataBaseRow[rowList.size()]);
-        favoriteEventManager = new FavoriteEventManager(rows);
         VocalendarApplication app = (VocalendarApplication)getApplication();
-        app.setFavoriteEventManager(favoriteEventManager);
+        favoriteEventManager = app.getFavoriteEventManager();
+        favoriteEventManager.loadFavoriteEvent(rows);
         
         eventArrayCursorAdapter = new EventWithAdditionalDateArrayCursorAdapter(
         		this, rows, timeZone, colorTheme, favoriteEventManager, this);

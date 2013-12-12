@@ -147,9 +147,8 @@ implements EventArrayCursorAdapter.FavoriteToggler {
 		
 		setupUI();
 		setupListView();
-        favoriteEventManager = new FavoriteEventManager();
         VocalendarApplication app = (VocalendarApplication)getApplication();
-        app.setFavoriteEventManager(favoriteEventManager);
+        favoriteEventManager = app.getFavoriteEventManager();
 
 	    Intent intent = getIntent();
 	    if(intent.hasExtra(KEY_CURRENT_DATE)) {

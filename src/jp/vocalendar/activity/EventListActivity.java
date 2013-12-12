@@ -94,7 +94,7 @@ implements EventArrayCursorAdapter.FavoriteToggler {
         setContentView(R.layout.event_list);
         
         loadMoreEventController = new LoadMoreEventController(this);
-        favoriteEventManager = new FavoriteEventManager();
+        favoriteEventManager = ((VocalendarApplication)getApplication()).getFavoriteEventManager();
         
         
         setupButtons();
