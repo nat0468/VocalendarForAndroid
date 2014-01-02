@@ -10,6 +10,7 @@ import jp.vocalendar.Constants;
 import jp.vocalendar.R;
 import jp.vocalendar.VocalendarApplication;
 import jp.vocalendar.activity.view.AnimationSurfaceView;
+import jp.vocalendar.animation.vocalendar.DotCharacterAnimation;
 import jp.vocalendar.animation.vocalendar.LoadingAnimation;
 import jp.vocalendar.animation.vocalendar.LoadingAnimationUtil;
 import jp.vocalendar.googleapi.OAuthManager;
@@ -66,6 +67,7 @@ public class EventLoadingActivity extends ActionBarActivity implements LoadEvent
 	
 	private GoogleCalendarLoadEventTask task = null;	
 	private TextView loadingItemView = null;
+	private LoadingAnimation loadingAnimation = null;
 	
 	// 読み込み中の日付
 	private int loadingYear, loadingMonth, loadingDateOfMonth;
@@ -74,8 +76,13 @@ public class EventLoadingActivity extends ActionBarActivity implements LoadEvent
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		UncaughtExceptionSavingHandler.init(this);
-		
-        setContentView(R.layout.loading);
+
+		loadingAnimation = makeLoadingAnimation();
+		if(loadingAnimation instanceof DotCharacterAnimation.LinearDotCharacterAnimation) {
+			setContentView(R.layout.loading_dot_character_animation);
+		} else {
+			setContentView(R.layout.loading);
+		}
         getSupportActionBar().hide();
         
         Button cancel = (Button)findViewById(R.id.cancelButton);
@@ -95,11 +102,10 @@ public class EventLoadingActivity extends ActionBarActivity implements LoadEvent
 
 	protected void initAnimation() {
 		AnimationSurfaceView view = getAnimationSurfaceView();
-		LoadingAnimation anim = makeLoadingAnimation();
-		view.addAnimation(anim);
+		view.addAnimation(loadingAnimation);
 		TextView tv = (TextView)findViewById(R.id.loadingImageCreatorText);
 		tv.setMovementMethod(LinkMovementMethod.getInstance());		
-		tv.setText(anim.getCreatorText());
+		tv.setText(loadingAnimation.getCreatorText());
 	}
 
 	private AnimationSurfaceView getAnimationSurfaceView() {

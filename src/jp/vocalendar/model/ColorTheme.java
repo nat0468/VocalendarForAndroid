@@ -290,7 +290,7 @@ public class ColorTheme {
 
 	public static String getColorThemeName(String key, Context context) {
 		String[] names =
-				context.getResources().getStringArray(R.array.color_theme_entries);
+				context.getResources().getStringArray(R.array.color_theme_names);
 		return names[getColorThemeCode(key, context)];
 	}
 

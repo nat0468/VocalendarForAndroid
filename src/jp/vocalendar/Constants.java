@@ -97,6 +97,12 @@ public class Constants {
 	  
 	  public static final String DEFAULT_THEME_NAME = "THEME_DEFAULT";
 	  
+	  /** イベント通知時間のプリファレンス名 */
+	  public static final String NOTIFICATION_TIME_PREFERENCE_NAME = "notification_time_pref";
+	  /** イベント通知時間のデフォルトプリファレンス値 */
+	  public static final String DEFAULT_NOTIFICATION_TIME_PREFERENCE_VALUE = "8";
+	  public static final int NOT_NOTIFY_PREFERENCE_VALUE = -1;
+	  
 	  /**
 	   * onActivityResult request codes:
 	   */

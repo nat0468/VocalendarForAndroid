@@ -164,7 +164,7 @@ gave advices and supported me.\
 	    <item>100</item>
 	</string-array>	
 	<string name="color_theme">Color Theme</string>
-	<string-array name="color_theme_entries">
+	<string-array name="color_theme_names">
 	    <item>Default</item>
 	    <item>Hatsune Miku</item>
 	    <item>Kagamine Rin/Len</item>
@@ -178,10 +178,24 @@ gave advices and supported me.\
 	    <item>Kasane Teto</item>
 	    <item>Custom color theme</item>
 	</string-array>	
+	<string-array name="color_theme_entries">
+	    <item>Default</item>
+	    <item>Hatsune Miku</item>
+<!--    <item>Kagamine Rin/Len</item>
+	    <item>Megurine Luka</item>
+	    <item>Kaito</item>
+	    <item>Meiko</item>
+	    <item>Kamui Gakupo</item>
+	    <item>Gumi</item>
+	    <item>SF-A2 Miki</item>
+	    <item>Yuzuki Yukari</item>
+	    <item>Kasane Teto</item> -->
+	    <item>Custom color theme</item>
+	</string-array>	
 	<string-array name="color_theme_entry_values">
 	    <item>THEME_DEFAULT</item>
 	    <item>THEME_MIKU</item>
-	    <item>THEME_RIN_LEN</item>
+<!--    <item>THEME_RIN_LEN</item>
 	    <item>THEME_LUKA</item>	    	    
 	    <item>THEME_KAITO</item>	    	    
 	    <item>THEME_MEIKO</item>	    	    
@@ -189,7 +203,7 @@ gave advices and supported me.\
 	    <item>THEME_GUMI</item>	    	    
 	    <item>THEME_MIKI</item>
 	    <item>THEME_YUKARI</item>
-	    <item>THEME_TETO</item>	    
+	    <item>THEME_TETO</item> -->   
 	    <item>THEME_CUSTOM</item>	    
 	</string-array>	
 	<string name="tag">【】</string>
@@ -226,10 +240,10 @@ gave advices and supported me.\
 	<string name="sunday_text_color">Sunday text color</string>
 	<string name="import_color_theme">Import color theme</string>
 	<string name="list_divider_color">List divider color</string>
-		<string-array name="import_color_theme_entries">
+	<string-array name="import_color_theme_entries">
 	    <item>Default</item>
 	    <item>Hatsune Miku</item>
-	    <item>Kagamine Rin/Len</item>
+<!--    <item>Kagamine Rin/Len</item>
 	    <item>Megurine Luka</item>
 	    <item>Kaito</item>
 	    <item>Meiko</item>
@@ -237,12 +251,12 @@ gave advices and supported me.\
 	    <item>Gumi</item>
 	    <item>SF-A2 Miki</item>
 	    <item>Yuzuki Yukari</item>
-	    <item>Kasane Teto</item>
+	    <item>Kasane Teto</item> -->
 	</string-array>	
 	<string-array name="import_color_theme_entry_values">
 	    <item>THEME_DEFAULT</item>
 	    <item>THEME_MIKU</item>
-	    <item>THEME_RIN_LEN</item>
+<!--    <item>THEME_RIN_LEN</item>
 	    <item>THEME_LUKA</item>	    	    
 	    <item>THEME_KAITO</item>	    	    
 	    <item>THEME_MEIKO</item>	    	    
@@ -250,7 +264,7 @@ gave advices and supported me.\
 	    <item>THEME_GUMI</item>	    	    
 	    <item>THEME_MIKI</item>
 	    <item>THEME_YUKARI</item>
-	    <item>THEME_TETO</item>	    
+	    <item>THEME_TETO</item> -->	    
 	</string-array>	
 	<string name="message">Message</string>
 	<string name="fail_to_connect_server">Failed to connect the server.</string>
@@ -270,4 +284,64 @@ To import the settings to a device, input(copy &amp; paste) the code, and press 
 	<string name="preview_custom_color_theme">Showing preview.\nPress [Back] button to back.</string>
 	<string name="favorite">Favorite</string>
 	<string name="favorite_list">Favorite List</string>
+	<string name="todays_events_notifications">Today\'s event notification</string>
+	<string name="unit_of_events">event(s)</string>
+	<string name="column">: </string>
+	<string name="comma">, </string>
+	<string name="etc">etc.</string>
+	<string name="notification_time">Time to execute event notification</string>
+	<string-array name="notification_time_entries">
+	    <item>Not notify</item>
+	    <item>0:00 every day</item>
+	    <item>1:00 every day</item>
+	    <item>2:00 every day</item>
+	    <item>3:00 every day</item>
+	    <item>4:00 every day</item>
+	    <item>5:00 every day</item>
+	    <item>6:00 every day</item>
+	    <item>7:00 every day</item>
+	    <item>8:00 every day</item>
+	    <item>9:00 every day</item>
+	    <item>10:00 every day</item>
+	    <item>11:00 every day</item>
+	    <item>12:00 every day</item>
+	    <item>13:00 every day</item>
+	    <item>14:00 every day</item>
+	    <item>15:00 every day</item>
+	    <item>16:00 every day</item>
+	    <item>17:00 every day</item>
+	    <item>18:00 every day</item>
+	    <item>19:00 every day</item>
+	    <item>20:00 every day</item>
+	    <item>21:00 every day</item>
+	    <item>22:00 every day</item>
+	    <item>23:00 every day</item>
+	</string-array>		
+	<string-array name="notification_time_entry_values">
+	    <item>-1</item>
+	    <item>0</item>
+	    <item>1</item>
+	    <item>2</item>
+	   	<item>3</item>
+	    <item>4</item>
+	    <item>5</item>
+	    <item>6</item>
+	    <item>7</item>
+	    <item>8</item>
+	    <item>9</item>
+	    <item>10</item>
+	    <item>11</item>
+	    <item>12</item>
+	   	<item>13</item>
+	    <item>14</item>
+	    <item>15</item>
+	    <item>16</item>
+	    <item>17</item>
+	    <item>18</item>
+	    <item>19</item>
+	    <item>20</item>
+		<item>21</item>
+		<item>22</item>
+		<item>23</item>	    	    
+	</string-array>		
 </resources>

@@ -3,6 +3,7 @@ package jp.vocalendar.activity;
 import jp.vocalendar.Constants;
 import jp.vocalendar.R;
 import jp.vocalendar.activity.view.AnimationSurfaceView;
+import jp.vocalendar.animation.vocalendar.DotCharacterAnimation;
 import jp.vocalendar.animation.vocalendar.LoadingAnimation;
 import jp.vocalendar.animation.vocalendar.LoadingAnimationUtil;
 import android.app.Activity;
@@ -17,11 +18,18 @@ import android.widget.TextView;
 
 public class PreviewLoadingPageActivity extends ActionBarActivity {
 
+	private LoadingAnimation loadingAnimation = null;
+	
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
-        setContentView(R.layout.loading);
+		loadingAnimation = makeLoadingAnimation();
+		if(loadingAnimation instanceof DotCharacterAnimation.LinearDotCharacterAnimation) {
+			setContentView(R.layout.loading_dot_character_animation);
+		} else {
+			setContentView(R.layout.loading);
+		}
         getSupportActionBar().hide();
         
         Button cancel = (Button)findViewById(R.id.cancelButton);
@@ -37,11 +45,10 @@ public class PreviewLoadingPageActivity extends ActionBarActivity {
 
 	protected void initAnimation() {
 		AnimationSurfaceView view = getAnimationSurfaceView();
-		LoadingAnimation anim = makeLoadingAnimation();
-		view.addAnimation(anim);
+		view.addAnimation(loadingAnimation);
 		TextView tv = (TextView)findViewById(R.id.loadingImageCreatorText);
 		tv.setMovementMethod(LinkMovementMethod.getInstance());		
-		tv.setText(anim.getCreatorText());
+		tv.setText(loadingAnimation.getCreatorText());
 	}
 
 	private AnimationSurfaceView getAnimationSurfaceView() {

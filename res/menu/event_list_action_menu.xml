@@ -11,4 +11,7 @@
           appcompat:showAsAction="never" />
     <item android:id="@+id/action_web_site" android:title="@string/open_vocalendar"
           appcompat:showAsAction="never" />
+    <item android:id="@+id/action_notification" android:title="notification"
+          appcompat:showAsAction="never" />
+    
 </menu>

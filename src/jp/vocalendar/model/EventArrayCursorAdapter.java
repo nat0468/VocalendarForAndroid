@@ -192,7 +192,10 @@ public class EventArrayCursorAdapter extends SimpleCursorAdapter {
 		
 		TextView st = (TextView)view.findViewById(R.id.summaryText);
 		st.setBackgroundDrawable(colorTheme.makeLightBackgroundStateListDrawable());
-		st.setTextColor(colorTheme.getLightTextColor());					
+		st.setTextColor(colorTheme.getLightTextColor());
+		
+		LinearLayout l = (LinearLayout)view.findViewById(R.id.eventListItemLayout);
+		l.setBackgroundDrawable(colorTheme.makeLightBackgroundStateListDrawable());
 	}
 	
 	@Override

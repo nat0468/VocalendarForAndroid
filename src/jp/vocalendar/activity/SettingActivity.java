@@ -6,6 +6,7 @@ import jp.vocalendar.Constants;
 import jp.vocalendar.R;
 import jp.vocalendar.animation.vocalendar.LoadingAnimationUtil;
 import jp.vocalendar.model.ColorTheme;
+import jp.vocalendar.receiver.AlarmReceiverSetter;
 import android.accounts.Account;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
@@ -48,6 +49,7 @@ implements OnPreferenceChangeListener, OnPreferenceClickListener	{
     	initLoadingPagePreference();
     	initColorThemePreference();
     	initAccountPreference();
+    	initNotificationTimePreference();
     	
     	Preference custom = getPreferenceScreen().findPreference(CUSTOM_COLOR_THEME);
     	if(custom != null) { // TODO
@@ -121,6 +123,14 @@ implements OnPreferenceChangeListener, OnPreferenceClickListener	{
     	accountPref.setSummary(accountPref.getEntry());
 	}
 
+	private void initNotificationTimePreference() {
+		ListPreference pref = (ListPreference)getPreferenceScreen()
+				.findPreference(Constants.NOTIFICATION_TIME_PREFERENCE_NAME);
+		pref.setSummary(pref.getEntry());
+		pref.setOnPreferenceChangeListener(this);
+	}
+
+	
 	@Override
 	public boolean onPreferenceChange(Preference preference, Object newValue) {
 		if(preference.getKey().equals(Constants.NUMBER_OF_DATE_TO_GET_EVENTS_PREFERENCE_NAME)) {
@@ -138,6 +148,12 @@ implements OnPreferenceChangeListener, OnPreferenceClickListener	{
 			preference.setSummary(newValue.toString());
 		} else if(preference.getKey().equals(Constants.LOAD_MORE_EVENT_WITHOUT_TAP)) {
 			// なにもしない  setResult(RESULT_OK)を実行する
+		} else if(preference.getKey().equals(Constants.NOTIFICATION_TIME_PREFERENCE_NAME)) {
+			
+			int n = Integer.parseInt(newValue.toString());
+			preference.setSummary(AlarmReceiverSetter.toEntry(newValue.toString(), this));
+			AlarmReceiverSetter.setAlarmReceiverToAlarmManager(this, n);
+			return true; // setResult(RESULT_OK)を呼ばずに返る。
 		} else {
 			return false;
 		}

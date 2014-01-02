@@ -13,7 +13,6 @@ implements CanvasAnimation {
 	private int bitmapsIndex = 0;
 	private Bitmap[] bitmaps = null;
 	private int intervalMilliSecond = 250;
-	private int scale = 3;
 	
 	@Override
 	public void init() {
@@ -70,13 +69,5 @@ implements CanvasAnimation {
 	public void setPosition(CharacterCordinate.Position p) {
 		setPosition(
 				p.getPixelLeft(), p.getPixelTop(), p.getPiexelRight(), p.getPixelBottom());
-	}
-
-	public int getScale() {
-		return scale;
-	}
-
-	public void setScale(int scale) {
-		this.scale = scale;
 	}
 }

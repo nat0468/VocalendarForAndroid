@@ -44,8 +44,13 @@
     </Preference>
     <ListPreference android:title="@string/google_account"
         			android:key="selected_account_preference" />
+    <ListPreference android:title="@string/notification_time"
+        			android:key="notification_time_pref"
+        			android:entries="@array/notification_time_entries"
+        			android:entryValues="@array/notification_time_entry_values"
+        			android:dialogTitle="@string/notification_time"
+        			android:defaultValue="8" />
     <Preference android:title="@string/back"
         		android:key="back">
-    </Preference>
-    
+    </Preference>    
 </PreferenceScreen>

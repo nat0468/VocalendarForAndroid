@@ -109,7 +109,7 @@ VOCALENDAR編集メンバーの皆さんにも感謝いたします。
 	<string name="number_of_events_to_search_more">もっと検索する時の取得件数</string>
 	<string name="number_of_events_to_search_more_dialog">イベント数の選択</string>			
 	<string name="color_theme">カラー・テーマ</string>
-	<string-array name="color_theme_entries">
+	<string-array name="color_theme_names">
 	    <item>デフォルト</item>
 	    <item>初音ミク</item>
 	    <item>鏡音リン・レン</item>
@@ -121,6 +121,20 @@ VOCALENDAR編集メンバーの皆さんにも感謝いたします。
 	    <item>SF-A2 開発コード miki</item>
 	    <item>結月ゆかり</item>
 	    <item>重音テト</item>
+	    <item>カスタム・カラー・テーマ</item>
+	</string-array>	
+	<string-array name="color_theme_entries">
+	    <item>デフォルト</item>
+	    <item>初音ミク</item>
+<!--    <item>鏡音リン・レン</item>
+	    <item>巡音ルカ</item>
+	    <item>KAITO</item>
+	    <item>MEIKO</item>
+	    <item>神威がくぽ</item>
+	    <item>GUMI</item>
+	    <item>SF-A2 開発コード miki</item>
+	    <item>結月ゆかり</item>
+	    <item>重音テト</item> -->
 	    <item>カスタム・カラー・テーマ</item>
 	</string-array>	
     <string name="press_on_color_to_apply">色を押して適用</string>	
@@ -143,7 +157,7 @@ VOCALENDAR編集メンバーの皆さんにも感謝いたします。
 	<string-array name="import_color_theme_entries">
 	    <item>デフォルト</item>
 	    <item>初音ミク</item>
-	    <item>鏡音リン・レン</item>
+<!--    <item>鏡音リン・レン</item>
 	    <item>巡音ルカ</item>
 	    <item>KAITO</item>
 	    <item>MEIKO</item>
@@ -151,7 +165,7 @@ VOCALENDAR編集メンバーの皆さんにも感謝いたします。
 	    <item>GUMI</item>
 	    <item>SF-A2 開発コード miki</item>
 	    <item>結月ゆかり</item>
-	    <item>重音テト</item>
+	    <item>重音テト</item> -->
 	</string-array>	
 	<string name="message">メッセージ</string>	
 	<string name="fail_to_connect_server">サーバーに接続できませんでした。</string>	
@@ -169,5 +183,65 @@ VOCALENDAR編集メンバーの皆さんにも感謝いたします。
 	<string name="preview">プレビュー</string>
 	<string name="preview_custom_color_theme">プレビュー表示です。\n[戻る]ボタンで戻ります。</string>
 	<string name="favorite">お気に入り</string>
-	<string name="favorite_list">お気に入り一覧</string>	
+	<string name="favorite_list">お気に入り一覧</string>
+	<string name="todays_events_notifications">今日のイベント通知</string>
+	<string name="unit_of_events">件</string>
+	<string name="column">：</string>
+	<string name="comma">, </string>
+	<string name="etc">他</string>
+	<string name="notification_time">イベント通知を実行する時間</string>
+	<string-array name="notification_time_entries">
+	    <item>イベント通知しない</item>
+	    <item>毎日0時</item>
+	    <item>毎日1時</item>
+	    <item>毎日2時</item>
+	   	<item>毎日3時</item>
+	    <item>毎日4時</item>
+	    <item>毎日5時</item>
+	    <item>毎日6時</item>
+	    <item>毎日7時</item>
+	    <item>毎日8時</item>
+	    <item>毎日9時</item>
+	    <item>毎日10時</item>
+	    <item>毎日11時</item>
+	    <item>毎日12時</item>
+	   	<item>毎日13時</item>
+	    <item>毎日14時</item>
+	    <item>毎日15時</item>
+	    <item>毎日16時</item>
+	    <item>毎日17時</item>
+	    <item>毎日18時</item>
+	    <item>毎日19時</item>
+	    <item>毎日20時</item>
+		<item>毎日21時</item>
+		<item>毎日22時</item>
+		<item>毎日23時</item>	    	    
+	</string-array>		
+	<string-array name="notification_time_entry_values">
+	    <item>-1</item>
+	    <item>0</item>
+	    <item>1</item>
+	    <item>2</item>
+	   	<item>3</item>
+	    <item>4</item>
+	    <item>5</item>
+	    <item>6</item>
+	    <item>7</item>
+	    <item>8</item>
+	    <item>9</item>
+	    <item>10</item>
+	    <item>11</item>
+	    <item>12</item>
+	   	<item>13</item>
+	    <item>14</item>
+	    <item>15</item>
+	    <item>16</item>
+	    <item>17</item>
+	    <item>18</item>
+	    <item>19</item>
+	    <item>20</item>
+		<item>21</item>
+		<item>22</item>
+		<item>23</item>	    	    
+	</string-array>			
 </resources>

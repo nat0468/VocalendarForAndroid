@@ -62,6 +62,13 @@
         android:gravity="center"
         android:orientation="vertical" >
 
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="@android:style/Widget.ProgressBar.Horizontal"
+            android:layout_width="192dp"
+            android:layout_height="wrap_content"
+            android:indeterminate="true" />
+        
         <TextView
             android:id="@+id/loadingView"
             android:layout_width="wrap_content"

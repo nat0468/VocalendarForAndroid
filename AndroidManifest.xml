@@ -4,11 +4,12 @@
     android:versionCode="10001"
     android:versionName="1.00.0-beta20131213" >
 
-    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="14" />
+    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="16" />
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
     <uses-permission android:name="android.permission.USE_CREDENTIALS"/>
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
 
     <application
         android:icon="@drawable/ic_vocalendar"
@@ -71,6 +72,19 @@
         
         <meta-data android:name="android.app.default_searchable"
                    android:value=".activity.SearchableEventActivity" />
+        <receiver android:process=":process" android:name=".receiver.AlarmReceiver">            
+        </receiver>
+        <receiver android:name=".receiver.AlarmReceiverSetter">
+		    <intent-filter>
+		        <action android:name="android.intent.action.BOOT_COMPLETED" />
+		        <action android:name="android.intent.action.DATE_CHANGED" />
+		        <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+		        <action android:name="android.intent.action.TIME_SET" />
+		        <action android:name="android.intent.action.PACKAGE_REPLACED" />
+		    </intent-filter>            
+        </receiver>
+        
+        
 	</application>
 
 </manifest>

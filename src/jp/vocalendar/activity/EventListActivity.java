@@ -16,6 +16,7 @@ import jp.vocalendar.model.EventDataBaseRow;
 import jp.vocalendar.model.EventDataBaseRowArray;
 import jp.vocalendar.model.FavoriteEventManager;
 import jp.vocalendar.model.LoadMoreEventController;
+import jp.vocalendar.receiver.AlarmReceiverSetter;
 import jp.vocalendar.util.DateUtil;
 import jp.vocalendar.util.DialogUtil;
 import jp.vocalendar.util.UncaughtExceptionSavingHandler;
@@ -59,6 +60,9 @@ implements EventArrayCursorAdapter.FavoriteToggler {
 	private static int REQUEST_CODE_GET_DAYLY_EVENT = 1;
 	// SettingActivityを呼ぶためのリクエストコード
 	private static int REQUEST_CODE_OPEN_SETTINGS = 2;	
+	// 今日のイベントを開くためのリクエストコード
+	public static int REQUEST_CODE_OPEN_TODAY = 10;
+	
 
 	/** 
 	 * イベントを読み込む日付。
@@ -440,9 +444,11 @@ implements EventArrayCursorAdapter.FavoriteToggler {
 		case R.id.action_web_site:
 			openWebSite();
 			return true;
+		case R.id.action_notification: // テスト用
+			AlarmReceiverSetter.setAlarmReceiverToAlarmManagerSoon(this);
 		default:
 			return super.onOptionsItemSelected(item);			
-		}
+		}		
 	}
 
 	public Calendar getTopDate() {

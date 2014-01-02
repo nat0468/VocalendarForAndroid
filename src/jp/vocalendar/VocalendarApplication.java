@@ -85,6 +85,14 @@ public class VocalendarApplication extends Application {
 		return pref.getString(Constants.COLOR_THEME_PREFERENCE_NAME, "THEME_DEFAULT");		
 	}
 
+	public static int getNotificationTime(Context context) {
+		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+		String time = pref.getString(
+				Constants.NOTIFICATION_TIME_PREFERENCE_NAME,
+				Constants.DEFAULT_NOTIFICATION_TIME_PREFERENCE_VALUE);
+		return Integer.parseInt(time);
+	}
+	
 	public FavoriteEventManager getFavoriteEventManager() {
 		return favoriteEventManager;
 	}
