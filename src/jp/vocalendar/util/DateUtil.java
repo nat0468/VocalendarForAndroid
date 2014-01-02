@@ -267,7 +267,7 @@ public class DateUtil {
 	 * @param timeZone
 	 * @return
 	 */
-	public static Calendar getStartTimeOfDay(int year, int month, int date, TimeZone timeZone) {
+	public static Calendar makeStartTimeOfDay(int year, int month, int date, TimeZone timeZone) {
 		Calendar cal = Calendar.getInstance(timeZone);
 		cal.set(Calendar.YEAR, year);
 		cal.set(Calendar.MONTH, month);
@@ -285,6 +285,18 @@ public class DateUtil {
 		cal.set(Calendar.MINUTE, 0);
 		cal.set(Calendar.SECOND, 0);
 		cal.set(Calendar.MILLISECOND, 0);		
+	}
+	
+	/**
+	 * 今日の始まりの時間を返す
+	 */
+	public static Calendar makeStartTimeOfToday(TimeZone timeZone) {
+		Calendar today = Calendar.getInstance(timeZone);
+		today.set(Calendar.HOUR_OF_DAY, 0);
+		today.set(Calendar.MINUTE, 0);
+		today.set(Calendar.SECOND, 0);
+		today.set(Calendar.MILLISECOND, 0);		
+		return today;
 	}
 	
 	/**

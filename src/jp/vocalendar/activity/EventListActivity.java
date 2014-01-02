@@ -269,7 +269,7 @@ implements EventArrayCursorAdapter.FavoriteToggler {
 			int y = data.getExtras().getInt(EventLoadingActivity.KEY_YEAR);
 			int m = data.getExtras().getInt(EventLoadingActivity.KEY_MONTH);
 			int d = data.getExtras().getInt(EventLoadingActivity.KEY_DATE);
-			currentDate = DateUtil.getStartTimeOfDay(y, m, d, TimeZone.getDefault());
+			currentDate = DateUtil.makeStartTimeOfDay(y, m, d, TimeZone.getDefault());
 			topDate = currentDate;
 
 		    SharedPreferences.Editor editor =
