@@ -120,5 +120,10 @@ public class Constants {
 	   */
 	  public static final String BROADCAST_CALENDAR_ID = "5fsoru1dfaga56mcleu5mp76kk@group.calendar.google.com";
 	  
-	  public static final String[] CALENDER_IDS = new String[] { MAIN_CALENDAR_ID, BROADCAST_CALENDAR_ID };	  
+	  public static final String[] CALENDER_IDS = new String[] { MAIN_CALENDAR_ID, BROADCAST_CALENDAR_ID };
+	  
+	  /**
+	   * ★イベントの「★」の文字
+	   */
+	  public static final String STAR_EVENT_CHARACTER = "★";
 }

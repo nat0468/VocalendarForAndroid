@@ -15,22 +15,14 @@ import jp.vocalendar.model.EventComparatorInDate;
 import jp.vocalendar.model.EventDataBaseRow;
 import jp.vocalendar.model.EventFactory;
 import jp.vocalendar.util.DateUtil;
-
-import com.google.api.client.extensions.android2.AndroidHttp;
-import com.google.api.client.googleapis.auth.oauth2.draft10.GoogleAccessProtectedResource;
-import com.google.api.client.http.HttpResponseException;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.http.json.JsonHttpRequest;
-import com.google.api.client.http.json.JsonHttpRequestInitializer;
-import com.google.api.client.json.jackson.JacksonFactory;
-import com.google.api.client.util.DateTime;
-import com.google.api.services.calendar.Calendar;
-import com.google.api.services.calendar.CalendarRequest;
-import com.google.api.services.calendar.model.Events;
-
 import android.accounts.Account;
 import android.app.Activity;
 import android.util.Log;
+
+import com.google.api.client.http.HttpResponseException;
+import com.google.api.client.util.DateTime;
+import com.google.api.services.calendar.Calendar;
+import com.google.api.services.calendar.model.Events;
 
 /**
  * Googleカレンダーからイベント検索するLoadEventTask.
@@ -263,7 +255,7 @@ public class SearchGoogleCalendarEventTask extends GoogleCalendarLoadEventTask {
 			int statusCode = e.getStatusCode();
 			if (statusCode == 401 && (tryNumber - 1) > 0) {
 				Log.d(TAG, "Got 401, refreshing token.");
-				OAuthManager.getInstance().doLogin(true, activity,
+				OAuthManager.getInstance().doLogin(true, activity, activity,
 					new OAuthManager.AuthHandler() {
 						@Override
 						public void handleAuth(Account account, String authToken, Exception ex) {

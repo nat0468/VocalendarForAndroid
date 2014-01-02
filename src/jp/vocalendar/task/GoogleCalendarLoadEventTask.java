@@ -165,7 +165,7 @@ public class GoogleCalendarLoadEventTask extends LoadEventTask {
 			int statusCode = e.getStatusCode();
 			if (statusCode == 401 && (tryNumber - 1) > 0) {
 				Log.d(TAG, "Got 401, refreshing token.");
-				OAuthManager.getInstance().doLogin(true, activity,
+				OAuthManager.getInstance().doLogin(true, activity, activity,
 					new OAuthManager.AuthHandler() {
 						@Override
 						public void handleAuth(Account account, String authToken, Exception ex) {
@@ -213,7 +213,7 @@ public class GoogleCalendarLoadEventTask extends LoadEventTask {
 					int statusCode = e.getStatusCode();
 					if (statusCode == 401 && (tryNumber - 1) > 0) {
 						Log.d(TAG, "Got 401, refreshing token.");
-						OAuthManager.getInstance().doLogin(true, activity,
+						OAuthManager.getInstance().doLogin(true, activity, activity,
 							new OAuthManager.AuthHandler() {
 								@Override
 								public void handleAuth(Account account, String authToken, Exception ex) {
@@ -228,7 +228,7 @@ public class GoogleCalendarLoadEventTask extends LoadEventTask {
 			} else {
 				break;
 			}
-		}
+		}		
 	}
 
 	/**
@@ -270,7 +270,7 @@ public class GoogleCalendarLoadEventTask extends LoadEventTask {
 	}
 
 	protected void initAccount() {
-		OAuthManager.getInstance().doLogin(false, activity, new OAuthManager.AuthHandler() {			
+		OAuthManager.getInstance().doLogin(false, activity, activity, new OAuthManager.AuthHandler() {			
 			@Override
 			public void handleAuth(Account account, String authToken, Exception ex) {
 				// TODO エラー処理

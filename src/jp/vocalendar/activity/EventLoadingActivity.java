@@ -248,7 +248,7 @@ public class EventLoadingActivity extends ActionBarActivity implements LoadEvent
 	
 	
 	private void initAccount() {
-		OAuthManager.getInstance().doLogin(false, this, new OAuthManager.AuthHandler() {			
+		OAuthManager.getInstance().doLogin(false, this, this, new OAuthManager.AuthHandler() {			
 			@Override
 			public void handleAuth(Account account, String authToken, Exception ex) {
 				onAuthToken(account, authToken, ex);

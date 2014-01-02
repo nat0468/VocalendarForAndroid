@@ -285,6 +285,7 @@ To import the settings to a device, input(copy &amp; paste) the code, and press 
 	<string name="favorite">Favorite</string>
 	<string name="favorite_list">Favorite List</string>
 	<string name="todays_events_notifications">Today\'s event notification</string>
+	<string name="star_event">★</string>
 	<string name="unit_of_events">event(s)</string>
 	<string name="column">: </string>
 	<string name="comma">, </string>

@@ -11,6 +11,7 @@ import jp.vocalendar.model.EventDataBaseRow;
 import jp.vocalendar.util.DialogUtil;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 

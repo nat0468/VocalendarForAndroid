@@ -185,6 +185,7 @@ VOCALENDAR編集メンバーの皆さんにも感謝いたします。
 	<string name="favorite">お気に入り</string>
 	<string name="favorite_list">お気に入り一覧</string>
 	<string name="todays_events_notifications">今日のイベント通知</string>
+	<string name="star_event">★</string>
 	<string name="unit_of_events">件</string>
 	<string name="column">：</string>
 	<string name="comma">, </string>

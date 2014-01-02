@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f0f0f0"
+    android:orientation="vertical">
+    
+    <LinearLayout
+        style="@style/LoadingContent"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:layout_weight="0.5"
+        android:orientation="horizontal"
+        android:padding="10dp" >
+
+        <ImageView
+            android:id="@+id/titleImageView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.6"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/vocalendar"
+            android:scaleType="fitStart"
+            android:src="@drawable/vocalendar_title" />
+
+        <TextView
+            android:id="@+id/spaceTextView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1.0"
+            android:text="" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.0"
+        android:orientation="vertical" >
+    </LinearLayout>
+
+    <jp.vocalendar.activity.view.AnimationSurfaceView
+        android:id="@+id/loadingAnimationSurfaceView"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_weight="0.0"
+        android:adjustViewBounds="true"
+        android:paddingBottom="0dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="20dp" />
+
+    <TextView
+        android:id="@+id/loadingImageCreatorText"
+        style="@style/LoadingContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_weight="0.0"
+        android:gravity="right"
+        android:text="Illustration by ELrowa."
+        android:textSize="12sp" />
+    
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="@android:style/Widget.ProgressBar.Horizontal"
+            android:layout_width="192dp"
+            android:layout_height="wrap_content"
+            android:indeterminate="true" />
+
+        <TextView
+            android:id="@+id/loadingView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:text="@string/loading_events" />
+
+        <TextView
+            android:id="@+id/loadingItemView"
+            android:layout_width="wrap_content"
+            android:layout_height="50sp"
+            android:layout_weight="1.0"
+            android:text="" />
+
+        <Button
+            android:id="@+id/cancelButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:text="@string/cancel" />	
+    </LinearLayout>	
+		
+</LinearLayout>
