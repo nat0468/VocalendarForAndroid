@@ -422,7 +422,11 @@ implements EventArrayCursorAdapter.FavoriteToggler {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 	    MenuInflater inflater = getMenuInflater();
-	    inflater.inflate(R.menu.event_list_action_menu, menu);
+	    if(Constants.DEBUG_MENU) {
+	    	inflater.inflate(R.menu.event_list_action_menu_debug, menu);	    	
+	    } else {
+	    	inflater.inflate(R.menu.event_list_action_menu, menu);
+	    }
 	    return super.onCreateOptionsMenu(menu);
 	}
 
@@ -444,8 +448,8 @@ implements EventArrayCursorAdapter.FavoriteToggler {
 		case R.id.action_web_site:
 			openWebSite();
 			return true;
-/*		case R.id.action_notification: // テスト用
-			AlarmReceiverSetter.setAlarmReceiverToAlarmManagerSoonDebug(this); */
+		case R.id.action_notification: // テスト用
+			AlarmReceiverSetter.setAlarmReceiverToAlarmManagerSoonDebug(this);
 		default:
 			return super.onOptionsItemSelected(item);	
 		}		

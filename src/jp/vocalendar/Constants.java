@@ -7,7 +7,12 @@ public class Constants {
 	/**
 	 * デバッグモードで実行する場合はtrue(例外レポート機能がオンになる)
 	 */
-	public static final boolean DEBUG_MODE = false;
+	public static final boolean DEBUG_MODE = true;
+	
+	/**
+	 * デバッグメニューを表示する場合はtrue
+	 */
+	public static final boolean DEBUG_MENU = true;
 	
 	  /**
 	   * API操作に使うアカウント種別

@@ -70,9 +70,10 @@ public class AlarmReceiverSetter extends BroadcastReceiver {
 	public static void setAlarmReceiverToAlarmManagerSoonDebug(Context context) {
 		Log.d(TAG, "setAlarmReceiverToAlarmManagerSoon");		
 		Intent intent = new Intent(context, AlarmReceiver.class);
+		intent.putExtra(AlarmReceiver.EXTRA_DEBUG, true);
 
 		PendingIntent sender = PendingIntent.getBroadcast(
-				context, AlarmReceiver.REQUEST_CODE_DEBUG, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+				context, AlarmReceiver.REQUEST_CODE_NORMAL, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 		// 3秒後に通知を表示させる
 		Calendar calSet = Calendar.getInstance();

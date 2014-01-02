@@ -31,7 +31,7 @@ import com.google.api.services.calendar.CalendarRequest;
 import com.google.api.services.calendar.model.Events;
 
 /**
- * ★イベントを検索するタスク
+ * 今日の★イベントを検索するタスク
  */
 public class SearchStarEventTask extends AsyncTask<String, Event, List<EventDataBaseRow>> {
 	private static String TAG = "SearchStarEventTask";
@@ -46,6 +46,9 @@ public class SearchStarEventTask extends AsyncTask<String, Event, List<EventData
 	private Context context;
 	private TimeZone timeZone;	
 	private Callback callback;
+	
+	/** デバッグモード。trueの場合、今月の★イベント検索になる */
+	private boolean debugMode = false;
 	
 	/**
 	 * 検索処理中に発生した例外
@@ -76,17 +79,21 @@ public class SearchStarEventTask extends AsyncTask<String, Event, List<EventData
 					Log.e(TAG, "handleAuth(): exception occured", exception);
 				}
 			}
-		});
-		
+		});		
 		if(exception != null) { //Google認証失敗時は何もしない
 			return null;
 		}
+		
 		LinkedList<EventDataBaseRow> allEvents = new LinkedList<EventDataBaseRow>();
 
 		java.util.Calendar cal = DateUtil.makeStartTimeOfToday(timeZone);
 		Date todayDate = cal.getTime();
 		DateTime startTime = new DateTime(todayDate, timeZone);
 		cal.add(java.util.Calendar.DATE, 1);
+		if(debugMode) {
+			cal.add(java.util.Calendar.MONTH, 1); //デバッグ時には1ヶ月後まで対象とする			
+			Log.d(TAG, "debug mode on. Expand search range...: " + cal.toString());
+		}
 		Date tommorowDate = cal.getTime();
 		DateTime endTime = new DateTime(tommorowDate, timeZone);		
 		
@@ -157,7 +164,9 @@ public class SearchStarEventTask extends AsyncTask<String, Event, List<EventData
 			}
 			Event e = EventFactory.toVocalendarEvent(
 							calendarId, ge, timeZone, context);
-			Log.d(TAG, e.toDateTimeSummaryString(timeZone, context));
+			if(Constants.DEBUG_MODE) {
+				Log.d(TAG, e.toDateTimeSummaryString(timeZone, context));
+			}
 			eventList.add(e);
 			publishProgress(e);
 		}
@@ -192,6 +201,14 @@ public class SearchStarEventTask extends AsyncTask<String, Event, List<EventData
 
 	public Context getContext() {
 		return context;
+	}
+
+	public boolean isDebugMode() {
+		return debugMode;
+	}
+
+	public void setDebugMode(boolean debugMode) {
+		this.debugMode = debugMode;
 	}
 	
 

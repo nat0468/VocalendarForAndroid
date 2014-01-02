@@ -34,13 +34,22 @@ public class AlarmReceiver extends BroadcastReceiver implements SearchStarEventT
 	private static String TAG = "AlarmReceiver";
 		
 	public static int REQUEST_CODE_NORMAL = 100; //通常の通知
-	public static int REQUEST_CODE_DEBUG = 110; //デバッグ用の通知
-
+	
+	/** デバッグモードのON/OFFをIntentに格納するためのキー名 */
+	public static String EXTRA_DEBUG = "jp.vocalendar.receiver.AlarmReceiver.DEBUG"; 
+	
+	/** デバッグモードのときにtrue */
+	private boolean debugMode = false;
+	
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		Log.d(TAG, "onReceive");
+		debugMode = intent.getBooleanExtra(EXTRA_DEBUG, false);
+		Log.d(TAG, "onReceive: debugMode=" + debugMode);
 		
 		SearchStarEventTask t = new SearchStarEventTask(context, this);
+		if(debugMode) {
+			t.setDebugMode(true); //デバッグ用の場合
+		}
 		t.execute();
 		
 		Log.d(TAG, "onReceive finished.");
@@ -54,7 +63,7 @@ public class AlarmReceiver extends BroadcastReceiver implements SearchStarEventT
 			starEvents = new LinkedList<EventDataBaseRow>();
 		}
 		List<EventDataBaseRow> favoriteEvents = getNotificationEvents(context);
-		if(getResultCode() != REQUEST_CODE_DEBUG) { //デバッグ時のみ0件表示
+		if(!debugMode) { //デバッグでない時は、0件は無視
 			if(starEvents.size() == 0 && favoriteEvents.size() == 0) {
 				Log.d(TAG, "no notification events.");				
 			}
