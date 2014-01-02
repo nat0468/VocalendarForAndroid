@@ -33,16 +33,17 @@ public class AlarmReceiverSetter extends BroadcastReceiver {
 	public static void setAlarmReceiverToAlarmManager(Context context, int notificationTime) {
 		Log.d(TAG, "setAlarmReceiverToAlarmManager");
 		
+		AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+		Intent intent = new Intent(context, AlarmReceiver.class);
+		PendingIntent sender = PendingIntent.getBroadcast(
+				context, AlarmReceiver.REQUEST_CODE_NORMAL, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
 		if(notificationTime == Constants.NOT_NOTIFY_PREFERENCE_VALUE) {
+			alarmManager.cancel(sender);
 			Log.d(TAG, "not notify event");
 			return;
 		}
 		
-		Intent intent = new Intent(context, AlarmReceiver.class);
-
-		PendingIntent sender = PendingIntent.getBroadcast(
-				context, AlarmReceiver.REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
 		// 通知時間を設定
 		Calendar calSet = Calendar.getInstance();
 		calSet.setTimeInMillis(System.currentTimeMillis());
@@ -56,23 +57,22 @@ public class AlarmReceiverSetter extends BroadcastReceiver {
 			calSet.add(Calendar.DATE, 1);
 		}
 
-		AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-		alarmManager.setInexactRepeating(
+		alarmManager.setRepeating(
 				AlarmManager.RTC_WAKEUP, calSet.getTimeInMillis(), AlarmManager.INTERVAL_DAY, sender);
 
 		Log.d(TAG, "setInexactRepeating() finished.");		
 	}
 	
 	/**
-	 * (テスト用)3秒後にイベント通知を実行する。
+	 * (デバッグ用)3秒後にイベント通知を実行する。
 	 * @param context
 	 */
-	public static void setAlarmReceiverToAlarmManagerSoon(Context context) {
-		Log.d(TAG, "setAlarmReceiverToAlarmManager");		
+	public static void setAlarmReceiverToAlarmManagerSoonDebug(Context context) {
+		Log.d(TAG, "setAlarmReceiverToAlarmManagerSoon");		
 		Intent intent = new Intent(context, AlarmReceiver.class);
 
 		PendingIntent sender = PendingIntent.getBroadcast(
-				context, AlarmReceiver.REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+				context, AlarmReceiver.REQUEST_CODE_DEBUG, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 		// 3秒後に通知を表示させる
 		Calendar calSet = Calendar.getInstance();
@@ -81,9 +81,9 @@ public class AlarmReceiverSetter extends BroadcastReceiver {
 		calSet.add(Calendar.SECOND, 3);
 
 		AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-		alarmManager.setRepeating(
-				AlarmManager.RTC_WAKEUP, calSet.getTimeInMillis(), AlarmManager.INTERVAL_DAY, sender);
-		Log.d(TAG, "setInexactRepeating() finished.");		
+		alarmManager.set(
+				AlarmManager.RTC_WAKEUP, calSet.getTimeInMillis(), sender);
+		Log.d(TAG, "setAlarmReceiverToAlarmManagerSoon() finished.");		
 	}
 
 	/**

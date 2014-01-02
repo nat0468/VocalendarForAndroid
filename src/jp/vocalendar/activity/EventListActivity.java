@@ -445,9 +445,9 @@ implements EventArrayCursorAdapter.FavoriteToggler {
 			openWebSite();
 			return true;
 		case R.id.action_notification: // テスト用
-			AlarmReceiverSetter.setAlarmReceiverToAlarmManagerSoon(this);
+			AlarmReceiverSetter.setAlarmReceiverToAlarmManagerSoonDebug(this);
 		default:
-			return super.onOptionsItemSelected(item);			
+			return super.onOptionsItemSelected(item);	
 		}		
 	}
 

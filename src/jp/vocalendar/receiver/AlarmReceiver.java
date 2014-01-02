@@ -31,14 +31,19 @@ import android.widget.Toast;
  */
 public class AlarmReceiver extends BroadcastReceiver {
 	private static String TAG = "AlarmReceiver";
-	
-	
-	public static int REQUEST_CODE = 100;
+		
+	public static int REQUEST_CODE_NORMAL = 100; //通常の通知
+	public static int REQUEST_CODE_DEBUG = 110; //デバッグ用の通知
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		Log.d(TAG, "onReceive");
 		EventDataBaseRow[] rows = getNotificationEvents(context);
+		if(getResultCode() == REQUEST_CODE_NORMAL) {
+			if(rows.length == 0) {
+				Log.d(TAG, "no notification events.");				
+			}
+		}
 		makeNotification(context, rows);
 		Log.d(TAG, "onReceive finished.");
 	}
@@ -103,6 +108,10 @@ public class AlarmReceiver extends BroadcastReceiver {
 
 	protected String makeTicker(Context context, EventDataBaseRow[] rows) {
 		StringBuilder sb = new StringBuilder();
+		if(rows.length == 0) {
+			sb.append(context.getString(R.string.no_event));
+			return sb.toString();
+		}		
         String comma = context.getString(R.string.comma);
         boolean addComma = false;
         for(EventDataBaseRow row : rows) {
