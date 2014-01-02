@@ -1,9 +1,11 @@
-package jp.vocalendar.model;
+package jp.vocalendar.task;
 
 import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.TimeZone;
+
+import jp.vocalendar.model.EventDataBaseRow;
 
 import com.google.api.client.util.DateTime;
 import android.app.Activity;

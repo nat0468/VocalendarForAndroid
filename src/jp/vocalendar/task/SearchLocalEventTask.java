@@ -1,4 +1,4 @@
-package jp.vocalendar.model;
+package jp.vocalendar.task;
 
 import java.util.Date;
 import java.util.LinkedList;
@@ -19,6 +19,8 @@ import android.util.Log;
 
 import jp.vocalendar.VocalendarApplication;
 import jp.vocalendar.googleapi.OAuthManager;
+import jp.vocalendar.model.EventDataBaseRow;
+import jp.vocalendar.model.EventDataBaseRowArray;
 
 /**
  * メモリ(VocalendarApplication)に読み込んだイベントから検索するLoadEventTask.

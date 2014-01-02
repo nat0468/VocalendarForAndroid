@@ -18,6 +18,8 @@ import jp.vocalendar.R;
 import jp.vocalendar.VocalendarApplication;
 import jp.vocalendar.activity.EventListActivity;
 import jp.vocalendar.activity.view.LoadMoreEventView;
+import jp.vocalendar.task.EventListActivityLoadEventTask;
+import jp.vocalendar.task.LoadEventTask;
 import jp.vocalendar.util.DateUtil;
 import jp.vocalendar.util.DialogUtil;
 

@@ -1,4 +1,4 @@
-package jp.vocalendar.model;
+package jp.vocalendar.task;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -9,6 +9,9 @@ import java.util.List;
 
 import jp.vocalendar.activity.EventListActivity;
 import jp.vocalendar.googleapi.OAuthManager;
+import jp.vocalendar.model.EventArrayCursor;
+import jp.vocalendar.model.EventDataBaseRow;
+import jp.vocalendar.model.EventDataBaseRowArray;
 
 /**
  * EventListActivity中にイベントを読み込むときに使うTask

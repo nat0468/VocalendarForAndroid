@@ -1,4 +1,4 @@
-package jp.vocalendar.model;
+package jp.vocalendar.task;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -6,6 +6,8 @@ import java.util.List;
 
 
 import jp.vocalendar.R;
+import jp.vocalendar.model.Event;
+import jp.vocalendar.model.EventDataBaseRow;
 import jp.vocalendar.util.DialogUtil;
 
 import android.app.Activity;

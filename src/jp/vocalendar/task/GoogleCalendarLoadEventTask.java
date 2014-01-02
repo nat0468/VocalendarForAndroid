@@ -1,4 +1,4 @@
-package jp.vocalendar.model;
+package jp.vocalendar.task;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -9,6 +9,11 @@ import java.util.List;
 import java.util.TimeZone;
 
 import jp.vocalendar.googleapi.OAuthManager;
+import jp.vocalendar.model.ClientCredentials;
+import jp.vocalendar.model.Event;
+import jp.vocalendar.model.EventComparatorInDate;
+import jp.vocalendar.model.EventDataBaseRow;
+import jp.vocalendar.model.EventFactory;
 import android.accounts.Account;
 import android.app.Activity;
 import android.util.Log;
