@@ -437,7 +437,7 @@ public class EventLoadingActivity extends ActionBarActivity implements LoadEvent
 						prepareLoadEventTask();
 					}
 				});
-		task.execute(Constants.LOADING_NOTIFICATION_URL);
+		task.execute(Constants.ANNOUNCEMENT_URL);
 	}
 	
 	private void showNoAnnouncementAndWaitOkButtonPressed() {

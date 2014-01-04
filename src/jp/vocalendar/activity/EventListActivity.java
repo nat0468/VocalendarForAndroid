@@ -575,7 +575,7 @@ implements EventArrayCursorAdapter.FavoriteToggler {
 								"お知らせ確認完了:" + s, false);
 					}
 				});		
-		t.execute(Constants.LOADING_NOTIFICATION_DEBUG_URL);			
+		t.execute(Constants.ANNOUNCEMENT_URL_DEBUG);			
 		Log.d(TAG, "checkDebugNotification() finished.");		
 	}
 	

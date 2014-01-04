@@ -50,9 +50,9 @@ implements SearchStarEventTask.Callback, CheckAnnouncementTask.Callback {
 		
 		CheckAnnouncementTask t = new CheckAnnouncementTask(context, this);
 		if(debugMode) {
-			t.execute(Constants.LOADING_NOTIFICATION_DEBUG_URL);			
+			t.execute(Constants.ANNOUNCEMENT_URL_DEBUG);			
 		} else {
-			t.execute(Constants.LOADING_NOTIFICATION_URL);
+			t.execute(Constants.ANNOUNCEMENT_URL);
 		}		
 		Log.d(TAG, "onReceive finished.");
 	}
