@@ -150,9 +150,9 @@ public class Constants {
 	   */
 	  public static final String STAR_EVENT_CHARACTER = "★";
 	  
-	  /** 読み込み中画面の告知画面のファイルがあるURLパス */
+	  /** お知らせのファイルがあるURLパス */
 	  public static final String ANNOUNCEMENT_URL = "http://vocalendar.jp/announcement/";
 	  
-	  /** 読み込み中画面の告知画面のファイルがあるURLパス(デバッグ用) */
+	  /** お知らせのファイルがあるURLパス(デバッグ用) */
 	  public static final String ANNOUNCEMENT_URL_DEBUG = "http://vocalendar.jp/announcement/debug_";
 }
