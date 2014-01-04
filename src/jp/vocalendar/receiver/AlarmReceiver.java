@@ -6,13 +6,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.TimeZone;
 
+import jp.vocalendar.Constants;
 import jp.vocalendar.R;
 import jp.vocalendar.activity.EventListActivity;
 import jp.vocalendar.model.EventDataBase;
 import jp.vocalendar.model.EventDataBaseRow;
 import jp.vocalendar.model.FavoriteEventDataBaseRow;
+import jp.vocalendar.task.CheckAnnouncementTask;
 import jp.vocalendar.task.SearchStarEventTask;
-import jp.vocalendar.util.DateUtil;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -30,7 +31,8 @@ import android.widget.Toast;
  * 毎日のイベント通知を行うタイミングでのAlarmを受け取るReceiver
  *
  */
-public class AlarmReceiver extends BroadcastReceiver implements SearchStarEventTask.Callback {
+public class AlarmReceiver extends BroadcastReceiver
+implements SearchStarEventTask.Callback, CheckAnnouncementTask.Callback {
 	private static String TAG = "AlarmReceiver";
 		
 	public static int REQUEST_CODE_NORMAL = 100; //通常の通知
@@ -46,18 +48,36 @@ public class AlarmReceiver extends BroadcastReceiver implements SearchStarEventT
 		debugMode = intent.getBooleanExtra(EXTRA_DEBUG, false);
 		Log.d(TAG, "onReceive: debugMode=" + debugMode);
 		
+		CheckAnnouncementTask t = new CheckAnnouncementTask(context, this);
+		if(debugMode) {
+			t.execute(Constants.LOADING_NOTIFICATION_DEBUG_URL);			
+		} else {
+			t.execute(Constants.LOADING_NOTIFICATION_URL);
+		}		
+		Log.d(TAG, "onReceive finished.");
+	}
+	
+	/**
+	 * 読み込み中画面の告知画面確認後の処理
+	 */
+	@Override
+	public void onPostExecute(Context context, boolean result) {
+		Log.d(TAG, "CheckLoadingNotificationTask finished. result=" + result);
 		SearchStarEventTask t = new SearchStarEventTask(context, this);
 		if(debugMode) {
 			t.setDebugMode(true); //デバッグ用の場合
 		}
-		t.execute();
-		
-		Log.d(TAG, "onReceive finished.");
-	}
+		t.execute();		
+		Log.d(TAG, "SearchStarEventTask executed...");
+	}	
 	
+	/**
+	 * ★イベント確認後の処理
+	 */
 	@Override
 	public void onPostExecute(
 			Context context, List<EventDataBaseRow> starEvents, Exception exception) {
+		Log.d(TAG, "SearchStarEventTask finished.");
 		if(starEvents == null) {
 			//★イベント取得失敗時は★0個と見なすために、空のリストを設定
 			starEvents = new LinkedList<EventDataBaseRow>();

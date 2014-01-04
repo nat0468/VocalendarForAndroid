@@ -13,35 +13,36 @@ import jp.vocalendar.activity.view.AnimationSurfaceView;
 import jp.vocalendar.animation.vocalendar.DotCharacterAnimation;
 import jp.vocalendar.animation.vocalendar.LoadingAnimation;
 import jp.vocalendar.animation.vocalendar.LoadingAnimationUtil;
+import jp.vocalendar.animation.vocalendar.AnnouncementAnimation;
 import jp.vocalendar.googleapi.OAuthManager;
 import jp.vocalendar.model.Event;
 import jp.vocalendar.model.EventDataBase;
 import jp.vocalendar.model.EventDataBaseRow;
+import jp.vocalendar.task.CheckAnnouncementTask;
 import jp.vocalendar.task.GoogleCalendarLoadEventTask;
 import jp.vocalendar.task.LoadEventTask;
 import jp.vocalendar.util.DateUtil;
 import jp.vocalendar.util.DialogUtil;
 import jp.vocalendar.util.UncaughtExceptionSavingHandler;
 import android.accounts.Account;
-import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.PendingIntent.CanceledException;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
-import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.api.client.util.DateTime;
 
@@ -50,12 +51,29 @@ import com.google.api.client.util.DateTime;
  * バックグランド処理でイベントを読み込む。
  */
 public class EventLoadingActivity extends ActionBarActivity implements LoadEventTask.TaskCallback {
-	private static String TAG = "SplashScreenActivity";
+	private static String TAG = "EventLoadingActivity";
 	
 	// イベントを取り込む開始日を指定する 年月日 をIntentに格納するキー
 	public static String KEY_YEAR = "year";
 	public static String KEY_MONTH = "month";
 	public static String KEY_DATE = "date";	
+	
+	/**
+	 * この画面が手動で呼ばれた場合にtrueをIntentに格納するためのキー。
+	 * trueの場合(手動)、告知画面がある場合は、OKボタンが押されるまで待つ。
+	 */
+	public static String KEY_MANUAL_LOADING = "manual_loading";
+	
+	/**
+	 * お知らせの有無を確認するかどうかをIntentに格納するためのキー。
+	 * trueの場合、お知らせの有無を確認する。
+	 */
+	public static String KEY_CHECK_ANNOUNCEMENT = "check_announcement";
+	
+	/**
+	 * お知らせの有無を確認するだけで終了する指定をIntentに格納するためのキー
+	 */
+	public static String KEY_CHECK_ANNOUNCEMENT_ONLY = "check_announcement_only";
 	
 	/** イベント取込に認証で失敗して読み込めなかった場合の結果コード */
 	public static int RESULT_AUTH_FAILED = RESULT_FIRST_USER + 1;
@@ -77,12 +95,9 @@ public class EventLoadingActivity extends ActionBarActivity implements LoadEvent
 		super.onCreate(savedInstanceState);
 		UncaughtExceptionSavingHandler.init(this);
 
+		
 		loadingAnimation = makeLoadingAnimation();
-		if(loadingAnimation instanceof DotCharacterAnimation.LinearDotCharacterAnimation) {
-			setContentView(R.layout.loading_dot_character_animation);
-		} else {
-			setContentView(R.layout.loading);
-		}
+		setContentViewForLoadingAnimation();
         getSupportActionBar().hide();
         
         Button cancel = (Button)findViewById(R.id.cancelButton);
@@ -97,17 +112,45 @@ public class EventLoadingActivity extends ActionBarActivity implements LoadEvent
 		});
 		loadingItemView = (TextView)findViewById(R.id.loadingItemView);
         initAnimation();
-        initAccount();
+        
+        if(getIntent().getBooleanExtra(KEY_CHECK_ANNOUNCEMENT, false)
+        		|| getIntent().getBooleanExtra(KEY_CHECK_ANNOUNCEMENT_ONLY, false)) {
+        	checkAnnouncement();
+        } else {     
+        	prepareLoadEventTask();
+        }
+	}
+
+	protected void setContentViewForLoadingAnimation() {
+		if(loadingAnimation instanceof DotCharacterAnimation.LinearDotCharacterAnimation) {
+			setContentView(R.layout.loading_dot_character_animation);
+		} else {
+			setContentView(R.layout.loading);
+		}
 	}
 
 	protected void initAnimation() {
 		AnimationSurfaceView view = getAnimationSurfaceView();
-		view.addAnimation(loadingAnimation);
+		view.setLoadingAnimation(loadingAnimation);
 		TextView tv = (TextView)findViewById(R.id.loadingImageCreatorText);
 		tv.setMovementMethod(LinkMovementMethod.getInstance());		
 		tv.setText(loadingAnimation.getCreatorText());
 	}
 
+	private void updateAnimation() {
+		getAnimationSurfaceView().destroy();
+		loadingAnimation = makeLoadingAnimation();
+		setContentViewForLoadingAnimation();
+		initAnimation();		
+	}
+	
+	private void showAnnoucementAnimation() {
+		getAnimationSurfaceView().destroy();
+		loadingAnimation = new AnnouncementAnimation();
+		setContentViewForLoadingAnimation();
+		initAnimation();				
+	}
+	
 	private AnimationSurfaceView getAnimationSurfaceView() {
 		AnimationSurfaceView view =
 				(AnimationSurfaceView)findViewById(R.id.loadingAnimationSurfaceView);
@@ -116,6 +159,13 @@ public class EventLoadingActivity extends ActionBarActivity implements LoadEvent
 	
 	private LoadingAnimation makeLoadingAnimation() {
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+		if(pref.getString(Constants.ANNOUNCEMENT_URL_PREFERENCE_NAME, null) != null) {
+			//告知有り
+			if(!VocalendarApplication.isAnnouncementOnceOnly(this)					
+					|| !VocalendarApplication.isAnnouncementDisplayed(this)) {				
+				return new AnnouncementAnimation();
+			}
+		}
 		String value = pref.getString(
 				Constants.LOADING_PAGE_PREFERENCE_NAME, null);
 		if(value == null) { // 初回起動時(未設定時)はドット絵を表示して、その後はランダム。
@@ -214,8 +264,47 @@ public class EventLoadingActivity extends ActionBarActivity implements LoadEvent
 		db.insertEvent(events);
 		db.close();		
 		
-		transitToEventListActivity();
+		if(loadingAnimation instanceof AnnouncementAnimation) {
+			// お知らせを表示していた場合
+			boolean firstDisplay = !VocalendarApplication.isAnnouncementDisplayed(this); // 初回表示			
+			VocalendarApplication.setAnnouncementDisplayed(this, true); //表示したことを記録			
+	        if(firstDisplay) {
+	        	// 初回表示ならばOKボタン押下まで待つ
+	        	waitOkButtonPressed();
+	        	return;
+	        }
+		}
+		transitToEventListActivity();        
 	}
+
+	/**
+	 * 告知後にOKボタンが押されるまで待つ画面に変更する。
+	 */
+	protected void waitOkButtonPressed() {
+		// 手動で更新した場合は、明示的にOKボタンを押して、イベント一覧画面へ戻る
+		waitOkButtonPressed(R.string.check_the_announcement_above_and_push_ok_button);
+	}
+
+	/**
+	 * OKボタンが押されるまで待つ画面に変更する。
+	 * @param resid 表示するメッセージ
+	 */
+	protected void waitOkButtonPressed(int resid) {
+		Button b = (Button)findViewById(R.id.cancelButton);
+		b.setText(R.string.ok);
+		b.setOnClickListener(new View.OnClickListener() {					
+			@Override
+			public void onClick(View v) {
+				transitToEventListActivity();
+			}
+		});
+		ProgressBar progressBar = (ProgressBar)findViewById(R.id.progressBar);
+		progressBar.setVisibility(View.INVISIBLE);
+		TextView loadingView = (TextView)findViewById(R.id.loadingView);
+		loadingView.setText(resid);
+		TextView loadingItemView = (TextView)findViewById(R.id.loadingItemView);
+		loadingItemView.setText("");		
+	}	
 
 	/**
 	 * イベント読み込みタスクで読み込み失敗時の処理。
@@ -245,9 +334,7 @@ public class EventLoadingActivity extends ActionBarActivity implements LoadEvent
 		startLoadEventTask();
 	}
 	
-	
-	
-	private void initAccount() {
+	private void prepareLoadEventTask() {
 		OAuthManager.getInstance().doLogin(false, this, this, new OAuthManager.AuthHandler() {			
 			@Override
 			public void handleAuth(Account account, String authToken, Exception ex) {
@@ -301,7 +388,7 @@ public class EventLoadingActivity extends ActionBarActivity implements LoadEvent
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		if(requestCode == LOGIN_REQUEST_CODE) {
-			initAccount();
+			prepareLoadEventTask();
 		}
 	}
 	
@@ -316,5 +403,44 @@ public class EventLoadingActivity extends ActionBarActivity implements LoadEvent
 		// TODO Auto-generated method stub
 		super.onRestart();
 		getAnimationSurfaceView().resume();
+	}
+	
+	/**
+	 * お知らせの有無のチェック
+	 */
+	private void checkAnnouncement() {
+		CheckAnnouncementTask task =
+				new CheckAnnouncementTask(this,
+						new CheckAnnouncementTask.Callback() {					
+					@Override
+					public void onPostExecute(Context context, boolean result) {
+						if(getIntent().getBooleanExtra(KEY_CHECK_ANNOUNCEMENT_ONLY, false)) {
+							if(result) {
+								showAnnoucementAnimation();
+								VocalendarApplication.setAnnouncementDisplayed(
+										EventLoadingActivity.this, true);
+								waitOkButtonPressed();
+							} else {
+								if(loadingAnimation instanceof AnnouncementAnimation) {
+									// お知らせが有りから無しに変わった場合は、アニメーション変更
+									updateAnimation(); 
+								}
+								showNoAnnouncementAndWaitOkButtonPressed();
+							}
+							return;
+						}
+						if(result) {
+							//お知らせ無し/有り から 有りになった場合に更新。
+							//お知らせ有り から 無しになった場合はそのまま。次回の表示時に反映される
+							updateAnimation();
+						}
+						prepareLoadEventTask();
+					}
+				});
+		task.execute(Constants.LOADING_NOTIFICATION_URL);
+	}
+	
+	private void showNoAnnouncementAndWaitOkButtonPressed() {
+		waitOkButtonPressed(R.string.no_announcement_from_vocalendar);
 	}
 }

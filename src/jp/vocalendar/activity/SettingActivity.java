@@ -3,6 +3,7 @@ package jp.vocalendar.activity;
 import com.google.api.client.googleapis.extensions.android2.auth.GoogleAccountManager;
 
 import jp.vocalendar.Constants;
+import jp.vocalendar.Debug;
 import jp.vocalendar.R;
 import jp.vocalendar.animation.vocalendar.LoadingAnimationUtil;
 import jp.vocalendar.model.ColorTheme;
@@ -20,6 +21,7 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
+import android.util.Xml;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -40,7 +42,12 @@ implements OnPreferenceChangeListener, OnPreferenceClickListener	{
 		}
     	super.onCreate(savedInstanceState);
     	setTitle(R.string.setting);
-    	addPreferencesFromResource(R.xml.pref);
+
+    	if(Debug.isDebugMenu(this)) {
+        	addPreferencesFromResource(R.xml.pref_debug_menu);
+    	} else {
+    		addPreferencesFromResource(R.xml.pref);
+    	}
     	
     	initNumberOfDatePreference();
     	initNumberOfDateToLoadMoreEventsPreference();

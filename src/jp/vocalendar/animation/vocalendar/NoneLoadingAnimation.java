@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.view.View;
 import jp.vocalendar.animation.AnimationManager;
 import jp.vocalendar.animation.canvas.CanvasAnimation;
 import jp.vocalendar.animation.canvas.CanvasBackground;
@@ -32,5 +33,10 @@ public class NoneLoadingAnimation extends CanvasBackground implements LoadingAni
 	@Override
 	public Spanned getCreatorText() {
 		return new SpannableString("");
+	}
+
+	@Override
+	public void onClick(View v) {
+		// なにもしない
 	}
 }

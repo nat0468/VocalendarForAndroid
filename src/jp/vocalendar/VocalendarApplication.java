@@ -93,6 +93,54 @@ public class VocalendarApplication extends Application {
 		return Integer.parseInt(time);
 	}
 	
+	/**
+	 * お知らせをクリックしたときに開くURLを返す。nullの場合は、お知らせが無い事を示す。
+	 * @param context
+	 * @return
+	 */
+	public static String getAnnouncementURL(Context context) {
+		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+		return pref.getString(Constants.ANNOUNCEMENT_URL_PREFERENCE_NAME, null);
+	}
+	
+	/**
+	 * お知らせ画面を一度だけしか表示しない。
+	 * @param context
+	 * @return
+	 */
+	public static boolean isAnnouncementOnceOnly(Context context) {
+		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+		return pref.getBoolean(Constants.ANNOUNCEMENT_ONCE_ONLY, false);		
+	}
+	
+	/**
+	 * お知らせ画面を表示済みか
+	 * @param context
+	 * @return
+	 */
+	public static boolean isAnnouncementDisplayed(Context context) {
+		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+		return pref.getBoolean(Constants.ANNOUNCEMENT_DISPLAYED, false);				
+	}
+	
+	public static void setAnnouncementDisplayed(Context context, boolean b) {
+		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+		SharedPreferences.Editor editor = pref.edit();
+		editor.putBoolean(Constants.ANNOUNCEMENT_DISPLAYED, b);
+		editor.commit();
+	}
+
+	/**
+	 * 読み込み中画面の告知画面をクリックしたときに開くURLをプリファレンスに設定する。告知画面が無い事を示すにはnullを設定する。
+	 * @param context
+	 */
+	public static void setLoadingNotificationURL(Context context, String url) {
+		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+		SharedPreferences.Editor editor = pref.edit();
+		editor.putString(Constants.ANNOUNCEMENT_URL_PREFERENCE_NAME, url);
+		editor.commit();
+	}
+	
 	public FavoriteEventManager getFavoriteEventManager() {
 		return favoriteEventManager;
 	}

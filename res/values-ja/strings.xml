@@ -244,5 +244,13 @@ VOCALENDAR編集メンバーの皆さんにも感謝いたします。
 		<item>21</item>
 		<item>22</item>
 		<item>23</item>	    	    
-	</string-array>			
+	</string-array>		
+	<string name="debug_menu_notification">(Debug)通知</string>
+	<string name="debug_menu_check_announcement">(Debug)お知らせの確認</string>
+	<string name="check_the_announcement_above_and_push_ok_button">
+	    上のお知らせを確認したら、OKボタンを押して下さい。 お知らせは、メニュー「お知らせ」で表示できます。
+	</string>
+	<string name="announcement_once_only">お知らせは一回のみ表示</string>		
+	<string name="no_announcement_from_vocalendar">VOCALENDARからのお知らせはありません。</string>
+	<string name="announcement">お知らせ</string>
 </resources>

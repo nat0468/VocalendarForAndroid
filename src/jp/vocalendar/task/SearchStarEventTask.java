@@ -164,9 +164,7 @@ public class SearchStarEventTask extends AsyncTask<String, Event, List<EventData
 			}
 			Event e = EventFactory.toVocalendarEvent(
 							calendarId, ge, timeZone, context);
-			if(Constants.DEBUG_MODE) {
-				Log.d(TAG, e.toDateTimeSummaryString(timeZone, context));
-			}
+			//Log.d(TAG, e.toDateTimeSummaryString(timeZone, context));
 			eventList.add(e);
 			publishProgress(e);
 		}

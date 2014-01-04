@@ -13,4 +13,10 @@
           appcompat:showAsAction="never" />
     <item android:id="@+id/action_announcement" android:title="@string/announcement"
           appcompat:showAsAction="never" />
+	<item android:id="@+id/action_notification"
+	      android:title="@string/debug_menu_notification"
+          appcompat:showAsAction="never" />
+	<item android:id="@+id/action_check_announcement"
+	      android:title="@string/debug_menu_check_announcement"
+          appcompat:showAsAction="never" />
 </menu>

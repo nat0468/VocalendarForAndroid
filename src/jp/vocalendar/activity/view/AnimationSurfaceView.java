@@ -2,21 +2,22 @@ package jp.vocalendar.activity.view;
 
 import jp.vocalendar.animation.canvas.SurfaceViewAnimationRunner;
 import jp.vocalendar.animation.vocalendar.LoadingAnimation;
-import jp.vocalendar.animation.vocalendar.WallpaperLoadingAnimation;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 
 /**
  * アニメーション表示用のSurfaceView
  */
 public class AnimationSurfaceView extends SurfaceView
-implements SurfaceHolder.Callback {
+implements SurfaceHolder.Callback, View.OnClickListener {
 	private static final String TAG = "AnimatinSurfaeView";
 	
 	private SurfaceViewAnimationRunner runner;
+	private LoadingAnimation loadingAnimation;
 	
 	public AnimationSurfaceView(Context context) {
 		super(context);
@@ -37,13 +38,15 @@ implements SurfaceHolder.Callback {
 	private void init(Context context) {
 		SurfaceHolder holder = getHolder();
 		holder.addCallback(this);
-		runner = new SurfaceViewAnimationRunner(this);
+		runner = new SurfaceViewAnimationRunner(this);		
+		setOnClickListener(this);
 	}
 
-	public void addAnimation(LoadingAnimation animation) {
-		animation.setAnimationManager(runner);
-		animation.setContext(getContext());
-		runner.add(animation);
+	public void setLoadingAnimation(LoadingAnimation laodingAnimation) {
+		this.loadingAnimation = laodingAnimation;
+		laodingAnimation.setAnimationManager(runner);
+		laodingAnimation.setContext(getContext());
+		runner.add(laodingAnimation);
 	}
 
 	@Override
@@ -72,6 +75,18 @@ implements SurfaceHolder.Callback {
 	
 	public void resume() {
 		Log.d(TAG, "resume");		
-		runner.resume();		
+		runner.resume();
+	}
+	
+	public void destroy() {
+		Log.d(TAG, "destroy");
+		runner.destroy();		
+	}
+
+	@Override
+	public void onClick(View v) {
+		if(loadingAnimation != null) {
+			loadingAnimation.onClick(v);
+		}
 	}
 }

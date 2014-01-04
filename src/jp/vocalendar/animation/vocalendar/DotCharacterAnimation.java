@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.view.View;
 
 /**
  * ドットアニメーションの全体を管理するアニメーション。
@@ -165,4 +166,9 @@ implements LoadingAnimation {
 			return new OneDotCharacterGenerator.Linear(intervalMilliSecondToAddCharacter, drawablesIndex.length);
 		}		
 	}
+
+	@Override
+	public void onClick(View v) {
+		// 何もしない
+	}	
 }

@@ -85,7 +85,8 @@ extends AnimationManagerSupport<CanvasAnimation> {
 		}
 	}
 	
-	public synchronized void cancel() {
+	
+	public synchronized void destroy() {
 		m_running = false;
 		stopUpdateTimer();
 		for(AnimationContainer ac : m_animationContainerList) {

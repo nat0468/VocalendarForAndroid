@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import jp.vocalendar.Constants;
+import jp.vocalendar.Debug;
 import jp.vocalendar.Help;
 import jp.vocalendar.R;
 import jp.vocalendar.VocalendarApplication;
@@ -17,12 +18,14 @@ import jp.vocalendar.model.EventDataBaseRowArray;
 import jp.vocalendar.model.FavoriteEventManager;
 import jp.vocalendar.model.LoadMoreEventController;
 import jp.vocalendar.receiver.AlarmReceiverSetter;
+import jp.vocalendar.task.CheckAnnouncementTask;
 import jp.vocalendar.util.DateUtil;
 import jp.vocalendar.util.DialogUtil;
 import jp.vocalendar.util.UncaughtExceptionSavingHandler;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -35,6 +38,7 @@ import android.preference.PreferenceManager;
 import android.provider.OpenableColumns;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -90,7 +94,8 @@ implements EventArrayCursorAdapter.FavoriteToggler {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        UncaughtExceptionSavingHandler.init(this);
+        initDebug();
+        UncaughtExceptionSavingHandler.init(this);        
         
         setupActionBar();
         
@@ -107,7 +112,7 @@ implements EventArrayCursorAdapter.FavoriteToggler {
         
         setDateToToday();
         if(isUpdateRequired()) {
-        	openEventLoadingActivity();
+        	openEventLoadingActivity(false, true);
         } else {
         	updateList();
         }
@@ -155,7 +160,7 @@ implements EventArrayCursorAdapter.FavoriteToggler {
         update.setOnClickListener(new View.OnClickListener() {			
 			@Override
 			public void onClick(View v) {
-				openEventLoadingActivity();
+				openEventLoadingActivity(true, false);
 			}
 		});        
 	}
@@ -252,13 +257,18 @@ implements EventArrayCursorAdapter.FavoriteToggler {
 	
 	/**
 	 * 読み込み中の日付(loadingDate)でイベント情報を読み込む
+	 * @param manual 手動で読み込み画面を開く処理の場合にtrueとする。
+	 * trueの場合、読み込み画面で告知画面をOKが押されるまで待つ。
+	 * @param check_notification 告知画面を確認する場合にtrueを指定
 	 */
-	private void openEventLoadingActivity() {
+	private void openEventLoadingActivity(boolean manual, boolean check_notification) {
 		loadMoreEventController.setAutoLoading(false);		
 		Intent i = new Intent(this, EventLoadingActivity.class);
 		i.putExtra(EventLoadingActivity.KEY_YEAR, currentDate.get(Calendar.YEAR));
 		i.putExtra(EventLoadingActivity.KEY_MONTH, currentDate.get(Calendar.MONTH));
 		i.putExtra(EventLoadingActivity.KEY_DATE, currentDate.get(Calendar.DATE));
+		i.putExtra(EventLoadingActivity.KEY_MANUAL_LOADING, manual);
+		i.putExtra(EventLoadingActivity.KEY_CHECK_ANNOUNCEMENT, check_notification);
 		startActivityForResult(i, REQUEST_CODE_GET_DAYLY_EVENT);		
 	}
 	
@@ -288,7 +298,7 @@ implements EventArrayCursorAdapter.FavoriteToggler {
 			eventArrayCursorAdapter.notifyDataSetChanged(); // 表示中のリスト項目にカラーテーマ変更を反映するために、Viewを再生成
 			loadMoreEventController.applyColorThemeToListView(getListView(), colorTheme);
 			setDateToToday();
-			openEventLoadingActivity(); // 設定が更新されたらイベント情報を再読み込み
+			openEventLoadingActivity(false, false); // 設定が更新されたらイベント情報を再読み込み
 		}
 		// イベント読み込みのキャンセル時は何もしない
 	}
@@ -422,7 +432,7 @@ implements EventArrayCursorAdapter.FavoriteToggler {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 	    MenuInflater inflater = getMenuInflater();
-	    if(Constants.DEBUG_MENU) {
+	    if(Debug.isDebugMenu(this)) {
 	    	inflater.inflate(R.menu.event_list_action_menu_debug, menu);	    	
 	    } else {
 	    	inflater.inflate(R.menu.event_list_action_menu, menu);
@@ -448,8 +458,15 @@ implements EventArrayCursorAdapter.FavoriteToggler {
 		case R.id.action_web_site:
 			openWebSite();
 			return true;
-		case R.id.action_notification: // テスト用
+		case R.id.action_announcement:
+			checkAnnouncement();
+			return true;
+		case R.id.action_notification: // デバッグ用
 			AlarmReceiverSetter.setAlarmReceiverToAlarmManagerSoonDebug(this);
+			return true;
+		case R.id.action_check_announcement: // デバッグ用
+			checkDebugAnnouncement();
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);	
 		}		
@@ -481,7 +498,7 @@ implements EventArrayCursorAdapter.FavoriteToggler {
 		}		
 		// 読み込んでいる日付の範囲に今日が含まれない場合
 		currentDate = Calendar.getInstance(); // 今日の日付で再読み込み
-		openEventLoadingActivity();
+		openEventLoadingActivity(false, false);
 	}
 	
 	private void scrollToDate(Date date, TimeZone timeZone) {
@@ -534,5 +551,37 @@ implements EventArrayCursorAdapter.FavoriteToggler {
 	private void openWebSite() {
 		Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://vocalendar.jp/"));
 		startActivity(intent);
+	}
+	
+	private void initDebug() {
+		String action = getIntent().getAction();
+		if(Constants.ACTION_DEBUG_MODE_ON.equals(action)) {
+			Debug.getSingleton(this).setDebugMode(true);
+		}
+		if(Constants.ACTION_DEBUG_MENU_ON.equals(action)) {
+			Debug.getSingleton(this).setDebugMenu(true);
+		}
+	}
+	
+	private void checkDebugAnnouncement() {
+		CheckAnnouncementTask t = new CheckAnnouncementTask(
+				this,
+				new CheckAnnouncementTask.Callback() {					
+					@Override
+					public void onPostExecute(Context context, boolean result) {
+						Log.d(TAG, "CheckAnnouncementTask finished. result=" + result);
+						String s = (result ? "お知らせあり" : "お知らせなし");
+						DialogUtil.openMessageDialog(EventListActivity.this,
+								"お知らせ確認完了:" + s, false);
+					}
+				});		
+		t.execute(Constants.LOADING_NOTIFICATION_DEBUG_URL);			
+		Log.d(TAG, "checkDebugNotification() finished.");		
+	}
+	
+	private void checkAnnouncement() {
+		Intent i = new Intent(this, EventLoadingActivity.class);
+		i.putExtra(EventLoadingActivity.KEY_CHECK_ANNOUNCEMENT_ONLY, true);
+		startActivity(i);		
 	}
 }

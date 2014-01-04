@@ -75,11 +75,11 @@ public class AlarmReceiverSetter extends BroadcastReceiver {
 		PendingIntent sender = PendingIntent.getBroadcast(
 				context, AlarmReceiver.REQUEST_CODE_NORMAL, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-		// 3秒後に通知を表示させる
+		// 1秒後に通知を表示させる
 		Calendar calSet = Calendar.getInstance();
 		calSet.setTimeInMillis(System.currentTimeMillis());
 		calSet.setTimeZone(TimeZone.getDefault());
-		calSet.add(Calendar.SECOND, 3);
+		calSet.add(Calendar.SECOND, 1);
 
 		AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 		alarmManager.set(

@@ -11,6 +11,7 @@ import java.util.Date;
 
 import jp.vocalendar.BuildConfig;
 import jp.vocalendar.Constants;
+import jp.vocalendar.Debug;
 
 import android.app.Activity;
 import android.content.Context;
@@ -50,7 +51,7 @@ public abstract class UncaughtExceptionSavingHandler implements UncaughtExceptio
 	 * @param clazz 生成する例外ハンドラ
 	 */
     public static void setHandlerIfNotSet(Activity activity) {
-    	if(isDebuggable()) { 
+    	if(Debug.isDebugMode(activity)) { 
     		UncaughtExceptionHandler handler = Thread.getDefaultUncaughtExceptionHandler();
     		if(handler == null || !(handler instanceof UncaughtExceptionSavingHandler)) {    			
     			//未設定、もしくは異なる例外ハンドラが設定されている場合は、設定する
@@ -60,10 +61,6 @@ public abstract class UncaughtExceptionSavingHandler implements UncaughtExceptio
     	}
     }
     
-    private static boolean isDebuggable() {
-    	return Constants.DEBUG_MODE;
-    }    
-	
 	public static UncaughtExceptionSavingHandler getUncaughtExceptionSavingHandler(Activity activity) {
 		if(s_handlder == null) {
 			try {
@@ -95,7 +92,7 @@ public abstract class UncaughtExceptionSavingHandler implements UncaughtExceptio
 	}
 
 	private static boolean isExceptionReportExist(Activity activity) {
-		if(!isDebuggable()) {
+		if(!Debug.isDebugMode(activity)) {
 			return false;
 		}
 		UncaughtExceptionSavingHandler handler =

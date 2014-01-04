@@ -345,4 +345,13 @@ To import the settings to a device, input(copy &amp; paste) the code, and press 
 		<item>22</item>
 		<item>23</item>	    	    
 	</string-array>		
+	<string name="debug_mode">Debug Mode</string>
+	<string name="debug_menu">Debug Menu</string>
+	<string name="debug_menu_notification">(Debug)Notification</string>
+	<string name="debug_menu_check_announcement">(Debug)Check Anncouncement</string>
+	<string name="check_the_announcement_above_and_push_ok_button">
+	    Check the announcement, and push OK button. Menu \"Annoucement\" shows the announcement.</string>
+	<string name="announcement_once_only">Announcement once only</string>
+	<string name="no_announcement_from_vocalendar">No announcement from VOCALENDAR.</string>
+	<string name="announcement">Announcement</string>
 </resources>

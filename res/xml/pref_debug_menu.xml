@@ -53,6 +53,14 @@
     <CheckBoxPreference android:title="@string/announcement_once_only" 
         			android:key="announcement_once_only"
         			android:defaultValue="false" />
+	<CheckBoxPreference xmlns:android="http://schemas.android.com/apk/res/android"  
+						android:title="@string/debug_mode" 
+						android:key="debug_mode"
+    					android:defaultValue="false" />
+	<CheckBoxPreference xmlns:android="http://schemas.android.com/apk/res/android"  
+						android:title="@string/debug_menu" 
+						android:key="debug_menu"
+    					android:defaultValue="false" />	
     <Preference android:title="@string/back"
         		android:key="back">
     </Preference>    

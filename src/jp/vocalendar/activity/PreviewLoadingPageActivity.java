@@ -45,7 +45,7 @@ public class PreviewLoadingPageActivity extends ActionBarActivity {
 
 	protected void initAnimation() {
 		AnimationSurfaceView view = getAnimationSurfaceView();
-		view.addAnimation(loadingAnimation);
+		view.setLoadingAnimation(loadingAnimation);
 		TextView tv = (TextView)findViewById(R.id.loadingImageCreatorText);
 		tv.setMovementMethod(LinkMovementMethod.getInstance());		
 		tv.setText(loadingAnimation.getCreatorText());

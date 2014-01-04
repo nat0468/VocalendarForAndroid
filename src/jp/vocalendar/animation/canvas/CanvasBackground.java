@@ -76,7 +76,7 @@ public class CanvasBackground extends CanvasAnimationSupport {
             double imageHeight = orgHeight * scale;
             rect.set(
             	0, (int)(destHeight - imageHeight) / 2,
-            	(int)destWidth, (int)imageHeight);
+            	(int)destWidth, (int)destHeight - (int)((destHeight - imageHeight)/2));
         }      
         return rect;
     }

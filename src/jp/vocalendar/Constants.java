@@ -5,14 +5,25 @@ package jp.vocalendar;
  */
 public class Constants {
 	/**
-	 * デバッグモードで実行する場合はtrue(例外レポート機能がオンになる)
+	 * デバッグモードで実行する場合はtrue(例外レポート機能がオンになる)になるプリファレンス名
 	 */
-	public static final boolean DEBUG_MODE = true;
+	public static final String DEBUG_MODE_PREF_NAME = "debug_mode";	
+	/**
+	 * デバッグモードをONにするアクション名
+	 */
+	public static final String ACTION_DEBUG_MODE_ON = "jp.vocalendar.intent.action.DEBUG_MODE_ON";
 	
 	/**
-	 * デバッグメニューを表示する場合はtrue
+	 * デバッグメニューを表示する場合はtrueになるプリファンレンス名
 	 */
-	public static final boolean DEBUG_MENU = true;
+	public static final String DEBUG_MENU_PREF_NAME = "debug_menu";
+	/**
+	 * デバッグメニューをONにするアクション名
+	 */
+	public static final String ACTION_DEBUG_MENU_ON = "jp.vocalendar.intent.action.DEBUG_MENU_ON";
+	
+	
+	
 	
 	  /**
 	   * API操作に使うアカウント種別
@@ -108,6 +119,13 @@ public class Constants {
 	  public static final String DEFAULT_NOTIFICATION_TIME_PREFERENCE_VALUE = "8";
 	  public static final int NOT_NOTIFY_PREFERENCE_VALUE = -1;
 	  
+	  /** 読み込み中画面のお知らせをクリックしたときに開くURLを格納するプリファレンス値。この値がnullなら告知無しを示す。 */
+	  public static final String ANNOUNCEMENT_URL_PREFERENCE_NAME = "announcement_url_pref";
+	  /** お知らせ表示は一回までの設定を格納するプリファレンス値。この値がtrueならお知らせは一回まで表示 */
+	  public static final String ANNOUNCEMENT_ONCE_ONLY ="announcement_once_only";
+	  /** お知らせを表示したかどうかを格納するプリファレンス値。この値がfalseなら見表示。trueなら表示済み */
+	  public static final String ANNOUNCEMENT_DISPLAYED ="announcement_displayed";	  
+	  
 	  /**
 	   * onActivityResult request codes:
 	   */
@@ -131,4 +149,10 @@ public class Constants {
 	   * ★イベントの「★」の文字
 	   */
 	  public static final String STAR_EVENT_CHARACTER = "★";
+	  
+	  /** 読み込み中画面の告知画面のファイルがあるURLパス */
+	  public static final String LOADING_NOTIFICATION_URL = "http://vocalendar.jp/notification/";
+	  
+	  /** 読み込み中画面の告知画面のファイルがあるURLパス(デバッグ用) */
+	  public static final String LOADING_NOTIFICATION_DEBUG_URL = "http://vocalendar.jp/notification/debug_";
 }

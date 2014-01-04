@@ -10,6 +10,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.text.Html;
 import android.text.Spanned;
+import android.view.View;
 
 public class WallpaperLoadingAnimation extends CanvasBackground
 implements LoadingAnimation {
@@ -39,6 +40,11 @@ implements LoadingAnimation {
         String str = context.getResources().getText(R.string.illustration_by).toString()
 				+ " <a href=\"http://www.elrowa.com/\">ELrowa</a>.";
         return Html.fromHtml(str);
+	}
+
+	@Override
+	public void onClick(View v) {
+		// 何もしない
 	}
 	
 }

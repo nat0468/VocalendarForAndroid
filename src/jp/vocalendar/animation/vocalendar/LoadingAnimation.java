@@ -2,6 +2,7 @@ package jp.vocalendar.animation.vocalendar;
 
 import android.content.Context;
 import android.text.Spanned;
+import android.view.View;
 import jp.vocalendar.animation.AnimationManager;
 import jp.vocalendar.animation.canvas.CanvasAnimation;
 
@@ -24,4 +25,10 @@ public interface LoadingAnimation extends CanvasAnimation {
 	 * 作成者を表すテキスト。アニメーション表示の下に表示する。
 	 */
 	public Spanned getCreatorText();
+	
+	/**
+	 * クリックされたときの処理を実装する
+	 * @param v
+	 */
+	public void onClick(View v);
 }

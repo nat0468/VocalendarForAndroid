@@ -63,6 +63,7 @@
         android:textSize="12sp" />
     
     <LinearLayout
+        android:id="@+id/loading_footer_layout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.5"
