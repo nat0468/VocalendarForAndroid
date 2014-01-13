@@ -85,7 +85,8 @@ implements SearchStarEventTask.Callback, CheckAnnouncementTask.Callback {
 		List<EventDataBaseRow> favoriteEvents = getNotificationEvents(context);
 		if(!debugMode) { //デバッグでない時は、0件は無視
 			if(starEvents.size() == 0 && favoriteEvents.size() == 0) {
-				Log.d(TAG, "no notification events.");				
+				Log.d(TAG, "no notification events.");			
+				return;
 			}
 		}
 		makeNotification(context, favoriteEvents, starEvents);		

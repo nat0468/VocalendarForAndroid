@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="jp.vocalendar"
     android:versionCode="10001"
-    android:versionName="1.00.0-beta20140104" >
+    android:versionName="1.00.0-beta20140108" >
 
     <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="16" />
     <uses-permission android:name="android.permission.INTERNET"/>
