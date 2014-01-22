@@ -247,10 +247,17 @@ VOCALENDAR編集メンバーの皆さんにも感謝いたします。
 	</string-array>		
 	<string name="debug_menu_notification">(Debug)通知</string>
 	<string name="debug_menu_check_announcement">(Debug)お知らせの確認</string>
+	<string name="debug_menu_change_favorite_event">(Debug)お気に入りイベント変更</string>			
 	<string name="check_the_announcement_above_and_push_ok_button">
 	    上のお知らせを確認したら、OKボタンを押して下さい。 お知らせは、メニュー「お知らせ」で表示できます。
 	</string>
 	<string name="announcement_once_only">お知らせは一回のみ表示</string>		
 	<string name="no_announcement_from_vocalendar">VOCALENDARからのお知らせはありません。</string>
 	<string name="announcement">お知らせ</string>
+	<string name="update_favorite_events_dialog_title">イベント情報更新中</string>
+	<string name="update_favorite_events_dialog_message">イベント情報を更新しています。</string>
+	<string name="some_favorite_events_can_not_be_found_on_server1">以下のイベントがサーバーで見つかりません：</string>
+	<string name="some_favorite_events_can_not_be_found_on_server2">\
+このイベントは登録し直された、もしくは削除された可能性があります。\
+対応するイベントをイベント一覧画面や検索画面でご確認下さい。</string>
 </resources>

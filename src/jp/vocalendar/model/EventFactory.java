@@ -24,6 +24,21 @@ public class EventFactory {
 			com.google.api.services.calendar.model.Event ge,
 			TimeZone timeZone, Context context) {
 		Event e = new Event();
+		updateVocalendarEvent(gCalendarId, ge, timeZone, context, e);
+		return e;
+	}
+
+	/**
+	 * 渡された(VOCALENDARの)Eventを、Google CalendarのEventの値で更新する。
+	 * @param gCalendarId
+	 * @param ge
+	 * @param timeZone
+	 * @param context
+	 * @param e
+	 */
+	public static void updateVocalendarEvent(String gCalendarId,
+			com.google.api.services.calendar.model.Event ge, TimeZone timeZone,
+			Context context, Event e) {
 		e.setGCalendarId(gCalendarId);
 		e.setGid(ge.getId());
 		if(ge.getSummary() != null) {
@@ -51,7 +66,6 @@ public class EventFactory {
 			String rrule = ge.getRecurrence().get(0);
 			operateRrule(e, rrule, timeZone);
 		}
-		return e;
 	}
 	
 	//日付文字列(yyyy-mm-dd)の正規表現パターン

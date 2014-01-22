@@ -6,6 +6,7 @@ import java.util.TimeZone;
 
 import jp.vocalendar.Constants;
 import jp.vocalendar.Debug;
+import jp.vocalendar.DebugMenuAction;
 import jp.vocalendar.Help;
 import jp.vocalendar.R;
 import jp.vocalendar.VocalendarApplication;
@@ -466,6 +467,9 @@ implements EventArrayCursorAdapter.FavoriteToggler {
 			return true;
 		case R.id.action_check_announcement: // デバッグ用
 			checkDebugAnnouncement();
+			return true;
+		case R.id.action_change_favorite_event: // デバッグ用
+			DebugMenuAction.changeFavoriteEventByDummyData(this);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);	

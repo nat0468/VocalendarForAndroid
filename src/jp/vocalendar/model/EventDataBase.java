@@ -323,6 +323,48 @@ public class EventDataBase {
 	}
 	
 	/**
+	 * 指定したイベントをお気に入りを更新する
+	 * @param e
+	 * @return 更新に成功したらtrue。お気に入りにないイベントで更新できなかった場合はfalse 
+	 */
+	public boolean updateFavorite(Event event) {
+		ContentValues v = new ContentValues();
+		long index = (event.isRecursive() ? Integer.MAX_VALUE : event.getStartDateIndex());
+		v.put(EventDataBaseHelper.COLUMN_START_DATE_INDEX, index);
+		v.put(EventDataBaseHelper.COLUMN_SUMMARY, event.getSummary());
+		v.put(EventDataBaseHelper.COLUMN_DESCRIPTION, event.getDescription());
+		if(event.getStartDate() != null) {
+			v.put(EventDataBaseHelper.COLUMN_START_DATE, event.getStartDate().getTime());
+		}
+		if(event.getStartDateTime() != null) {
+			v.put(EventDataBaseHelper.COLUMN_START_DATE_TIME, event.getStartDateTime().getTime());
+		}
+		if(event.getEndDate() != null) {
+			v.put(EventDataBaseHelper.COLUMN_END_DATE, event.getEndDate().getTime());
+		}
+		if(event.getEndDateTime() != null) {
+			v.put(EventDataBaseHelper.COLUMN_END_DATE_TIME, event.getEndDateTime().getTime());
+		}
+		v.put(EventDataBaseHelper.COLUMN_RECURSIVE, event.getRecursive());
+		v.put(EventDataBaseHelper.COLUMN_RECURSIVE_BY, event.getRecursiveBy());
+		v.put(EventDataBaseHelper.COLUMN_BY_WEEKDAY_OCCURRENCE, event.getByWeekdayOccurrence());
+		v.put(EventDataBaseHelper.COLUMN_LOCATION, event.getLocation());
+
+		int numRow = 0;
+		try {
+			numRow = database.update(
+					EventDataBaseHelper.FAVORITES_TABLE_NAME, v,
+					EventDataBaseHelper.COLUMN_GCALENDAR_ID + "=? AND " + 
+					EventDataBaseHelper.COLUMN_GID + "=?",					
+					new String[] {event.getGCalendarId(), event.getGid()});
+		} catch(SQLiteException e) {
+			Log.e(TAG, "updateFavorite() failed.", e);
+		}
+		return (numRow != 0);
+	}
+	
+	
+	/**
 	 * お気に入りイベントを取得する。
 	 * @param today お気に入り一覧を取得する起点日時(典型的には現在日時)
 	 * @param timeZone 

@@ -1,11 +1,15 @@
 package jp.vocalendar.model;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.google.api.services.calendar.Calendar;
 
 import android.app.Activity;
 import android.content.Context;
 
+import jp.vocalendar.activity.FavoriteEventListActivity;
 import jp.vocalendar.util.DialogUtil;
 
 /**
@@ -15,9 +19,16 @@ import jp.vocalendar.util.DialogUtil;
 public class FavoriteEventManager {
 	
 	/**
-	 * GClalendarIdとgidのホルダ。
+	 * イベントの識別子。GClalendarIdとgidのホルダ。
 	 */
-	private class GCalendarIdAndGid {
+	public static class GCalendarIdAndGid implements Serializable {
+		private static final long serialVersionUID = 1L;
+		
+		private String gCalendarId;
+		private String gid;
+
+		public GCalendarIdAndGid() { }
+		
 		public GCalendarIdAndGid(EventDataBaseRow r) {
 			this(r.getEvent());
 		}
@@ -31,9 +42,6 @@ public class FavoriteEventManager {
 			this.gid = gid;
 		}
 		
-		public String gCalendarId;
-		public String gid;
-
 		@Override
 		public int hashCode() {
 			return (gCalendarId + ":::" + gid).hashCode();
@@ -54,6 +62,14 @@ public class FavoriteEventManager {
 				}
 			}
 			return false;
+		}
+
+		public String getGCalendarId() {
+			return gCalendarId;
+		}
+
+		public String getGid() {
+			return gid;
 		}
 		
 	}
@@ -156,6 +172,25 @@ public class FavoriteEventManager {
 		if(result) {
 			GCalendarIdAndGid g = new GCalendarIdAndGid(event.getGCalendarId(), event.getGid());
 			favoriteMap.remove(g);
+		}
+		return result;
+	}
+
+	/**
+	 * 指定されたお気に入りイベントの情報を更新する。DBにも反映する。
+	 * @param context
+	 * @param calendar
+	 * @param event
+	 * @return 更新に成功したらtrueを返す。
+	 */
+	public boolean updateFavorite(Context context, Event event) {
+		EventDataBase db = new EventDataBase(context);
+		boolean result = false;
+		db.open();
+		try {
+			result = db.updateFavorite(event);
+		} finally {
+			db.close();
 		}
 		return result;
 	}

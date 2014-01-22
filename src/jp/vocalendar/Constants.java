@@ -155,4 +155,7 @@ public class Constants {
 	  
 	  /** お知らせのファイルがあるURLパス(デバッグ用) */
 	  public static final String ANNOUNCEMENT_URL_DEBUG = "http://vocalendar.jp/announcement/debug_";
+	  
+	  /** Google Calendar API呼び出し時に指定するアプリケーション名 */
+	  public static final String APPLICATION_NAME_FOR_GOOGLE = "Vocalendar-for-Android/1.0";
 }

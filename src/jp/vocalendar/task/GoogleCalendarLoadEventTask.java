@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.TimeZone;
 
+import jp.vocalendar.Constants;
 import jp.vocalendar.googleapi.OAuthManager;
 import jp.vocalendar.model.ClientCredentials;
 import jp.vocalendar.model.Event;
@@ -259,7 +260,7 @@ public class GoogleCalendarLoadEventTask extends LoadEventTask {
 	            new GoogleAccessProtectedResource(authToken);
 	
 	    return Calendar.builder(transport, jsonFactory)
-	    			.setApplicationName("Vocalendar-for-Android/0.5")
+	    			.setApplicationName(Constants.APPLICATION_NAME_FOR_GOOGLE)
 	                .setJsonHttpRequestInitializer(new JsonHttpRequestInitializer() {
 	                	@Override
 	                	public void initialize(JsonHttpRequest request) {

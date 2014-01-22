@@ -182,7 +182,7 @@ public class SearchStarEventTask extends AsyncTask<String, Event, List<EventData
 	            new GoogleAccessProtectedResource(authToken);
 	
 	    return Calendar.builder(transport, jsonFactory)
-	    			.setApplicationName("Vocalendar-for-Android/0.5")
+	    			.setApplicationName(Constants.APPLICATION_NAME_FOR_GOOGLE)
 	                .setJsonHttpRequestInitializer(new JsonHttpRequestInitializer() {
 	                	@Override
 	                	public void initialize(JsonHttpRequest request) {
