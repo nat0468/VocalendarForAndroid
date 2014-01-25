@@ -45,8 +45,11 @@ public class LoadingActivity extends ActionBarActivity {
 		public void onInit(String message);
 		/** タスクの進捗時のコールバック。引数に読み込み中アイテムのメッセージを指定 */
 		public void onProgressUpdate(String itemMessage);		
-		/** タスク終了時のコールバック */
-		public void onPostExecute();
+		/**
+		 * タスク終了時のコールバック
+		 * @param intent 呼び出し元へ返すデータを格納するIntent
+		 */
+		public void onPostExecute(Intent intent);
 		/** タスクキャンセル時のコールバック */
 		public void onCanceled();
 	}
@@ -135,8 +138,8 @@ public class LoadingActivity extends ActionBarActivity {
 					updateProgressMessage(message);
 				}				
 				@Override
-				public void onPostExecute() {
-					taskFinished();
+				public void onPostExecute(Intent intent) {
+					taskFinished(intent);
 				}
 				@Override
 				public void onCanceled() {
@@ -173,8 +176,8 @@ public class LoadingActivity extends ActionBarActivity {
 	/**
 	 * タスクが正常終了したときに呼ばれる
 	 */
-	private void taskFinished() {
-		setResult(Activity.RESULT_OK);
+	private void taskFinished(Intent intent) {
+		setResult(Activity.RESULT_OK, intent);
 		finish();
 	}
 	

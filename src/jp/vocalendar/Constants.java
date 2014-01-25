@@ -158,4 +158,6 @@ public class Constants {
 	  
 	  /** Google Calendar API呼び出し時に指定するアプリケーション名 */
 	  public static final String APPLICATION_NAME_FOR_GOOGLE = "Vocalendar-for-Android/1.0";
+	  
+	  public static final String NUMBER_OF_FAVORITE_EVENT_TO_DISPLAY = "NUMBER_OF_FAVORITE_EVENT_TO_DISPLAU";
 }

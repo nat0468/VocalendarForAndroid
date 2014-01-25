@@ -31,6 +31,7 @@ import android.accounts.Account;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -124,8 +125,8 @@ public class UpdateFavoriteEventTask extends
 		}
 		if(result == Result.SOME_EVENTS_NOT_FOUND) {
 			showSomeEventsNotFoundDialog();
-		}		
-		taskCallback.onPostExecute();
+		}
+		taskCallback.onPostExecute(new Intent());
 	}
 
 	@Override

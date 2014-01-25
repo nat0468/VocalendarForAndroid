@@ -7,14 +7,19 @@ import java.util.TimeZone;
 
 import jp.vocalendar.R;
 import jp.vocalendar.VocalendarApplication;
+import jp.vocalendar.activity.view.VocalendarDatePicker;
 import jp.vocalendar.model.ColorTheme;
+import jp.vocalendar.model.Event;
 import jp.vocalendar.model.EventArrayCursorAdapter;
 import jp.vocalendar.model.EventDataBase;
 import jp.vocalendar.model.EventDataBaseRow;
+import jp.vocalendar.model.EventDataBaseRowArray;
 import jp.vocalendar.model.EventWithAdditionalDateArrayCursorAdapter;
 import jp.vocalendar.model.FavoriteEventDataBaseRow;
 import jp.vocalendar.model.FavoriteEventManager;
+import jp.vocalendar.model.LoadMoreFavoriteEventController;
 import jp.vocalendar.model.FavoriteEventManager.GCalendarIdAndGid;
+import jp.vocalendar.model.LoadMoreEventController;
 import jp.vocalendar.task.UpdateFavoriteEventTask;
 import jp.vocalendar.util.DateUtil;
 import jp.vocalendar.util.DialogUtil;
@@ -40,10 +45,18 @@ implements EventArrayCursorAdapter.FavoriteToggler {
 	private static final int REQUEST_CODE_UPDATE_FAVORITE_EVENT = 100;
 	
 	private ColorTheme colorTheme;
-	private UpdateFavoriteEventTask updateFavoriteEventTask;
+	private LoadMoreFavoriteEventController loadMoreFavoriteEventController;
 
-	/** リスト中の今日のイベントの位置 */
-	private int todayIndex;
+	/** 
+	 * リスト中の今日のイベントの位置。
+	 * 日付を指定したお気に入り一覧の場合は、Integer.MIN_VALUE になる。
+	 */
+	private int todayIndex = Integer.MIN_VALUE;
+	
+	/** お気に入り一覧を読み込み開始する時間。初期値は今日の開始時間(0時0分0秒) */
+	private Calendar startTimeToList;
+	
+	private VocalendarDatePicker datePicker;
 		
 	/** Called when the activity is first created. */
 	@Override
@@ -55,9 +68,11 @@ implements EventArrayCursorAdapter.FavoriteToggler {
         colorTheme = initColorTheme();
         setContentView(R.layout.event_list);
         
+        loadMoreFavoriteEventController = new LoadMoreFavoriteEventController(this);
+        
         setupButtons();
         setupListView();
-        updateList();
+        updateListToday();
 	}
 
 	private void setupActionBar() {
@@ -78,7 +93,7 @@ implements EventArrayCursorAdapter.FavoriteToggler {
 		today.setOnClickListener(new View.OnClickListener() {			
 			@Override
 			public void onClick(View v) {
-				setSelection(todayIndex);
+				goToToday();
 			}
 		});
 		
@@ -86,7 +101,7 @@ implements EventArrayCursorAdapter.FavoriteToggler {
         changeDate.setOnClickListener(new View.OnClickListener() {			
 			@Override
 			public void onClick(View v) {
-				DialogUtil.openNotImplementedDialog(FavoriteEventListActivity.this);
+				openDatePicker();
 			}
 		});
 
@@ -124,6 +139,13 @@ implements EventArrayCursorAdapter.FavoriteToggler {
 	}
 	
 	private void openEventDescriptionActivity(int position) {
+		if(loadMoreFavoriteEventController.isLoadMorePreviousEventViewDisplayed()) {
+			if(position == 0) {
+				loadMoreFavoriteEventController.loadPreviousEventsTapped();
+				return;
+			}
+			position--;
+		}
 		EventDataBaseRow event =
 				eventArrayCursorAdapter.getEventArrayCursor().getEventDataBaseRow(position);
 		Intent i = new Intent(this, OneEventDescriptionActivity.class);
@@ -131,16 +153,19 @@ implements EventArrayCursorAdapter.FavoriteToggler {
 		startActivity(i);
 	}
 
-	private void updateList() {
+	/**
+	 * 一覧を今日で更新
+	 */
+	private void updateListToday() {
         TimeZone timeZone = TimeZone.getDefault();
-        Calendar today = Calendar.getInstance();
-        DateUtil.makeStartTimeOfDay(today);
-        
+        startTimeToList = Calendar.getInstance(timeZone);
+        DateUtil.makeStartTimeOfDay(startTimeToList);
+
         List<FavoriteEventDataBaseRow> rowList = new LinkedList<FavoriteEventDataBaseRow>();
         
         EventDataBase db = new EventDataBase(this);
 		db.open();
-        todayIndex = db.getAllFavoriteEvents(today, timeZone, rowList);
+        db.getFavoriteEvents(startTimeToList, timeZone, rowList);
         db.close();
         
         EventDataBaseRow[] rows = rowList.toArray(new EventDataBaseRow[rowList.size()]);
@@ -148,12 +173,53 @@ implements EventArrayCursorAdapter.FavoriteToggler {
         favoriteEventManager = app.getFavoriteEventManager();
         favoriteEventManager.loadFavoriteEvent(rows);
         
+        if(rows.length != 0) {
+            loadMoreFavoriteEventController.setupListView(getListView(), colorTheme); // もっと読み込む項目を設定            
+            todayIndex = 1; //もっと読み込むアイテムの次が今日のお気に入りイベント        	
+        } else {
+        	// もっと読み込む項目は設定しない(loadMoreFavoriteEventController.setupListView()は呼ばない)
+        	todayIndex = 0;        	
+        }
         eventArrayCursorAdapter = new EventWithAdditionalDateArrayCursorAdapter(
         		this, rows, timeZone, colorTheme, favoriteEventManager, this);
         getListView().setAdapter(eventArrayCursorAdapter);
         setSelection(todayIndex);
 	}
-	
+
+	/**
+	 * 一覧を指定日で更新
+	 * @param cal
+	 */
+	private void updateList(int year, int month, int day) {
+        TimeZone timeZone = TimeZone.getDefault();
+		startTimeToList.set(Calendar.YEAR, year);
+		startTimeToList.set(Calendar.MONTH, month);
+		startTimeToList.set(Calendar.DAY_OF_MONTH, day);
+
+        List<FavoriteEventDataBaseRow> rowList = new LinkedList<FavoriteEventDataBaseRow>();
+        
+        EventDataBase db = new EventDataBase(this);
+		db.open();
+        db.getFavoriteEvents(startTimeToList, timeZone, rowList);
+        db.close();
+        
+        EventDataBaseRow[] rows = rowList.toArray(new EventDataBaseRow[rowList.size()]);
+        VocalendarApplication app = (VocalendarApplication)getApplication();
+        favoriteEventManager = app.getFavoriteEventManager();
+        favoriteEventManager.loadFavoriteEvent(rows);
+
+        int startPosition = 0;
+        if(rows.length != 0) {
+            loadMoreFavoriteEventController.setupListView(getListView(), colorTheme); // もっと読み込む項目を設定            
+            startPosition = 1; //もっと読み込むアイテムの次が今日のお気に入りイベント        	
+        }
+        eventArrayCursorAdapter = new EventWithAdditionalDateArrayCursorAdapter(
+        		this, rows, timeZone, colorTheme, favoriteEventManager, this);
+        getListView().setAdapter(eventArrayCursorAdapter);
+        setSelection(startPosition);
+        todayIndex = Integer.MIN_VALUE;
+	}
+
 	@Override
 	public boolean onSupportNavigateUp() {
 		openEventList();
@@ -187,10 +253,72 @@ implements EventArrayCursorAdapter.FavoriteToggler {
 			int requestCode, int resultCode, Intent data) {
 		if(requestCode == REQUEST_CODE_UPDATE_FAVORITE_EVENT) { // 読み込み中画面から戻ったときの処理
 			if(resultCode == Activity.RESULT_OK) {
-				updateList();
+				loadMoreFavoriteEventController.resetListView();				
+				updateList(
+						startTimeToList.get(Calendar.YEAR),
+						startTimeToList.get(Calendar.MONTH),
+						startTimeToList.get(Calendar.DAY_OF_MONTH));
 			}
 			return;
 		}
 		super.onActivityResult(requestCode, resultCode, data);
+	}
+	
+	/**
+	 * お気に入りイベントを更新する。
+	 * @param eventDataBaseRowArray
+	 */
+	public void updateFavoriteEventRows(EventDataBaseRow[] rows) {
+		int oldSize = eventArrayCursorAdapter.getEventArrayCursor().getEventDataBaseRows().length;
+		int newSize = rows.length - oldSize;
+		if(todayIndex >= 0) {
+			todayIndex = todayIndex + newSize;
+		}
+		if(rows.length > 0) {
+			Event e = rows[0].getEvent();
+			if(e.getStartDateTime() != null) {
+				startTimeToList.setTime(e.getStartDateTime());
+			} else if(e.getStartDate() != null) {
+				startTimeToList.setTime(e.getStartDate());				
+			}
+		}
+		
+    	eventArrayCursorAdapter = new EventWithAdditionalDateArrayCursorAdapter(
+    			this, rows, TimeZone.getDefault(), colorTheme,
+    			favoriteEventManager, this);    	
+        setListAdapter(eventArrayCursorAdapter);        
+       	setSelection(newSize);        
+	}
+
+	private void openDatePicker() {
+		if(datePicker == null) {
+			datePicker = new VocalendarDatePicker(
+					this,
+					new VocalendarDatePicker.OkOnClickListener() {
+						@Override
+						public void onClick(int year, int month, int dayOfMonth) {
+							changeDateTo(year, month, dayOfMonth);
+						}						
+					});
+		}
+		datePicker.show(startTimeToList);
+	}
+	
+	private void changeDateTo(int year, int month, int day) {
+		loadMoreFavoriteEventController.resetListView();
+		updateList(year, month, day);
+	}
+
+	public Calendar getStartTimeToList() {
+		return startTimeToList;
+	}
+	
+	private void goToToday() {
+		if(todayIndex >= 0) {
+			setSelection(todayIndex);
+		} else {
+			loadMoreFavoriteEventController.resetListView();
+			updateListToday();
+		}
 	}
 }

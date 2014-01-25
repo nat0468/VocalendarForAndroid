@@ -6,7 +6,7 @@ import jp.vocalendar.model.EventArrayCursorAdapter.FavoriteToggler;
 import android.app.Activity;
 
 /**
- * 常に日付もじれるを表示するイベント一覧表示に使うAdapter
+ * 常に日付文字列を表示するイベント一覧表示に使うAdapter
  */
 public class EventWithAdditionalDateArrayCursorAdapter extends
 		EventArrayCursorAdapter {

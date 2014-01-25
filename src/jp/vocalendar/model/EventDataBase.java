@@ -7,6 +7,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.TimeZone;
 
+import jp.vocalendar.util.DateUtil;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -372,9 +374,25 @@ public class EventDataBase {
 	 * @return rowsの中の起点日時の位置(インデックス)
 	 */
 	public int getAllFavoriteEvents(Calendar today, TimeZone timeZone, List<FavoriteEventDataBaseRow> rows) {
+		return getAllFavoriteEvents(today, timeZone, -1, rows);
+	}
+
+	/**
+	 * お気に入りイベントを最大数指定で取得する。
+	 * @param today お気に入り一覧を取得する起点日時(典型的には現在日時)
+	 * @param timeZone 
+	 * @param max お気に入りイベントを取得する最大個数。0以下の場合は最大個数なし。
+	 * @param rows 取得したお気に入りイベントを格納するリスト
+	 * @return rowsの中の起点日時の位置(sqlインデックス)
+	 */
+	public int getAllFavoriteEvents(Calendar today, TimeZone timeZone, int max, List<FavoriteEventDataBaseRow> rows) {
+		String limit = null;
+		if(max > 0) {
+			limit = Integer.toString(max);			
+		}
 		Cursor c = database.query(
 				EventDataBaseHelper.FAVORITES_TABLE_NAME, QUERY_FAVORITE_EVENT_COLUMNS, 
-				null, null, null, null, EventDataBaseHelper.COLUMN_START_DATE_INDEX + " ASC");
+				null, null, null, null, EventDataBaseHelper.COLUMN_START_DATE_INDEX + " ASC", limit);
 		if(c.moveToFirst()) {
 			do {
 				rows.add(getFavoriteEvent(c, today, timeZone));				
@@ -384,6 +402,31 @@ public class EventDataBase {
 		sortByDeemedStartDateTime(rows, today, timeZone);
 		setEventIndex(rows);
 		return findToday(rows, today);
+	}
+
+	/**
+	 * 今日以降のお気に入りイベントを最大数指定で取得する。
+	 * @param today お気に入り一覧を取得する起点日時(典型的には現在日時)
+	 * @param timeZone 
+	 * @param rows 取得したお気に入りイベントを格納するリスト
+	 * @return rowsの中の起点日時の位置(sqlインデックス)
+	 */
+	public void getFavoriteEvents(Calendar today, TimeZone timeZone, List<FavoriteEventDataBaseRow> rows) {
+		DateUtil.makeStartTimeOfDay(today);
+		long todayDateIndex = today.getTimeInMillis();
+		Cursor c = database.query(
+				EventDataBaseHelper.FAVORITES_TABLE_NAME, QUERY_FAVORITE_EVENT_COLUMNS, 
+				"? <= " + EventDataBaseHelper.COLUMN_START_DATE_INDEX,
+				new String[] { Long.toString(todayDateIndex) },
+				null, null, EventDataBaseHelper.COLUMN_START_DATE_INDEX + " ASC");
+		if(c.moveToFirst()) {
+			do {
+				rows.add(getFavoriteEvent(c, today, timeZone));				
+			} while(c.moveToNext());
+		}
+		c.close();
+		sortByDeemedStartDateTime(rows, today, timeZone);
+		setEventIndex(rows);
 	}
 	
 	private void setEventIndex(List<FavoriteEventDataBaseRow> rows) {
@@ -438,5 +481,34 @@ public class EventDataBase {
 		return 0;
 	}
 
+	/**
+	 * 指定された startDateIndex より前のお気に入りイベントを最大数指定で取得する。
+	 * @param startDateIndex 
+	 * @param today
+	 * @param max 取得する最大イベント数
+	 * @param timeZone
+	 * @return 取得したお気に入りイベントのリスト
+	 */
+	public List<FavoriteEventDataBaseRow> getFavoriteEventsPrevious(
+			long startDateIndex, Calendar today, int max, TimeZone timeZone) {
+		List<FavoriteEventDataBaseRow> list = new LinkedList<FavoriteEventDataBaseRow>();
+		Cursor c = database.query(
+				EventDataBaseHelper.FAVORITES_TABLE_NAME, QUERY_FAVORITE_EVENT_COLUMNS, 
+				EventDataBaseHelper.COLUMN_START_DATE_INDEX + "< ?",
+				new String[] { Long.toString(startDateIndex) },
+				null, null, EventDataBaseHelper.COLUMN_START_DATE_INDEX + " DESC",
+				Integer.toString(max));
+		if(c.moveToFirst()) {
+			do {
+				list.add(getFavoriteEvent(c, today, timeZone));				
+			} while(c.moveToNext());
+		}
+		c.close();
+		sortByDeemedStartDateTime(list, today, timeZone);
+		setEventIndex(list);
+		
+		return list;
+	}
 	
+
 }

@@ -148,4 +148,15 @@ public class VocalendarApplication extends Application {
 	public void setFavoriteEventManager(FavoriteEventManager favoriteEventManager) {
 		this.favoriteEventManager = favoriteEventManager;
 	}
+	
+	/**
+	 * お気に入り一覧画面で表示するお気に入り数
+	 * @param context
+	 * @return
+	 */
+	public static int getNumberOfFavoriteEventToDisplay(Context context) {
+		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+		return pref.getInt(Constants.NUMBER_OF_FAVORITE_EVENT_TO_DISPLAY, 50);				
+	}
+	
 }

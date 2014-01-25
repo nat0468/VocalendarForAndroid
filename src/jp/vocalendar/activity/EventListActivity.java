@@ -10,6 +10,7 @@ import jp.vocalendar.DebugMenuAction;
 import jp.vocalendar.Help;
 import jp.vocalendar.R;
 import jp.vocalendar.VocalendarApplication;
+import jp.vocalendar.activity.view.VocalendarDatePicker;
 import jp.vocalendar.model.ColorTheme;
 import jp.vocalendar.model.EventArrayCursor;
 import jp.vocalendar.model.EventArrayCursorAdapter;
@@ -304,55 +305,26 @@ implements EventArrayCursorAdapter.FavoriteToggler {
 		// イベント読み込みのキャンセル時は何もしない
 	}
 	
-	private DatePicker datePicker = null;
-	private Dialog datePickerDialog = null;
+	private VocalendarDatePicker datePicker = null;
 	
 	private void openDatePicker() {
-		if(datePickerDialog == null) {
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			LayoutInflater inflater = getLayoutInflater();
-			View v = inflater.inflate(R.layout.date_picker_dialog, null);
-			datePicker = (DatePicker)v.findViewById(R.id.datePicker);
-			Button todayButton = (Button)v.findViewById(R.id.setTodayButton);
-			todayButton.setOnClickListener(new View.OnClickListener() {				
-				@Override
-				public void onClick(View v) {
-					setDateToToday();
-					updateDatePicker();
-				}
-			});			
-			builder.setView(v)
-				   .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {				
-					   @Override
-					   public void onClick(DialogInterface dialog, int which) {
-						   changeDate(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth());
-					   }
-				   })
-				   .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {				
-					   @Override
-					   public void onClick(DialogInterface dialog, int which) {
-						   dialog.cancel();
-					   }
-				   });
-			datePickerDialog = builder.create();
-		}		
-		updateDatePicker(); // 読み込み中の日付に変更(ダイアログを開く度に、読み込み中の年月日に指定する)
-		datePickerDialog.show();
+		if(datePicker == null) {
+			datePicker = new VocalendarDatePicker(
+					this,
+					new VocalendarDatePicker.OkOnClickListener() {				
+						@Override
+						public void onClick(int year, int month, int dayOfMonth) {
+							changeDate(year, month, dayOfMonth);					
+						}
+					});			
+		}
+		datePicker.show(currentDate);
 	}
 
 	private void setDateToToday() {
 		currentDate.setTimeInMillis(System.currentTimeMillis());
 	}
 
-	private void updateDatePicker() {
-		if(datePicker != null) {
-			datePicker.updateDate(
-					currentDate.get(Calendar.YEAR),
-					currentDate.get(Calendar.MONTH),
-					currentDate.get(Calendar.DATE));
-		}
-	}
-	
 	/**
 	 * 指定された日付のイベントを読み込む。
 	 * @param year
