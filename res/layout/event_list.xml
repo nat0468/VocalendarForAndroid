@@ -50,9 +50,9 @@
             style="@style/ActionButtonStyle"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:contentDescription="@string/favorite"
-            android:clickable="true"
             android:background="@color/action_button"
+            android:clickable="true"
+            android:contentDescription="@string/favorite"
             android:src="@drawable/ic_action_important" />
 
         <ImageView

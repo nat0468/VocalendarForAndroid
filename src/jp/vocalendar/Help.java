@@ -14,7 +14,7 @@ public class Help {
 	private Help() { } // インスタンス生成禁止
 	
 	private static final String HELP_URL =
-			"http://vocalendar.jp/apps/android/help/help.html";
+			"http://vocalendar.jp/apps/android/help/v1/help.html";
 	
 	public static void openHelp(Context context) {
 		Log.d("Help", "openHelp() " + HELP_URL);		

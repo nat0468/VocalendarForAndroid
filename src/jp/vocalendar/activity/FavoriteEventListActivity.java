@@ -106,7 +106,7 @@ implements EventArrayCursorAdapter.FavoriteToggler {
 		});
 
         ImageView favorite = (ImageView)findViewById(R.id.go_to_favorite_list_image_view_action);
-        favorite.setImageResource(R.drawable.not_favorite);
+        favorite.setImageResource(R.drawable.ic_action_not_important);
         favorite.setOnClickListener(new View.OnClickListener() {			
 			@Override
 			public void onClick(View v) {
