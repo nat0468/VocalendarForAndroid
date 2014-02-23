@@ -18,7 +18,7 @@ public class VocalendarApplication extends Application {
 	/**
 	 * イベント一覧画面で読み込んだイベント情報
 	 */
-	private EventDataBaseRowArray eventDataBaseRowArray;
+	private EventDataBaseRowArray eventDataBaseRowArray = new EventDataBaseRowArray();
 	
 	/**
 	 * お気に入りイベント情報。一覧画面と詳細画面で共有するために使う。

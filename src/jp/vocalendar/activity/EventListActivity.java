@@ -85,7 +85,7 @@ implements EventArrayCursorAdapter.FavoriteToggler {
 	private Calendar topDate = Calendar.getInstance();
 	
 	/** イベント一覧の配列 */
-	private EventDataBaseRowArray eventDataBaseRowArray;
+	private EventDataBaseRowArray eventDataBaseRowArray = new EventDataBaseRowArray();
 	
 	private LoadMoreEventController loadMoreEventController;
 	
@@ -277,21 +277,25 @@ implements EventArrayCursorAdapter.FavoriteToggler {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		if(requestCode == REQUEST_CODE_GET_DAYLY_EVENT && resultCode == RESULT_OK) {
-			int y = data.getExtras().getInt(EventLoadingActivity.KEY_YEAR);
-			int m = data.getExtras().getInt(EventLoadingActivity.KEY_MONTH);
-			int d = data.getExtras().getInt(EventLoadingActivity.KEY_DATE);
-			currentDate = DateUtil.makeStartTimeOfDay(y, m, d, TimeZone.getDefault());
-			topDate = currentDate;
-
-		    SharedPreferences.Editor editor =
-		            PreferenceManager.getDefaultSharedPreferences(this).edit();
-		    editor.putLong(
-		    		Constants.LAST_UPDATED_PREFERENCE_NAME,
-		    		currentDate.getTimeInMillis()); //読み込み中の日付を最終更新日時とする(日付変更した後にActivityが終了した時、次回起動時に今日の日付で起動するように)
-		    editor.commit();		    
-		    
-			updateList();
+		if(requestCode == REQUEST_CODE_GET_DAYLY_EVENT) {
+			if(resultCode == RESULT_OK) { //イベント読み込み成功時				
+				int y = data.getExtras().getInt(EventLoadingActivity.KEY_YEAR);
+				int m = data.getExtras().getInt(EventLoadingActivity.KEY_MONTH);
+				int d = data.getExtras().getInt(EventLoadingActivity.KEY_DATE);
+				currentDate = DateUtil.makeStartTimeOfDay(y, m, d, TimeZone.getDefault());
+				topDate = currentDate;
+	
+			    SharedPreferences.Editor editor =
+			            PreferenceManager.getDefaultSharedPreferences(this).edit();
+			    editor.putLong(
+			    		Constants.LAST_UPDATED_PREFERENCE_NAME,
+			    		currentDate.getTimeInMillis()); //読み込み中の日付を最終更新日時とする(日付変更した後にActivityが終了した時、次回起動時に今日の日付で起動するように)
+			    editor.commit();
+				updateList();
+			} else {
+				// イベント読み込みのキャンセルまたはエラーの場合時は何もしない
+				
+			}
 		} else if(requestCode == REQUEST_CODE_GET_DAYLY_EVENT
 				&& resultCode == EventLoadingActivity.RESULT_AUTH_FAILED) {
 			finish(); // アカウント追加でキャンセルされたので終了			
@@ -302,7 +306,6 @@ implements EventArrayCursorAdapter.FavoriteToggler {
 			setDateToToday();
 			openEventLoadingActivity(false, false); // 設定が更新されたらイベント情報を再読み込み
 		}
-		// イベント読み込みのキャンセル時は何もしない
 	}
 	
 	private VocalendarDatePicker datePicker = null;
@@ -457,8 +460,15 @@ implements EventArrayCursorAdapter.FavoriteToggler {
 	}
 	
 	private void goToToday() {
+		if(eventDataBaseRowArray.getTopDate() == null ||
+				eventDataBaseRowArray.getLastDate() == null) {
+			// イベントが空の場合は再読み込み
+			currentDate = Calendar.getInstance(); // 今日の日付で再読み込み
+			openEventLoadingActivity(false, false);		
+			return;
+		}
 		Date today = new Date();
-		TimeZone timeZone = TimeZone.getDefault();
+		TimeZone timeZone = TimeZone.getDefault();		
 		if(eventDataBaseRowArray.getTopDate().compareTo(today) <= 0 &&
 				today.compareTo(eventDataBaseRowArray.getLastDate()) <= 0) {
 			// 読み込んでいる日付の範囲に今日が含まれる場合

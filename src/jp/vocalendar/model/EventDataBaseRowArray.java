@@ -14,11 +14,21 @@ public class EventDataBaseRowArray {
 	/** 通常のイベントのみを集めた配列 */
 	private EventDataBaseRow[] normalRows;
 	
-	/** イベントを読み込んだ最初の日付。イベントの有無は関係無し */
+	/** イベントを読み込んだ最初の日付。イベントの有無は関係無し。空のイベントの場合はnull */
 	private Date topDate;
 	
-	/** イベントを読み込んだ最後の日付。イベントの有無は関係無し */
+	/** イベントを読み込んだ最後の日付。イベントの有無は関係無し。空のイベントの場合はnull */
 	private Date lastDate;
+	
+	/**
+	 * 空のイベントデータベースのインスタンスを作る
+	 */
+	public EventDataBaseRowArray() {
+		this.allRows = new EventDataBaseRow[0];
+		this.normalRows = new EventDataBaseRow[0];		
+		this.topDate = null;
+		this.lastDate = null;		
+	}
 	
 	public EventDataBaseRowArray(EventDataBaseRow[] allRows, EventDataBaseRow[] normalRows) {
 		this.allRows = allRows;
