@@ -76,7 +76,7 @@ public class SearchMoreGoogleCalendarEventTask extends	SearchGoogleCalendarEvent
 
 	private void initStartDate() {
 		EventDataBaseRow r = eventsToBeAppended.get(eventsToBeAppended.size() - 1);
-		if(r.getRowType() == EventDataBaseRow.TYPE_SEPARATOR) { // 最後が日付セパレータ、すなわち検索結果なしの場合
+		if(r.getRowType() == EventDataBaseRow.TYPE_SEARCH_START_DATE) { // 最後が検索開始日セパレータ、すなわち検索結果なしの場合
 			java.util.Calendar cal = java.util.Calendar.getInstance();
 			cal.setTime(r.getDisplayDate());
 			cal.add(java.util.Calendar.DATE, 1); // 1日後を検索開始日にする
