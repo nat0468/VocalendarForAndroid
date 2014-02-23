@@ -313,9 +313,7 @@ public class EventLoadingActivity extends ActionBarActivity implements LoadEvent
 		if(task.getException() != null) { //例外発生時にダイアログ表示
 			String msg = null;
 			if(task.getException() instanceof IOException) { // 通信エラー
-				msg = getResources().getString(R.string.fail_to_connect_server) + "\n"
-						+ getResources().getString(R.string.loaded_data_will_be_shown);					
-				DialogUtil.openMessageDialog(this, msg, true);
+				doCommunicationError();
 			} else { // 予期しないエラー
 				msg = getResources().getString(R.string.unexpected_error);
 				if(task.getException().getMessage() != null) {
@@ -324,6 +322,13 @@ public class EventLoadingActivity extends ActionBarActivity implements LoadEvent
 				DialogUtil.openErrorDialog(this, msg);
 			}
 		}
+	}
+
+	protected void doCommunicationError() {
+		String msg;
+		msg = getResources().getString(R.string.fail_to_connect_server) + "\n"
+				+ getResources().getString(R.string.loaded_data_will_be_shown);					
+		DialogUtil.openMessageDialog(this, msg, true);
 	}
 	
 	/**
@@ -346,11 +351,7 @@ public class EventLoadingActivity extends ActionBarActivity implements LoadEvent
 	private void onAuthToken(Account account, String authToken, Exception ex) {
 		if(account == null || authToken == null) {
 			if(ex instanceof IOException) {
-				String m = getResources().getString(R.string.communication_error);
-				if(ex.getMessage() != null) {
-					m = m + ": " + ex.getMessage();
-				}				
-				DialogUtil.openErrorDialog(this, m);
+				doCommunicationError();
 			} else {
 				showGoogleAccountRequredDialog();
 			}

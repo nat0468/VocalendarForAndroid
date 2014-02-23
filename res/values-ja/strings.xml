@@ -101,7 +101,6 @@ VOCALENDAR編集メンバーの皆さんにも感謝いたします。
 	<string name="load_more_event_without_tap">タップなしでもっと読み込む</string>
 	<string name="location_plus_colon">場所：</string>
 	<string name="map">地図</string>
-	<string name="communication_error">通信エラー</string>
 	<string name="unexpected_error">予期しないエラー</string>
 	<string name="search_events">イベントを検索</string>
 	<string name="searching">検索中...</string>
