@@ -173,13 +173,8 @@ implements EventArrayCursorAdapter.FavoriteToggler {
         favoriteEventManager = app.getFavoriteEventManager();
         favoriteEventManager.loadFavoriteEvent(rows);
         
-        if(rows.length != 0) {
-            loadMoreFavoriteEventController.setupListView(getListView(), colorTheme); // もっと読み込む項目を設定            
-            todayIndex = 1; //もっと読み込むアイテムの次が今日のお気に入りイベント        	
-        } else {
-        	// もっと読み込む項目は設定しない(loadMoreFavoriteEventController.setupListView()は呼ばない)
-        	todayIndex = 0;        	
-        }
+        loadMoreFavoriteEventController.setupListView(getListView(), colorTheme); // もっと読み込む項目を設定            
+        todayIndex = 1; //もっと読み込むアイテムの次が今日のお気に入りイベント        	
         eventArrayCursorAdapter = new EventWithAdditionalDateArrayCursorAdapter(
         		this, rows, timeZone, colorTheme, favoriteEventManager, this);
         getListView().setAdapter(eventArrayCursorAdapter);
