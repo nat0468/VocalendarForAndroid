@@ -18,14 +18,12 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 public class EventArrayEventDescriptionPagerAdapter extends
 		FragmentStatePagerAdapter {
 	private EventDataBaseRow[] rows;
-	private FavoriteEventManager favoriteEventManager;
 	private Bitmap favoriteBitmap, notFavoriteBitmap;
 	
 	public EventArrayEventDescriptionPagerAdapter(Context context, FragmentManager fm,
 			EventDataBaseRow[] rows, FavoriteEventManager favoriteEventManager) {
 		super(fm);
 		this.rows = rows;
-		this.favoriteEventManager = favoriteEventManager;
 		this.favoriteBitmap =
 				BitmapFactory.decodeResource(context.getResources(), R.drawable.favorite);
 		this.notFavoriteBitmap =
@@ -36,7 +34,6 @@ public class EventArrayEventDescriptionPagerAdapter extends
 	public Fragment getItem(int i) {
 		EventDescriptionFragment fragment = new EventDescriptionFragment();
         fragment.setFavoriteAndNotFavoriteBitmap(favoriteBitmap, notFavoriteBitmap);
-        fragment.setFavoriteEventManager(favoriteEventManager);
         Bundle args = new Bundle();
         args.putSerializable(
         		EventDescriptionFragment.ARG_EVENT_DATABASE_ROW, rows[i]);

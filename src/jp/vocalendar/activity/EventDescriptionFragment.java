@@ -5,6 +5,7 @@ import java.net.URLEncoder;
 import java.util.TimeZone;
 
 import jp.vocalendar.R;
+import jp.vocalendar.VocalendarApplication;
 import jp.vocalendar.model.EventDataBaseRow;
 import jp.vocalendar.model.ColorTheme;
 import jp.vocalendar.model.FavoriteEventManager;
@@ -201,14 +202,7 @@ public class EventDescriptionFragment extends Fragment {
 		} else {
 			this.themeColor = new ColorTheme(activity);
 		}
+		this.favoriteEventManager =
+				((VocalendarApplication)activity.getApplication()).getFavoriteEventManager();
 	}
-
-	public FavoriteEventManager getFavoriteEventManager() {
-		return favoriteEventManager;
-	}
-
-	public void setFavoriteEventManager(FavoriteEventManager favoriteEventManager) {
-		this.favoriteEventManager = favoriteEventManager;
-	}	
-	
 }

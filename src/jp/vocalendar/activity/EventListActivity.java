@@ -191,7 +191,6 @@ implements EventArrayCursorAdapter.FavoriteToggler {
 
         VocalendarApplication app = (VocalendarApplication)getApplication();
         app.setEventDataBaseRowArray(eventDataBaseRowArray);
-        app.setFavoriteEventManager(favoriteEventManager);
 
         TimeZone timeZone = TimeZone.getDefault();
         

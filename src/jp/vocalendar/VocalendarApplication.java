@@ -145,10 +145,6 @@ public class VocalendarApplication extends Application {
 		return favoriteEventManager;
 	}
 
-	public void setFavoriteEventManager(FavoriteEventManager favoriteEventManager) {
-		this.favoriteEventManager = favoriteEventManager;
-	}
-	
 	/**
 	 * お気に入り一覧画面で表示するお気に入り数
 	 * @param context
