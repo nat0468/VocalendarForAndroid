@@ -294,7 +294,7 @@ implements EventArrayCursorAdapter.FavoriteToggler {
 				updateList();
 			} else {
 				// イベント読み込みのキャンセルまたはエラーの場合時は何もしない
-				
+				// TODO
 			}
 		} else if(requestCode == REQUEST_CODE_GET_DAYLY_EVENT
 				&& resultCode == EventLoadingActivity.RESULT_AUTH_FAILED) {

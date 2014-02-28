@@ -35,7 +35,7 @@ public class EventDataBaseHelper extends SQLiteOpenHelper {
 	public static final String COLUMN_LOCATION = "location";
 	
 	//お気に入りのソートに使う開始日時。開始日または開始日時のどちらかが入る。繰り返し日付の場合は Integer.MAX を入れる
-	public static final String COLUMN_START_DATE_INDEX = "start_date_index"; 
+	public static final String COLUMN_START_DATE_INDEX = "start_date_index";
 	
 	private static final String CREATE_EVENTS_TABLE_SQL =
 			"CREATE TABLE " + EVENTS_TABLE_NAME + " (" +

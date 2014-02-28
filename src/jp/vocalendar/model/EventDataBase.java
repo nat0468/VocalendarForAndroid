@@ -414,10 +414,18 @@ public class EventDataBase {
 	public void getFavoriteEvents(Calendar today, TimeZone timeZone, List<FavoriteEventDataBaseRow> rows) {
 		DateUtil.makeStartTimeOfDay(today);
 		long todayDateIndex = today.getTimeInMillis();
+		
 		Cursor c = database.query(
-				EventDataBaseHelper.FAVORITES_TABLE_NAME, QUERY_FAVORITE_EVENT_COLUMNS, 
-				"? <= " + EventDataBaseHelper.COLUMN_START_DATE_INDEX,
-				new String[] { Long.toString(todayDateIndex) },
+				EventDataBaseHelper.FAVORITES_TABLE_NAME, QUERY_FAVORITE_EVENT_COLUMNS,
+				"(? <= " + EventDataBaseHelper.COLUMN_START_DATE_INDEX + ") OR " // 開始日が今日以降
+				 + "(" + EventDataBaseHelper.COLUMN_START_DATE_TIME + " <= ? AND " // 今日が開始時間と終了時間の間
+				 + "? < " + EventDataBaseHelper.COLUMN_END_DATE_TIME + ") OR "
+				 + "(" + EventDataBaseHelper.COLUMN_START_DATE + " <= ? AND " // 今日が、開始日と終了日の間
+				 + "? < " + EventDataBaseHelper.COLUMN_END_DATE + ")",
+				new String[] {
+						Long.toString(todayDateIndex),
+						Long.toString(todayDateIndex), Long.toString(todayDateIndex),
+						Long.toString(todayDateIndex), Long.toString(todayDateIndex) },
 				null, null, EventDataBaseHelper.COLUMN_START_DATE_INDEX + " ASC");
 		if(c.moveToFirst()) {
 			do {
