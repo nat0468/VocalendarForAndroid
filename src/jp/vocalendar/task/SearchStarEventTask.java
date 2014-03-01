@@ -134,9 +134,12 @@ public class SearchStarEventTask extends AsyncTask<String, Event, List<EventData
 		Calendar.Events.List list = es.list(calendarId);
 		
 		Events events = null;
-		events = list.setTimeMin(startTime).setTimeMax(endTime)
+/*		events = list.setTimeMin(startTime).setTimeMax(endTime)
 						.setTimeZone(timeZone.getID()).setOrderBy("startTime")
-						.setSingleEvents(true).setQ(Constants.STAR_EVENT_CHARACTER).execute();
+						.setSingleEvents(true).setQ(Constants.STAR_EVENT_CHARACTER).execute(); */
+		events = list.setTimeMin(startTime).setTimeMax(endTime)
+				.setTimeZone(timeZone.getID()).setOrderBy("startTime")
+				.setSingleEvents(true).execute(); // queryに「★」を指定しても、検索がうまく行かないので全件取得
 		List<Event> eventList = new LinkedList<Event>();
 		if(events != null) {
 			Log.d(TAG, "handleEvents");
