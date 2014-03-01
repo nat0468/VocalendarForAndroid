@@ -12,7 +12,7 @@ import android.util.Log;
 public class Debug {
 	private static String TAG = "Debug";
 	private Context context;
-	private boolean debugMode = true; // TODO リリース時にfalseに変更
+	private boolean debugMode = false; // TODO リリース時にfalseに変更
 	private boolean debugMenu = false;
 	
 	private Debug(Context context) {
