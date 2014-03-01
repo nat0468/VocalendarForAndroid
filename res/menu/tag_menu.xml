@@ -12,6 +12,6 @@
     <item android:id="@+id/tag_nico_live" android:title="@string/tag_nico_live"></item>
     <item android:id="@+id/tag_tv" android:title="@string/tag_tv"></item>
     <item android:id="@+id/tag_radio" android:title="@string/tag_radio"></item>
-    <item android:id="@+id/tag_close_to_end" android:title="@string/tag_close_to_end"></item>
-    <item android:id="@+id/tag_star" android:title="@string/tag_star"></item>
+<!-- <item android:id="@+id/tag_close_to_end" android:title="@string/tag_close_to_end"></item> -->
+<!-- <item android:id="@+id/tag_star" android:title="@string/tag_star"></item> -->
 </menu>

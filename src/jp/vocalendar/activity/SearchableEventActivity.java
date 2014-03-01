@@ -385,7 +385,8 @@ implements EventArrayCursorAdapter.FavoriteToggler {
 	
 	private String makeKeywordToSearch(MenuItem item) {
 		String keyword = item.getTitle().toString();
-		if(keyword.endsWith("】")) { // 閉じタグを外す
+		if(keyword.startsWith("【") && keyword.endsWith("】")) { // タグを外す
+			keyword = keyword.substring(keyword.indexOf("【") + 1);
 			keyword = keyword.substring(0, keyword.lastIndexOf("】"));
 		}
 		return keyword;
