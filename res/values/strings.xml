@@ -361,4 +361,5 @@ To import the settings to a device, input(copy &amp; paste) the code, and press 
 The events might be re-registered, or deleted.\
 Please check the equivalent events on events list screen or the search screen.
 	</string>
+	<string name="notificate_star_event">Notificate ★ events</string>	
 </resources>

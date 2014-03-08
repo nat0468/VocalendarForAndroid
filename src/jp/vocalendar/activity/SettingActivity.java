@@ -136,7 +136,6 @@ implements OnPreferenceChangeListener, OnPreferenceClickListener	{
 		pref.setSummary(pref.getEntry());
 		pref.setOnPreferenceChangeListener(this);
 	}
-
 	
 	@Override
 	public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -155,8 +154,7 @@ implements OnPreferenceChangeListener, OnPreferenceClickListener	{
 			preference.setSummary(newValue.toString());
 		} else if(preference.getKey().equals(Constants.LOAD_MORE_EVENT_WITHOUT_TAP)) {
 			// なにもしない  setResult(RESULT_OK)を実行する
-		} else if(preference.getKey().equals(Constants.NOTIFICATION_TIME_PREFERENCE_NAME)) {
-			
+		} else if(preference.getKey().equals(Constants.NOTIFICATION_TIME_PREFERENCE_NAME)) {			
 			int n = Integer.parseInt(newValue.toString());
 			preference.setSummary(AlarmReceiverSetter.toEntry(newValue.toString(), this));
 			AlarmReceiverSetter.setAlarmReceiverToAlarmManager(this, n);

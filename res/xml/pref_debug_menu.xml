@@ -50,6 +50,9 @@
         			android:entryValues="@array/notification_time_entry_values"
         			android:dialogTitle="@string/notification_time"
         			android:defaultValue="8" />
+    <CheckBoxPreference android:title="@string/notificate_star_event" 
+        			android:key="notificate_star_event"
+        			android:defaultValue="true" />
     <CheckBoxPreference android:title="@string/announcement_once_only" 
         			android:key="announcement_once_only"
         			android:defaultValue="false" />

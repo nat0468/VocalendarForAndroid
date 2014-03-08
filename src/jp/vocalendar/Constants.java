@@ -126,6 +126,9 @@ public class Constants {
 	  /** お知らせを表示したかどうかを格納するプリファレンス値。この値がfalseなら見表示。trueなら表示済み */
 	  public static final String ANNOUNCEMENT_DISPLAYED ="announcement_displayed";	  
 	  
+	  /** イベント通知機能で★イベントを通知するかどうかを格納するプリファレンス値 */
+	  public static final String NOTIFICATE_STAR_EVENT = "notificate_star_event";
+	  
 	  /**
 	   * onActivityResult request codes:
 	   */

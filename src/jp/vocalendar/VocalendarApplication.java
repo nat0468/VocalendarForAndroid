@@ -155,4 +155,20 @@ public class VocalendarApplication extends Application {
 		return pref.getInt(Constants.NUMBER_OF_FAVORITE_EVENT_TO_DISPLAY, 50);				
 	}
 	
+	/**
+	 * イベント通知で★イベントを通知するかどうかの設定を変更する
+	 * @param b
+	 */
+	public static void setNotificateStarEvent(Context context, boolean b) {
+		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+		SharedPreferences.Editor editor = pref.edit();
+		editor.putBoolean(Constants.NOTIFICATE_STAR_EVENT, b);
+		editor.commit();		
+	}
+	
+	public static boolean isNotificateStarEvent(Context context) {
+		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+		return pref.getBoolean(Constants.NOTIFICATE_STAR_EVENT, true);		
+	}
+	
 }

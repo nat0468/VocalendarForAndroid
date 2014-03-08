@@ -259,4 +259,5 @@ VOCALENDAR編集メンバーの皆さんにも感謝いたします。
 	<string name="some_favorite_events_can_not_be_found_on_server2">\
 このイベントは登録し直された、もしくは削除された可能性があります。\
 対応するイベントをイベント一覧画面や検索画面でご確認下さい。</string>
+	<string name="notificate_star_event">★イベントをイベント通知する</string>
 </resources>

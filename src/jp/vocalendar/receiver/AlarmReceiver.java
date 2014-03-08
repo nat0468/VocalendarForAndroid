@@ -8,6 +8,7 @@ import java.util.TimeZone;
 
 import jp.vocalendar.Constants;
 import jp.vocalendar.R;
+import jp.vocalendar.VocalendarApplication;
 import jp.vocalendar.activity.EventListActivity;
 import jp.vocalendar.model.EventDataBase;
 import jp.vocalendar.model.EventDataBaseRow;
@@ -43,10 +44,15 @@ implements SearchStarEventTask.Callback, CheckAnnouncementTask.Callback {
 	/** デバッグモードのときにtrue */
 	private boolean debugMode = false;
 	
+	/** ★イベントを通知するときにtrue */
+	private boolean notificateStarEvent = true;
+	
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		debugMode = intent.getBooleanExtra(EXTRA_DEBUG, false);
 		Log.d(TAG, "onReceive: debugMode=" + debugMode);
+		notificateStarEvent = VocalendarApplication.isNotificateStarEvent(context);
+		Log.d(TAG, "onReceive: notificationStarEvent=" + notificateStarEvent);
 		
 		CheckAnnouncementTask t = new CheckAnnouncementTask(context, this);
 		if(debugMode) {
@@ -63,6 +69,13 @@ implements SearchStarEventTask.Callback, CheckAnnouncementTask.Callback {
 	@Override
 	public void onPostExecute(Context context, boolean result) {
 		Log.d(TAG, "CheckLoadingNotificationTask finished. result=" + result);
+		if(!notificateStarEvent) {
+			//★イベントの検索は飛ばして、★イベント検索後(お気に入りイベントの表示)の処理へ
+			Log.d(TAG, "skip SearchStarEventTask.");
+			onPostExecute(context, new LinkedList<EventDataBaseRow>(), null);			
+			return;
+		}
+		
 		SearchStarEventTask t = new SearchStarEventTask(context, this);
 		if(debugMode) {
 			t.setDebugMode(true); //デバッグ用の場合
@@ -147,10 +160,12 @@ implements SearchStarEventTask.Callback, CheckAnnouncementTask.Callback {
 		sb.append(context.getString(R.string.favorite));
 		sb.append(favoriteEvents.size());
 		sb.append(context.getString(R.string.unit_of_events));
-		sb.append(context.getString(R.string.comma));
-		sb.append(context.getString(R.string.star_event));
-		sb.append(starEvents.size());
-		sb.append(context.getString(R.string.unit_of_events));		
+		if(notificateStarEvent) {
+			sb.append(context.getString(R.string.comma));
+			sb.append(context.getString(R.string.star_event));
+			sb.append(starEvents.size());
+			sb.append(context.getString(R.string.unit_of_events));
+		}
 		inboxStyle.setSummaryText(sb.toString());
 		
 		builder.setStyle(inboxStyle);		
