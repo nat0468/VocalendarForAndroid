@@ -32,12 +32,12 @@
 	<string name="update">Update</string>			
 	<string name="change_date">Date</string>			
 	<string name="not_implemented">Not implemented.</string>
-	<string name="open_vocalendar">Open vocalender.jp</string>	
+	<string name="open_vocalendar">Open vocalendar.jp</string>	
 	<string name="about_message">\
 &lt;h2&gt;VOCALENDAR %s&lt;/h2&gt;
 &lt;h4&gt;About VOCALENDAR for Android&lt;/h4&gt;
 VOCALENDAR for Android is an application to view the information of events about VOCALOID in \
-&lt;a href="http://vocalender.jp"&gt;VOCALENDAR&lt;/a&gt;\
+&lt;a href="http://vocalendar.jp"&gt;VOCALENDAR&lt;/a&gt;\
 About VOCALENDAR, please see &lt;a href="http://vocalendar.jp/about/"&gt;here&lt;/a&gt;\
 (Japanese).&lt;br/&gt;\
 &lt;br/&gt;\

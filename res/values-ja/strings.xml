@@ -32,11 +32,11 @@
 	<string name="update">更新</string>
 	<string name="change_date">日付変更</string>
 	<string name="not_implemented">実装予定</string>
-	<string name="open_vocalendar">vocalender.jpを開く</string>
+	<string name="open_vocalendar">vocalendar.jpを開く</string>
 	<string name="about_message">\
 &lt;h2&gt;VOCALENDAR %s&lt;/h2&gt;
 &lt;h4&gt;VOCALENDAR for Androidについて&lt;/h4&gt;
-VOCALENDAR for Androidは、&lt;a href="http://vocalender.jp"&gt;VOCALENDAR&lt;/a&gt;に\
+VOCALENDAR for Androidは、&lt;a href="http://vocalendar.jp"&gt;VOCALENDAR&lt;/a&gt;に\
 掲載されているボーカロイド関連のイベント情報を参照できるアプリです。&lt;br/&gt;\
 VOCALENDARについては、&lt;a href="http://vocalendar.jp/about/"&gt;こちらへ&lt;/a&gt;。\
 &lt;br/&gt;&lt;br/&gt;\
