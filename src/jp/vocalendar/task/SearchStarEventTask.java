@@ -46,6 +46,7 @@ public class SearchStarEventTask extends AsyncTask<String, Event, List<EventData
 	private Context context;
 	private TimeZone timeZone;	
 	private Callback callback;
+	private Date todayDate; //今日の日付
 	
 	/** デバッグモード。trueの場合、今月の★イベント検索になる */
 	private boolean debugMode = false;
@@ -87,12 +88,12 @@ public class SearchStarEventTask extends AsyncTask<String, Event, List<EventData
 		LinkedList<EventDataBaseRow> allEvents = new LinkedList<EventDataBaseRow>();
 
 		java.util.Calendar cal = DateUtil.makeStartTimeOfToday(timeZone);
-		Date todayDate = cal.getTime();
+		this.todayDate = cal.getTime();
 		DateTime startTime = new DateTime(todayDate, timeZone);
 		cal.add(java.util.Calendar.DATE, 1);
 		if(debugMode) {
-			cal.add(java.util.Calendar.MONTH, 1); //デバッグ時には1ヶ月後まで対象とする			
-			Log.d(TAG, "debug mode on. Expand search range...: " + cal.toString());
+			//cal.add(java.util.Calendar.MONTH, 1); //デバッグ時には1ヶ月後まで対象とする			
+			//Log.d(TAG, "debug mode on. Expand search range...: " + cal.toString());
 		}
 		Date tommorowDate = cal.getTime();
 		DateTime endTime = new DateTime(tommorowDate, timeZone);		
@@ -161,13 +162,17 @@ public class SearchStarEventTask extends AsyncTask<String, Event, List<EventData
 			com.google.api.services.calendar.model.Event ge = itr.next();
 			if(ge.getStatus() != null && !"confirmed".equals(ge.getStatus())) {
 				continue; // confirmed 以外のイベントは無視
-			}
+			}			
 			if(!ge.getSummary().startsWith(Constants.STAR_EVENT_CHARACTER)) {
 				continue; // ★イベントでないイベント(★で始まらない)は無視
-			}
+			}			
 			Event e = EventFactory.toVocalendarEvent(
 							calendarId, ge, timeZone, context);
-			//Log.d(TAG, e.toDateTimeSummaryString(timeZone, context));
+			Log.d(TAG, e.toDateTimeSummaryString(timeZone, context));
+			if(!e.equalByDate(todayDate, timeZone)) {
+				Log.d(TAG, "skip " + e.toDateTimeSummaryString(timeZone, context));
+				continue; // 今日と一致しないイベントは無視
+			}			
 			eventList.add(e);
 			publishProgress(e);
 		}
