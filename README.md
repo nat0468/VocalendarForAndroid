@@ -1,4 +1,8 @@
-VocalendarForAndroid
+Vocalendar For Android
 ====================
 
-VOCALENDAR for Android
+VOCALENDAR for Androidのソースリポジトリです。
+
+このコードについては、 nat@plala.to まで。
+
+以上
