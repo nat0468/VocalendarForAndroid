@@ -3,6 +3,6 @@ Vocalendar For Android
 
 VOCALENDAR for Androidのソースリポジトリです。
 
-このコードについては、 nat@plala.to まで。
+このコードについては、 @nat0468 まで。
 
 以上
